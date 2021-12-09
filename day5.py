@@ -7,12 +7,6 @@ class Grid:
     def __init__(self, line_objs): # line_objs => array of [[x1, y2], [x2, y2]]
         all_x = [entry for line in line_objs for entry in line.get_axis_coordinates("x")]
         all_y = [entry for line in line_objs for entry in line.get_axis_coordinates("y")]
-        self.bounds = {
-            "x": [min(all_x), max(all_x)],
-            "y": [min(all_y), max(all_y)]
-        }
-        self.x_offset = min(all_x)
-        self.y_offset = min(all_y)
         self.grid = [ # each nested array is a row, so it'll need to be of length max(all_x) - min(all_x)
             [0 for x in range(max(all_x) + 1)] for y in range(max(all_y) + 1)
         ]
@@ -22,18 +16,12 @@ class Grid:
         if flat_direction == "x": # x value doesn't change, y does
             x = line.points[0][0]
             span = sorted(line.get_axis_coordinates("y"))
-            # print("x unchanging - spanning y:", span)
-            # for y in range(span[0], span[1]): # +1 ?
             for y in range(span[0], span[1] + 1):
-                # print(f"[{x},{y}] += 1")
                 self.grid[y][x] += 1
         if flat_direction == "y": # y doesn't change, x does
             y = line.points[0][1]
             span = sorted(line.get_axis_coordinates("x"))
-            # print("y unchanging - spanning x:", span)
-            # for x in range(span[0], span[1]): # +1 ?
             for x in range(span[0], span[1] + 1):
-                # print(f"[{x},{y}] += 1")
                 self.grid[y][x] += 1
     
     def overlaps(self, threshold):
