@@ -85,10 +85,8 @@ def part2(param):
     return total
 
 def main():
-    with open("./inputs/day8.txt") as infile:    
-        infile = infile.read().strip().split("\n")
-        infile = [line.split(" | ") for line in infile]
-        infile = [[left.split(), right.split()] for [left, right] in infile]
+    with open("./inputs/day8.txt") as infile:
+        infile = [[left.split(), right.split()] for [left, right] in [line.split(" | ") for line in infile.read().strip().split("\n")]]
     
     print("Answer for part 1 =", part1(infile))
     print("Answer for part 2 =", part2(infile))

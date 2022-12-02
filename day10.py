@@ -1,26 +1,18 @@
 def part1(inp):
-    """
-    A corrupted line is one where a chunk closes with the wrong character - that is, where the characters
-    it opens and closes with do not form one of the four legal pairs listed above.
-    """
-    # Accepted chars:
-    brackets = [
-        ["(", ")"],
-        ["[", "]"],
-        ["{", "}"],
-        ["<", ">"],
+    inp = [
+        "{([(<{}[<>[]}>{[]{[(<()>",
+        "[[<[([]))<([[{}[[()]]]",
+        "[{[{({}]{}}([{[{{{}}([]",
+        "[<(<(<(<{}))><([]([]()",
+        "<{([([[(<>()){}]>(<<{{"
     ]
     for line in inp:
-        flag = True
-        for bracket_type in brackets:
-            opening = bracket_type[0]
-            closing = bracket_type[1]
-            print(line.count(opening), "-", line.count(closing))
-            if not line.count(opening) == line.count(closing):
-                flag = False
+        print(line.count("("), line.count(")"))
+        print(line.count("["), line.count("]"))
+        print(line.count("{"), line.count("}"))
         print()
-            
-    print(len(inp))
+    
+    # pass
 
 def part2(inp):
     pass
