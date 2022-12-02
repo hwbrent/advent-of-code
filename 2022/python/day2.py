@@ -136,7 +136,7 @@ def part1(input: 'list[str]') -> 'None':
 
 ''' ****************************************************************** '''
 
-# Converts a letter (e.g. 'X' to an outcome (win/draw/lose) ONLY FOR THE PERSON ON THE RIGHT (e.g. -1)).
+# Converts a letter (e.g. 'X') to an outcome (win/draw/lose) ONLY FOR THE PERSON ON THE RIGHT (e.g. -1).
 letter_to_outcome = {
     "X": -1,
     "Y": 0,
