@@ -82,16 +82,22 @@ So, in this example, the number of overlapping assignment pairs is 4.
 In how many assignment pairs do the ranges overlap?
 '''
 
-def range_is_contained_by(range1,range2):
+def range_is_contained_by(range1:'range',range2:'range') -> 'bool':
+    ''' Indicates whether `range1` is fully contained within `range2` '''
     return range1[0] >= range2[0] and range1[-1] <= range2[-1]
 
-def ranges_overlap(range1,range2):
+def ranges_overlap(range1:'range',range2:'range'):
+    '''
+    Indicates whether there is any overlap between `range1` and `range2`.
+    i.e. if one (specifically one, not both) end of a range is within the other range.
+    This does NOT consider whether one range is fully contained within the other.
+    '''
     # range1 overlaps with range2 if either end is within range2, but not both ends
     lower_end_overlaps = range1[0]  in range2 and not range1[-1] in range2
     upper_end_overlaps = range1[-1] in range2 and not range1[0]  in range2
     return lower_end_overlaps or upper_end_overlaps
 
-def get_pair_ranges(line):
+def get_pair_ranges(line:'str') -> 'tuple[range,range]':
     ''' Parses each `line` from the input and extracts a `range` for each of the two elves.'''
     nums = (int(num) for num in re.findall(r'\d+', line)) # generator
     range1 = range(next(nums), next(nums)+1)
@@ -100,7 +106,7 @@ def get_pair_ranges(line):
 
 ''' ****************************************************************** '''
 
-def part1(input):
+def part1(input) -> 'None':
     count = 0
     for line in input:
         elf1, elf2 = get_pair_ranges(line)
@@ -110,7 +116,7 @@ def part1(input):
 
 ''' ****************************************************************** '''
 
-def part2(input):
+def part2(input) -> 'None':
     count = 0
     for line in input:
         elf1, elf2 = get_pair_ranges(line)
