@@ -321,6 +321,55 @@ After 100 steps, there have been a total of 1656 flashes.
 
 Given the starting energy levels of the dumbo octopuses in your cavern,
 simulate 100 steps. How many total flashes are there after 100 steps?
+
+--- Part Two ---
+
+It seems like the individual flashes aren't bright enough to navigate.
+However, you might have a better option: the flashes seem to be
+synchronizing!
+
+In the example above, the first time all octopuses flash simultaneously is
+step 195:
+
+After step 193:
+5877777777
+8877777777
+7777777777
+7777777777
+7777777777
+7777777777
+7777777777
+7777777777
+7777777777
+7777777777
+
+After step 194:
+6988888888
+9988888888
+8888888888
+8888888888
+8888888888
+8888888888
+8888888888
+8888888888
+8888888888
+8888888888
+
+After step 195:
+0000000000
+0000000000
+0000000000
+0000000000
+0000000000
+0000000000
+0000000000
+0000000000
+0000000000
+0000000000
+
+If you can calculate the exact moments when the octopuses will all flash
+simultaneously, you should be able to navigate through the cavern. What is
+the first step during which all octopuses flash?
 '''
 
 ''' ****************************************************************** '''
@@ -434,8 +483,14 @@ class Cavern:
                 if not cavern_octopus is param_octopus:
                     yield cavern_octopus
 
-    # def increment_flash_count(self) -> 'None':
-    #     self.flash_count += 1
+    def all_octopi_have_flashed(self) -> 'bool':
+        ''' Indicates whether all the octopi in the cavern flashed in the step just completed. '''
+        for row in self.octopi:
+            for octopus in row:
+                has_not_flashed = octopus.energy != 0
+                if has_not_flashed:
+                    return False
+        return True
 
 ''' ****************************************************************** '''
 
@@ -448,18 +503,18 @@ def part1(input):
 ''' ****************************************************************** '''
 
 def part2(input):
-    pass
+    cavern = Cavern(input)
+
+    step_count = 0
+    while not cavern.all_octopi_have_flashed():
+        cavern.step()
+        step_count += 1
+
+    print('Part 2 -->', step_count)
 
 ''' ****************************************************************** '''
 
 if __name__ == "__main__":
     input = [[int(num) for num in row] for row in get_input().strip().split("\n")]
-    test_input = [
-        [1,1,1,1,1],
-        [1,9,9,9,1],
-        [1,9,1,9,1],
-        [1,9,9,9,1],
-        [1,1,1,1,1]
-    ]
     part1(input)
     part2(input)
