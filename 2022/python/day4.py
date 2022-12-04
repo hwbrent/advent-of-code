@@ -62,10 +62,34 @@ be cleaning, so these seem like the most in need of reconsideration. In this
 example, there are 2 such pairs.
 
 In how many assignment pairs does one range fully contain the other?
+
+--- Part Two ---
+
+It seems like there is still quite a bit of duplicate work planned. Instead,
+the Elves would like to know the number of pairs that overlap at all.
+
+In the above example, the first two pairs (2-4,6-8 and 2-3,4-5) don't
+overlap, while the remaining four pairs (5-7,7-9, 2-8,3-7, 6-6,4-6, and
+2-6,4-8) do overlap:
+
+• 5-7,7-9 overlaps in a single section, 7.
+• 2-8,3-7 overlaps all of the sections 3 through 7.
+• 6-6,4-6 overlaps in a single section, 6.
+• 2-6,4-8 overlaps in sections 4, 5, and 6.
+
+So, in this example, the number of overlapping assignment pairs is 4.
+
+In how many assignment pairs do the ranges overlap?
 '''
 
 def range_is_contained_by(range1,range2):
     return range1[0] >= range2[0] and range1[-1] <= range2[-1]
+
+def ranges_overlap(range1,range2):
+    # range1 overlaps with range2 if either end is within range2, but not both ends
+    lower_end_overlaps = range1[0]  in range2 and not range1[-1] in range2
+    upper_end_overlaps = range1[-1] in range2 and not range1[0]  in range2
+    return lower_end_overlaps or upper_end_overlaps
 
 def get_pair_ranges(line):
     ''' Parses each `line` from the input and extracts a `range` for each of the two elves.'''
@@ -87,7 +111,14 @@ def part1(input):
 ''' ****************************************************************** '''
 
 def part2(input):
-    pass
+    count = 0
+    for line in input:
+        elf1, elf2 = get_pair_ranges(line)
+        contained = range_is_contained_by(elf1,elf2) or range_is_contained_by(elf2,elf1)
+        overlapped = ranges_overlap(elf1,elf2)
+        if contained or overlapped:
+            count += 1
+    print('Part 2 -->', count)
 
 ''' ****************************************************************** '''
 
