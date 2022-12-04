@@ -65,9 +65,7 @@ In how many assignment pairs does one range fully contain the other?
 '''
 
 def range_is_contained_by(range1,range2):
-    lrange1 = list(range1)
-    lrange2 = list(range2)
-    return lrange1[0] >= lrange2[0] and lrange1[-1] <= lrange2[-1]
+    return range1[0] >= range2[0] and range1[-1] <= range2[-1]
 
 def get_pair_ranges(line):
     ''' Parses each `line` from the input and extracts a `range` for each of the two elves.'''
