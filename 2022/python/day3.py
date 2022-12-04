@@ -106,54 +106,6 @@ Find the item type that corresponds to the badges of each three-Elf group.
 What is the sum of the priorities of those item types?
 '''
 
-all_letters = string.ascii_lowercase + string.ascii_uppercase
-priorities = {letter: index+1 for index, letter in enumerate(all_letters)}
-
-def get_compartments_from_rucksack(rucksack: 'str') -> 'tuple[str,str]':
-    ''' Splits `rucksack` into two halves and return them in a `list`. '''
-    return rucksack[:len(rucksack)//2], rucksack[len(rucksack)//2:]
-
-def get_shared_chars(*args) -> 'set':
-    ''' Gets the chars that are present in each of the arguments passed in. '''
-    args_as_sets = [set(char for char in arg) for arg in args]
-    first = args_as_sets[0]
-    rest = args_as_sets[1:]
-    return first.intersection(*rest)
-
-def get_priorities_from_shared(shared_chars: 'set') -> 'int':
-    ''' Returns the sum of the priorities of each char in `shared_chars` '''
-    mapped = [priorities[char] for char in shared_chars]
-    return sum(mapped)
-
-''' ****************************************************************** '''
-
-def part1(rucksacks) -> 'None':
-    sum_of_priorities = 0
-
-    for rucksack in rucksacks:
-        compartment1, compartment2 = get_compartments_from_rucksack(rucksack)
-        shared_chars = get_shared_chars(compartment1, compartment2)
-        sum_of_priorities += get_priorities_from_shared(shared_chars)
-
-    print('Part 1 -->', sum_of_priorities)
-
-''' ****************************************************************** '''
-
-def part2(rucksacks) -> 'None':
-    sum_of_priorities = 0
-
-    for x in range(0, len(rucksacks), 3):
-        group = rucksacks[x:x+3]
-        shared_chars = get_shared_chars(*group)
-        sum_of_priorities += get_priorities_from_shared(shared_chars)
-    
-    print('Part 2 -->', sum_of_priorities)
-
-
-''' ****************************************************************** '''
-
 if __name__ == "__main__":
-    input = get_input()
-    rucksacks = input.strip().split("\n")
-    part1(rucksacks)
-    part2(rucksacks)
+    print('Part 1 -->', sum([sum([{letter: index+1 for index, letter in enumerate(string.ascii_lowercase + string.ascii_uppercase)}[char] for char in [set(char for char in arg) for arg in [rucksack[:len(rucksack)//2], rucksack[len(rucksack)//2:]]][0].intersection(*[set(char for char in arg) for arg in [rucksack[:len(rucksack)//2], rucksack[len(rucksack)//2:]]][1:])]) for rucksack in get_input().strip().split("\n")]))
+    print('Part 2 -->', sum([sum([{letter: index+1 for index, letter in enumerate(string.ascii_lowercase + string.ascii_uppercase)}[char] for char in [set(char for char in arg) for arg in get_input().strip().split("\n")[x:x+3]][0].intersection(*[set(char for char in arg) for arg in get_input().strip().split("\n")[x:x+3]][1:])]) for x in range(0, len(get_input().strip().split("\n")), 3)]))
