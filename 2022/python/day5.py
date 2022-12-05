@@ -3,6 +3,8 @@ import re
 from pprint import PrettyPrinter
 pp = PrettyPrinter(4)
 
+INT_REGEX = r'\d+'
+
 '''
 --- Day 5: Supply Stacks ---
 
@@ -87,16 +89,16 @@ def get_stacks(raw_stacks:'str') -> 'dict':
     ''' Get the initial stacks provided at the top of the input. '''
     raw_stacks = raw_stacks.split('\n')
 
-    stacks = {int(num): [] for num in re.findall(r'\d', raw_stacks[-1])}
+    stacks = {int(num): [] for num in re.findall(INT_REGEX, raw_stacks[-1])}
 
     for line in raw_stacks[:-1]:
-        index = 1
+        index_in_line = 1
         stack_number = 1
         while stack_number <= len(stacks.keys()):
-            crate_value = line[index]
+            crate_value = line[index_in_line]
             if crate_value != " ":
                 stacks[stack_number].insert(0, crate_value)
-            index += 4
+            index_in_line += 4
             stack_number += 1
 
     return stacks
@@ -110,13 +112,13 @@ def part1(input):
     instructions = instructions.strip().split("\n")
     
     for instruction in instructions:
-        quantity, source_stack, target_stack = re.findall(r'\d+', instruction)
+        quantity, source_stack_key, target_stack_key = re.findall(INT_REGEX, instruction)
         quantity = int(quantity)
-        source_stack = int(source_stack)
-        target_stack = int(target_stack)
+        source_stack = stacks[int(source_stack_key)]
+        target_stack = stacks[int(target_stack_key)]
 
         while quantity != 0:
-            stacks[target_stack].append(stacks[source_stack].pop())
+            target_stack.append(source_stack.pop())
             quantity -= 1
     
     message = ""
@@ -128,7 +130,26 @@ def part1(input):
 ''' ****************************************************************** '''
 
 def part2(input):
-    pass
+    raw_stacks, instructions = input
+
+    stacks = get_stacks(raw_stacks)
+    instructions = instructions.strip().split("\n")
+    
+    for instruction in instructions:
+        quantity, source_stack_key, target_stack_key = re.findall(INT_REGEX, instruction)
+        quantity = int(quantity)
+        source_stack = stacks[int(source_stack_key)]
+        target_stack = stacks[int(target_stack_key)]
+
+        while quantity != 0:
+            target_stack.append(source_stack.pop(-quantity))
+            quantity -= 1
+    
+    message = ""
+    for stack in stacks.values():
+        message += stack.pop()
+
+    print("Part 2 -->", message)
 
 ''' ****************************************************************** '''
 
