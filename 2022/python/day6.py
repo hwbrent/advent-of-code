@@ -55,20 +55,38 @@ Here are a few more examples:
 
 How many characters need to be processed before the first start-of-packet
 marker is detected?
+
+--- Part Two ---
+
+Your device's communication system is correctly detecting packets, but still
+isn't working. It looks like it also needs to look for messages.
+
+A start-of-message marker is just like a start-of-packet marker, except it
+consists of 14 distinct characters rather than 4.
+
+Here are the first positions of start-of-message markers for all of the above
+examples:
+
+• mjqjpqmgbljsphdztnvjfqwrcgsmlb: first marker after character 19
+• bvwbjplbgvbhsrlpgdmjqwftvncz: first marker after character 23
+• nppdvjthqldpwncqszvftbrmjlhg: first marker after character 23
+• nznrnfrfntjfmvfwmzdfjlvtqnbhcprsg: first marker after character 29
+• zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw: first marker after character 26
+
+How many characters need to be processed before the first start-of-message
+marker is detected?
 '''
 
-def part1(input):
-    for x in range(len(input)-3):
-        section = input[x:x+4]
+def part(part, input):
+    section_length = 4 if part == 1 else 14
+    for x in range(len(input)-section_length+1):
+        section = input[x:x+section_length]
         unique_chars = set(char for char in section)
         if len(section) == len(unique_chars):
-            print("Part 1 -->", x + len(section))
+            print(f"Part {part} -->", x + section_length)
             break
-
-def part2(input):
-    pass
 
 if __name__ == "__main__":
     input = get_input().strip()
-    part1(input)
-    part2(input)
+    part(1,input)
+    part(2,input)
