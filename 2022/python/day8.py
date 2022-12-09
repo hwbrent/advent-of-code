@@ -51,7 +51,8 @@ def part1(trees):
                 count += 1
                 continue
 
-            visible = tree > max(row[:j]) \
+            visible = \
+                   tree > max(row[:j]) \
                 or tree > max(row[j+1:]) \
                 or tree > max(r[j] for r in trees[:i]) \
                 or tree > max(r[j] for r in trees[i+1:])
@@ -61,8 +62,39 @@ def part1(trees):
 
     print('Part 1 -->', count)
 
-def part2(input):
-    pass
+def get_viewing_distance(tree, tree_slice):
+    for index, next_tree in enumerate(tree_slice):
+        if next_tree >= tree:
+            return index + 1
+    if len(tree_slice) != 0:
+        # Can see the whole way to the end of the grid
+        return len(tree_slice)
+    else:
+        # Tree is on edge of grid
+        return 1
+
+def part2(trees):
+
+    highest = 0
+
+    for i, row in enumerate(trees):
+        for j, tree in enumerate(row):
+
+            left = row[j-1::-1]
+            right = row[j+1:]
+            up = [r[j] for r in trees[i-1::-1]]
+            down = [r[j] for r in trees[i+1:]]
+
+            scenic_score = \
+                  get_viewing_distance(tree, left) \
+                * get_viewing_distance(tree, right) \
+                * get_viewing_distance(tree, up) \
+                * get_viewing_distance(tree, down)
+            
+            if scenic_score > highest:
+                highest = scenic_score
+
+    print('Part 2 -->', highest)
 
 ''' ****************************************************************** '''
 
