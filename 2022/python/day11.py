@@ -45,62 +45,44 @@ def part1(input):
     '''
 
     monkeys = parse_input(input)
-    pp.pprint(monkeys)
 
-    times_inspected = {i: 0 for i,_ in enumerate(monkeys)}
+    # Each value corresponds to the monkey with number equal to the index of the value.
+    # i.e. times_inspected[2] holds the value for monkey 2
+    times_inspected = [0 for _ in monkeys]
 
     for round in range(20):
-        # if round != 0:
-        #     break
 
         # Iterate through all the monkeys
         for monkey_index, monkey in enumerate(monkeys):
 
             times_inspected[monkey_index] += len(monkeys[monkey_index]['Starting items'])
 
-            get_value_as_path = lambda item_index: f'monkeys[{monkey_index}]["Starting items"][{item_index}]'
+            def get_val():
+                return monkeys[monkey_index]["Starting items"][0]
+            def set_val(v):
+                monkeys[monkey_index]["Starting items"][0] = v
 
-            print('*'*30)
-            print(monkey['Operation'])
+            # Not really "iterating" per se. More like working with the first element
+            # of the list, then removing it, and repeating until there are no more
+            # elements in the list to work with.
+            while len(monkeys[monkey_index]["Starting items"]) != 0:
 
-            val_path = get_value_as_path(0)
-            while len(eval(f'monkeys[{monkey_index}]["Starting items"]')) != 0:
+                # Update worry level per the operation provided.
+                exec(monkey['Operation'].replace('value', f'monkeys[{monkey_index}]["Starting items"][0]'))
 
-                print(eval(val_path))
+                # Divide worry level by 3 and round down to nearest integer.
+                set_val(math.floor(get_val() / 3))
 
-                # Update the value based on the operation in monkey['Operation'].
-                operation = monkey['Operation'].replace('value', val_path)
-                exec(operation)
-
-                print(eval(val_path))
-
-                # Divide by 3 and round down to nearest integer.
-                div3_and_round = f'{val_path} = {math.floor(eval(val_path) / 3)}'
-                exec(div3_and_round)
-
-                print(eval(val_path))
-
-                # Do test and figure out which monkey to throw new value to.
-                test_outcome = eval(val_path) % monkey['Test']['divisible by'] == 0
+                # Do test and figure out which monkey to throw new worry level to.
+                test_outcome = get_val() % monkey['Test']['divisible by'] == 0
                 target_monkey = monkey['Test']['true'] if test_outcome == True else monkey['Test']['false']
-                print('throw to monkey', target_monkey)
-                exec(f'monkeys[{target_monkey}]["Starting items"].append({eval(val_path)})')
+                monkeys[target_monkey]["Starting items"].append(get_val())
 
-                exec(f'del {val_path}')
-                print()
+                del monkeys[monkey_index]["Starting items"][0]
 
-            # print(monkey['Starting items'])
-            print()
-    
-        for monkey in monkeys:
-            print(monkey['Starting items'])
-
-        srtd = sorted(times_inspected.values())
-        print(times_inspected)
-        print(srtd)
-
-        monkey_business_level = srtd[-2] * srtd[-1]
-        print('Part 1 -->', monkey_business_level)
+    times_inspected.sort()
+    monkey_business_level = times_inspected[-2] * times_inspected[-1]
+    print('Part 1 -->', monkey_business_level)
 
 def part2(input):
     pass
@@ -108,8 +90,9 @@ def part2(input):
 ''' ****************************************************************** '''
 
 if __name__ == "__main__":
-    # input = get_input()
-    input = '''Monkey 0:
+    input = get_input()
+
+    example = '''Monkey 0:
   Starting items: 79, 98
   Operation: new = old * 19
   Test: divisible by 23
@@ -137,5 +120,6 @@ Monkey 3:
     If true: throw to monkey 0
     If false: throw to monkey 1
     '''
-    part1(get_input())
+
+    part1(input)
     part2(input)
