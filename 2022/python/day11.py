@@ -1,6 +1,7 @@
 from utils import get_input
 import re
 import math
+import time
 from pprint import PrettyPrinter
 pp = PrettyPrinter(indent=4)
 
@@ -36,14 +37,6 @@ def parse_input(input):
     return out
 
 def part1(input):
-    '''
-    • Starting items lists your worry level for each item the monkey is currently holding in the order they will be inspected.
-    • Operation shows how your worry level changes as that monkey inspects an item. (An operation like new = old * 5 means that your worry level after the monkey inspected the item is five times whatever your worry level was before inspection.)
-    • Test shows how the monkey uses your worry level to decide where to throw an item next.
-        • If true shows what happens with an item if the Test was true.
-        • If false shows what happens with an item if the Test was false.
-    '''
-
     monkeys = parse_input(input)
 
     # Each value corresponds to the monkey with number equal to the index of the value.
@@ -85,7 +78,60 @@ def part1(input):
     print('Part 1 -->', monkey_business_level)
 
 def part2(input):
-    pass
+    ''' Credit to this comment on Reddit: https://www.reddit.com/r/adventofcode/comments/zifqmh/comment/izuixs4/?utm_source=share&utm_medium=web2x&context=3 '''
+    start = time.time()
+    monkeys = parse_input(input)
+
+    divisible_bys = [monkey['Test']['divisible by'] for monkey in monkeys]
+    lcm = math.lcm(*divisible_bys)
+
+    # Each value corresponds to the monkey with number equal to the index of the value.
+    # i.e. times_inspected[2] holds the value for monkey 2
+    times_inspected = [0 for _ in monkeys]
+
+    for round in range(10_000):
+
+        # Iterate through all the monkeys
+        for monkey_index, monkey in enumerate(monkeys):
+
+            times_inspected[monkey_index] += len(monkeys[monkey_index]['Starting items'])
+
+            def get_val():
+                return monkeys[monkey_index]["Starting items"][0]
+            def set_val(v):
+                monkeys[monkey_index]["Starting items"][0] = v
+
+            # Not really "iterating" per se. More like working with the first element
+            # of the list, then removing it, and repeating until there are no more
+            # elements in the list to work with.
+            while len(monkeys[monkey_index]["Starting items"]) != 0:
+
+                # Update worry level per the operation provided.
+                exec(monkey['Operation'].replace('value', f'monkeys[{monkey_index}]["Starting items"][0]'))
+
+                # Reduce worry level to manageable level.
+                # https://www.reddit.com/r/adventofcode/comments/zifqmh/comment/izuixs4/?utm_source=share&utm_medium=web2x&context=3
+                set_val(
+                    # math.floor(get_val() / 3)
+                    # math.floor(math.log(get_val()))
+                    # math.floor(math.sqrt(get_val()))
+                    get_val() % lcm
+                )
+
+                # Do test and figure out which monkey to throw new worry level to.
+                test_outcome = get_val() % monkey['Test']['divisible by'] == 0
+                target_monkey = monkey['Test']['true'] if test_outcome == True else monkey['Test']['false']
+                monkeys[target_monkey]["Starting items"].append(get_val())
+
+                del monkeys[monkey_index]["Starting items"][0]
+
+    times_inspected.sort()
+    monkey_business_level = times_inspected[-2] * times_inspected[-1]
+    # with math.log  --> 14400600004 --> too low
+    # with math.sqrt --> 14400720005 --> too low
+
+    finish = time.time()
+    print(f'Part 2 --> {monkey_business_level} \t ({finish-start} seconds)')
 
 ''' ****************************************************************** '''
 
@@ -122,4 +168,4 @@ Monkey 3:
     '''
 
     part1(input)
-    part2(input)
+    part2(input) # (time: 11.930435180664062 seconds)
