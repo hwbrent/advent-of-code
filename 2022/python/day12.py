@@ -59,13 +59,19 @@ def get_options(input,i):
 ''' ****************************************************************** '''
 
 class Node:
-    def __init__(self, index, char, opts, parent=None):
+    def __init__(self, index, char, opts):
         self.index = index
         self.char = char
         self.opts = opts
-        self.parent = parent
 
+        self.parent = None
         self.visited = False
+    
+    def __eq__(self, other:'str'):
+        return self.char == other
+    
+    def __repr__(self):
+        return f'Node(index={self.index},char={self.char},opts={self.opts},parent={repr(self.parent)})'
 
 class BFS:
     '''
@@ -112,36 +118,48 @@ class BFS:
         for i, char in enumerate(input):
             if char == '\n':
                 continue
-            info[i] = {
-                "char": input[i],
-                "opts": get_options(input, i),
-                "visited": False,
-                "parent": None
-            }
+            # info[i] = {
+            #     "char": input[i],
+            #     "opts": get_options(input, i),
+            #     "visited": False,
+            #     "parent": None
+            # }
+            char = input[i]
+            opts = get_options(input,i)
+            info[i] = Node(i,char, opts)
         return info
 
     def do(self):
         q = list()
-        self.root['visited'] = True
+        self.root.visited = True
         q.append(self.root)
 
         while len(q) != 0:
             v = q.pop(0)
-            if v['char'] == 'E':
+            if v == 'E':
                 return v
-            for next_node in v['opts']:
-                next_node = self.node_info[next_node]
-                if not next_node['visited']:
-                    next_node['visited'] = True
-                    next_node['parent'] = v
+            for next_node in v.opts:
+                next_node = self.node_info[next_node] # next_node was an index in input, now it's a Node
+                if not next_node.visited:
+                    next_node.visited = True
+                    next_node.parent = v
                     q.append(next_node)
 
     def get_as_list(self):
-        # out = []
-        # end = self.do()
-        # while not end['parent'] is None:
-        #     out.append(end['parent'])
-        pass
+
+        indices = []
+        chars = []
+        node = self.do()
+        while not node.parent is None:
+            indices.insert(0, node.index)
+            chars.insert(0, node.char)
+            node = node.parent
+
+        # Do this for the starting node too
+        indices.insert(0, node.index)
+        chars.insert(0, node.char)
+
+        print(len(chars))
 
 ''' ****************************************************************** '''
 
@@ -155,5 +173,6 @@ acctuvwj
 abdefghi'''
 
     bfs = BFS(input)
-    end = bfs.do()
-    print(end)
+    bfs.get_as_list()
+    # print(input.index('S'))
+    # print(input.index('E'))
