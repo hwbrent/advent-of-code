@@ -1,6 +1,8 @@
 from utils import get_input
 import json
 
+ans_indices = [1, 7, 8, 10, 11, 18, 21, 24, 25, 26, 27, 28, 33, 35, 37, 42, 43, 45, 50, 52, 53, 55, 57, 58, 59, 61, 64, 66, 69, 70, 72, 73, 74, 77, 78, 79, 82, 83, 90, 92, 94, 96, 97, 103, 107, 108, 109, 112, 117, 118, 119, 120, 121, 123, 126, 131, 133, 134, 135, 137, 138, 139, 141, 142, 144, 145, 147, 148, 149]
+
 def parse_input(input = get_input()):
     return [
         [json.loads(packet) for packet in pair.split('\n')]
@@ -13,85 +15,56 @@ def part1(input):
     What is the sum of the indices of those pairs?
     '''
 
-    indices_of_pairs_in_right_order = set() # 1-indexed
+    indices = set()
 
-    # ------------------------------
+    # Iterate through each pair of packets.
+    for index, pair in enumerate(input):
+        index += 1
+        packet1, packet2 = pair
+        
+        left = None
+        right = None
 
-    def compare(packet1, packet2, index):
-        assert type(packet1) == list
-        assert type(packet2) == list
-
-        # Keep incrementing i until one or neither of the packets has no values left
+        # Compare the two packets from above.
         i = 0
         while True:
-            left_ran_out_first = (i == len(packet1) and i < len(packet2))
-            right_ran_out_first = (i < len(packet1) and i == len(packet2))
-            both_ran_out_at_same_time = (i == len(packet1) == len(packet2))
+            assert type(packet1) == type(packet2) == list
 
-            if left_ran_out_first:
-                # The inputs are in the right order.
-                indices_of_pairs_in_right_order.add(index+1)
-                return
-            elif right_ran_out_first:
-                # The inputs are not in the right order.
-                return
-            elif both_ran_out_at_same_time:
-                # Continue checking the next part of the input.
-                return
-            
+            p1_ended_before_p2 = i == len(packet1) and i < len(packet2)
+            p2_ended_before_p1 = i < len(packet1) and i == len(packet2)
+            both_ended_at_same_time = i == len(packet1) == len(packet2)
+
+            if p1_ended_before_p2:
+                indices.add(index)
+                break
+            elif p2_ended_before_p1 or both_ended_at_same_time:
+                break
             else:
-                left = packet1[i]
-                right = packet2[i]
+                # Both lists still have values left in them.
+                # So now need to compare those values
 
-                both_ints = type(left) == type(right) == int
-                both_lists = type(left) == type(right) == list
-                one_int = not (both_ints or both_lists)
+                if left is right is None:
+                    left = packet1[i]
+                    right = packet2[i]
 
-                if both_ints:
-                    # print('both_ints')
-                    # If both values are integers, the lower integer should come first.
-                    # If the left integer is lower than the right integer, the inputs are in the right order.
-                    # If the left integer is higher than the right integer, the inputs are not in the right order.
-                    # Otherwise, the inputs are the same integer; continue checking the next part of the input.
+                # If both values are integers
+                if type(left) == type(right) == int:
+                    pass
 
-                    if left < right:
-                        # The inputs are in the right order.
-                        indices_of_pairs_in_right_order.add(index+1)
-                        return
-                    elif left > right:
-                        # The inputs are not in the right order.
-                        return
-                    elif left == right:
-                        # Continue checking the next part of the input.
-                        i += 1
-                        continue
+                # If both values are lists
+                elif type(left) == type(right) == list:
+                    pass
 
-                elif both_lists:
-                    # print('both_lists')
-                    # If both values are lists, compare the first value of each list, then the second value, and so on.
-                    # If the left list runs out of items first, the inputs are in the right order.
-                    # If the right list runs out of items first, the inputs are not in the right order.
-                    # If the lists are the same length and no comparison makes a decision about the order, continue checking the next part of the input.
-                    compare(left,right,index)
+                # If exactly one value is an integer
+                else: # different types
+                    pass
 
-                elif one_int:
-                    # print('one_int')
-                    # If exactly one value is an integer, convert the integer to a list which contains that integer as its only value, then retry the comparison.
-                    # For example, if comparing [0,0,0] and 2, convert the right value to [2] (a list containing 2); the result is then found by instead comparing [0,0,0] and [2].
-                    if type(left) == int:
-                        compare([left], right, index)
-                    elif type(right) == int:
-                        compare(left, [right], index)
 
-                i += 1
+        print(packet1)
+        print(packet2)
+        print()
 
-    # ------------------------------
-
-    for i in range(len(input)):
-        compare(*input[i], i)
-
-    print(indices_of_pairs_in_right_order)
-    print('Part 1 -->', sum(indices_of_pairs_in_right_order))
+    pass
 
 def part2(input):
     pass
@@ -148,10 +121,10 @@ if __name__ == '__main__':
 #####################################################################################
 #####################################################################################
 
-ans_indices = [1, 7, 8, 10, 11, 18, 21, 24, 25, 26, 27, 28, 33, 35, 37, 42, 43, 45, 50, 52, 53, 55, 57, 58, 59, 61, 64, 66, 69, 70, 72, 73, 74, 77, 78, 79, 82, 83, 90, 92, 94, 96, 97, 103, 107, 108, 109, 112, 117, 118, 119, 120, 121, 123, 126, 131, 133, 134, 135, 137, 138, 139, 141, 142, 144, 145, 147, 148, 149]
-print("-"*50)
-print(ans_indices)
-print(sum(ans_indices))
+# print("-"*50)
+# print(ans_indices)
+# print(sum(ans_indices))
+
 # indices = []
 
 # from collections import defaultdict
