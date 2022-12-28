@@ -1,5 +1,6 @@
 from utils import get_input
 import copy
+from collections import defaultdict
 from pprint import PrettyPrinter
 pp = PrettyPrinter(4)
 
@@ -252,70 +253,57 @@ def get_file_system(parsed_input:'list') -> 'dict':
 
     return file_system, all_dirs
 
-def is_leaf(fs, path) -> 'bool':
-    '''  '''
-    dir = eval(f'{fs}{convert_path_list_to_string(list(path))}')
-    for value in dir.values():
-        if type(value) == dict:
-            return False
-    else:
-        return True
-
-def get_dir(fs,path) -> 'dict':
-    return eval(f'{fs}{convert_path_list_to_string(path)}')
-
 ''' ****************************************************************** '''
 
-def part1(parsed_input):
+def part1(input):
     '''
     Find all of the directories with a total size of at most 100000.
     What is the sum of the total sizes of those directories?
     '''
 
-    fs, all_dirs = get_file_system(parsed_input)
-    leaves = set( path for path in all_dirs if is_leaf(fs,path) )
+    fs, all_dirs = get_file_system(input)
 
-    dir_sizes = dict()
+    def default_value():
+        return 0
 
-    def get_dir_size(path):
-        dir = get_dir(fs, path)
+    dir_sizes = defaultdict(default_value)
 
+    def get_dir_size(path) -> 'int':
+        ''' Gets the size of the direcory located at `path`. '''
+        dir = eval(f'{fs}{convert_path_list_to_string(list(path))}')
         total = 0
+        # Iterate through the items in this directory.
+        # If the entry is a file, add the size of the file to `total`.
+        # If the entry is a directory, add the size of that directory to `total`.
         for k,v in dir.items():
-            if type(v) == int:
+            is_file = type(v) == int
+            is_directory = type(v) == dict
+            if is_file:
                 total += v
-            elif type(v) == dict:
+            elif is_directory:
                 child_path = (*path, k)
                 total += dir_sizes[child_path]
-
         return total
 
+    # Go up each level of the tree, starting from the bottom.
+    # Calculate the size of every directory on each level and add it to `dir_paths`.
+    tree_height = len(max(all_dirs, key=len))
+    for level in reversed(range(1, tree_height+1)):
+        for path in all_dirs:
+            if len(path) != level:
+                continue
+            dir_size = get_dir_size(path)
+            dir_sizes[path] = dir_size
 
-    # Probably makes sense to traverse the tree from the leaves up.
-    # Add each leaf directory to dir_sizes with the value being the sum of the files
+    total = sum(value for value in dir_sizes.values() if value <= 100_000)
+    print('Part 1 -->', total)
 
-
-
-    # Start by finding the size of all the leaf directories.
-    for path in leaves:
-        dir = get_dir(fs,path)
-        dir_sizes[path] = sum(dir.values())
-
-    for path in leaves:
-        parent = path[:-1]
-    
-    print(dir_sizes)
-    
-    # Then 'move up' from the leaf directories
-
-def part2(parsed_input):
+def part2(input):
     pass
 
 ''' ****************************************************************** '''
 
 if __name__ == "__main__":
-    # raw_input = get_input()
-    # parsed_input = parse_input(raw_input)
-    # part1(parsed_input)
-    # part2(parsed_input)
-    print('' or 'Hello')
+    input = parse_input(get_input())
+    part1(input)
+    part2(input)
