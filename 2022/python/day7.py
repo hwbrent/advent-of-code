@@ -1,5 +1,7 @@
 from utils import get_input
 import copy
+from collections import defaultdict
+import math
 from pprint import PrettyPrinter
 pp = PrettyPrinter(4)
 
@@ -138,16 +140,6 @@ def convert_path_list_to_string(path:'list[str]') -> 'str':
             copied[index] = f"[{entry}]"
     return "".join(copied)
 
-def convert_stdout_item(entry:'list'):
-    '''
-    e.g. ['dir', 'mtbt']
-    e.g. [95962, 'mzvb']
-    '''
-    if entry[0] == 'dir':
-        return {"type":"dir", "contents":{}}
-    elif type(entry[0]) == int:
-        return {"type":"file", "size": entry[0]}
-
 def get_file_system(parsed_input:'list') -> 'dict':
     '''
     Convert the file system implied by the parsed_input and return it as a `dict`.
@@ -199,6 +191,8 @@ def get_file_system(parsed_input:'list') -> 'dict':
     # The current location within `file_system`.
     current_path = []
 
+    all_dirs = set()
+
     for entry in parsed_input:
 
         command = entry[0][0]
@@ -222,6 +216,7 @@ def get_file_system(parsed_input:'list') -> 'dict':
             else:
                 # Going DOWN into child directory. So add value to `current_path`
                 current_path.append(target_dir)
+                all_dirs.add(tuple(current_path))
                 if not target_dir in current_dir.keys():
                     exec(f'file_system{convert_path_list_to_string(current_path)} = {{}}')
 
@@ -247,21 +242,93 @@ def get_file_system(parsed_input:'list') -> 'dict':
                     value = item[0] if (type(item[0]) == int) else dict()
                     exec(f'file_system{convert_path_list_to_string(current_path + [key])} = {value}')
 
-    return file_system
+    return file_system, all_dirs
+
+def get_all_dir_sizes(fs, all_dirs) -> 'dict':
+    ''' Calculates the size of every directory in `fs`. '''
+    def default_value():
+        return 0
+
+    dir_sizes = defaultdict(default_value)
+
+    def get_dir_size(path) -> 'int':
+        ''' Gets the size of the direcory located at `path`. '''
+        dir = eval(f'{fs}{convert_path_list_to_string(list(path))}')
+        total = 0
+        # Iterate through the items in this directory.
+        # If the entry is a file, add the size of the file to `total`.
+        # If the entry is a directory, add the size of that directory to `total`.
+        for k,v in dir.items():
+            is_file = type(v) == int
+            is_directory = type(v) == dict
+            if is_file:
+                total += v
+            elif is_directory:
+                child_path = (*path, k)
+                total += dir_sizes[child_path]
+        return total
+
+    # Go up each level of the tree, starting from the bottom.
+    # Calculate the size of every directory on each level and add it to `dir_paths`.
+    tree_height = len(max(all_dirs, key=len))
+    for level in reversed(range(1, tree_height+1)):
+        for path in all_dirs:
+            if len(path) != level:
+                continue
+            dir_size = get_dir_size(path)
+            dir_sizes[path] = dir_size
+
+    return dir_sizes
 
 ''' ****************************************************************** '''
 
-def part1(parsed_input):
-    file_system = get_file_system(parsed_input)
-    print('Part 1 -->', None)
+def part1(input):
+    '''
+    Find all of the directories with a total size of at most 100000.
+    What is the sum of the total sizes of those directories?
+    '''
 
-def part2(parsed_input):
-    pass
+    fs, all_dirs = get_file_system(input)
+    dir_sizes = get_all_dir_sizes(fs, all_dirs)
+
+    total = sum(value for value in dir_sizes.values() if value <= 100_000)
+    print('Part 1 -->', total)
+
+def part2(input):
+    '''
+    Find the smallest directory that, if deleted, would free up enough space
+    on the filesystem to run the update. What is the total size of that
+    directory?
+    '''
+
+    fs, all_dirs = get_file_system(input)
+    dir_sizes = get_all_dir_sizes(fs, all_dirs)
+
+    unused_space_needed = 30_000_000 # provided in question
+    total_disk_space = 70_000_000 # provided in question
+
+    # the total space used by the files in the input filesystem
+    my_used_space = dir_sizes[tuple('/')] 
+    # the total space NOT used by the files in the input filesystem
+    my_unused_space = total_disk_space - my_used_space
+
+    # The space that needs to be cleared from the input filesystem
+    my_extra_space_needed = unused_space_needed - my_unused_space
+
+    # Find the smallest directory that, if deleted, would free up enough space
+    # on the filesystem to run the update.
+
+    only_sizes = list(dir_sizes.values())
+
+    file_to_delete = min(
+        file_size for file_size in only_sizes if file_size >= my_extra_space_needed
+    )
+
+    print('Part 2 -->', file_to_delete)
 
 ''' ****************************************************************** '''
 
 if __name__ == "__main__":
-    raw_input = get_input()
-    parsed_input = parse_input(raw_input)
-    part1(parsed_input)
-    part2(parsed_input)
+    input = parse_input(get_input())
+    part1(input)
+    part2(input)
