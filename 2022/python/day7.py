@@ -199,6 +199,8 @@ def get_file_system(parsed_input:'list') -> 'dict':
     # The current location within `file_system`.
     current_path = []
 
+    all_dirs = set()
+
     for entry in parsed_input:
 
         command = entry[0][0]
@@ -222,6 +224,7 @@ def get_file_system(parsed_input:'list') -> 'dict':
             else:
                 # Going DOWN into child directory. So add value to `current_path`
                 current_path.append(target_dir)
+                all_dirs.add(tuple(current_path))
                 if not target_dir in current_dir.keys():
                     exec(f'file_system{convert_path_list_to_string(current_path)} = {{}}')
 
@@ -247,13 +250,63 @@ def get_file_system(parsed_input:'list') -> 'dict':
                     value = item[0] if (type(item[0]) == int) else dict()
                     exec(f'file_system{convert_path_list_to_string(current_path + [key])} = {value}')
 
-    return file_system
+    return file_system, all_dirs
+
+def is_leaf(fs, path) -> 'bool':
+    '''  '''
+    dir = eval(f'{fs}{convert_path_list_to_string(list(path))}')
+    for value in dir.values():
+        if type(value) == dict:
+            return False
+    else:
+        return True
+
+def get_dir(fs,path) -> 'dict':
+    return eval(f'{fs}{convert_path_list_to_string(path)}')
 
 ''' ****************************************************************** '''
 
 def part1(parsed_input):
-    file_system = get_file_system(parsed_input)
-    print('Part 1 -->', None)
+    '''
+    Find all of the directories with a total size of at most 100000.
+    What is the sum of the total sizes of those directories?
+    '''
+
+    fs, all_dirs = get_file_system(parsed_input)
+    leaves = set( path for path in all_dirs if is_leaf(fs,path) )
+
+    dir_sizes = dict()
+
+    def get_dir_size(path):
+        dir = get_dir(fs, path)
+
+        total = 0
+        for k,v in dir.items():
+            if type(v) == int:
+                total += v
+            elif type(v) == dict:
+                child_path = (*path, k)
+                total += dir_sizes[child_path]
+
+        return total
+
+
+    # Probably makes sense to traverse the tree from the leaves up.
+    # Add each leaf directory to dir_sizes with the value being the sum of the files
+
+
+
+    # Start by finding the size of all the leaf directories.
+    for path in leaves:
+        dir = get_dir(fs,path)
+        dir_sizes[path] = sum(dir.values())
+
+    for path in leaves:
+        parent = path[:-1]
+    
+    print(dir_sizes)
+    
+    # Then 'move up' from the leaf directories
 
 def part2(parsed_input):
     pass
@@ -261,7 +314,8 @@ def part2(parsed_input):
 ''' ****************************************************************** '''
 
 if __name__ == "__main__":
-    raw_input = get_input()
-    parsed_input = parse_input(raw_input)
-    part1(parsed_input)
-    part2(parsed_input)
+    # raw_input = get_input()
+    # parsed_input = parse_input(raw_input)
+    # part1(parsed_input)
+    # part2(parsed_input)
+    print('' or 'Hello')
