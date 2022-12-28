@@ -1,6 +1,7 @@
 from utils import get_input
 import copy
 from collections import defaultdict
+import math
 from pprint import PrettyPrinter
 pp = PrettyPrinter(4)
 
@@ -139,16 +140,6 @@ def convert_path_list_to_string(path:'list[str]') -> 'str':
             copied[index] = f"[{entry}]"
     return "".join(copied)
 
-def convert_stdout_item(entry:'list'):
-    '''
-    e.g. ['dir', 'mtbt']
-    e.g. [95962, 'mzvb']
-    '''
-    if entry[0] == 'dir':
-        return {"type":"dir", "contents":{}}
-    elif type(entry[0]) == int:
-        return {"type":"file", "size": entry[0]}
-
 def get_file_system(parsed_input:'list') -> 'dict':
     '''
     Convert the file system implied by the parsed_input and return it as a `dict`.
@@ -253,16 +244,8 @@ def get_file_system(parsed_input:'list') -> 'dict':
 
     return file_system, all_dirs
 
-''' ****************************************************************** '''
-
-def part1(input):
-    '''
-    Find all of the directories with a total size of at most 100000.
-    What is the sum of the total sizes of those directories?
-    '''
-
-    fs, all_dirs = get_file_system(input)
-
+def get_all_dir_sizes(fs, all_dirs) -> 'dict':
+    ''' Calculates the size of every directory in `fs`. '''
     def default_value():
         return 0
 
@@ -295,11 +278,53 @@ def part1(input):
             dir_size = get_dir_size(path)
             dir_sizes[path] = dir_size
 
+    return dir_sizes
+
+''' ****************************************************************** '''
+
+def part1(input):
+    '''
+    Find all of the directories with a total size of at most 100000.
+    What is the sum of the total sizes of those directories?
+    '''
+
+    fs, all_dirs = get_file_system(input)
+    dir_sizes = get_all_dir_sizes(fs, all_dirs)
+
     total = sum(value for value in dir_sizes.values() if value <= 100_000)
     print('Part 1 -->', total)
 
 def part2(input):
-    pass
+    '''
+    Find the smallest directory that, if deleted, would free up enough space
+    on the filesystem to run the update. What is the total size of that
+    directory?
+    '''
+
+    fs, all_dirs = get_file_system(input)
+    dir_sizes = get_all_dir_sizes(fs, all_dirs)
+
+    unused_space_needed = 30_000_000 # provided in question
+    total_disk_space = 70_000_000 # provided in question
+
+    # the total space used by the files in the input filesystem
+    my_used_space = dir_sizes[tuple('/')] 
+    # the total space NOT used by the files in the input filesystem
+    my_unused_space = total_disk_space - my_used_space
+
+    # The space that needs to be cleared from the input filesystem
+    my_extra_space_needed = unused_space_needed - my_unused_space
+
+    # Find the smallest directory that, if deleted, would free up enough space
+    # on the filesystem to run the update.
+
+    only_sizes = list(dir_sizes.values())
+
+    file_to_delete = min(
+        file_size for file_size in only_sizes if file_size >= my_extra_space_needed
+    )
+
+    print('Part 2 -->', file_to_delete)
 
 ''' ****************************************************************** '''
 
