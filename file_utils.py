@@ -35,18 +35,14 @@ def create_python_file(file_path:'str', driver_url:'str', desc_string:'str' = No
 
     print('Creating python file...', end="\r", flush=True)
 
-    tab = '    '
     if desc_string:
-        desc_string = os.linesep + desc_string
-        desc_string = "'''"      + desc_string
-        desc_string = tab        + desc_string
+        tab = '    '
+        padding = tab + "'''" + os.linesep
 
+        desc_string = padding + desc_string
         desc_string = desc_string.replace(os.linesep, os.linesep+tab)
         desc_string += os.linesep
-
-        desc_string += tab
-        desc_string += "'''"
-        desc_string += os.linesep
+        desc_string += padding
 
     with open(file_path, 'w') as f:
         f.write(f"""from utils import get_input
@@ -88,6 +84,12 @@ def wait_for(method:'function', by:'By', param_string:'str'):
     '''
     Enables selenium to 'wait' for things to appear in the DOM before searching.
     An Exception is raised if it takes longer than 30 seconds.
+
+    Example usage:
+    ```python
+    #        driver.find_element( By.CSS_SELECTOR, 'button[type="submit"]')
+    wait_for(driver.find_element, By.CSS_SELECTOR, 'button[type="submit"]')
+    ```
     '''
 
     # Assert that `method` is a method on either WebDriver or WebElement
@@ -120,7 +122,7 @@ def main() -> 'None':
     python_file_exists = os.path.exists(python_file_path)
     input_file_exists = os.path.exists(input_file_path)
     files_already_exist = python_file_exists or input_file_exists
-    
+
     if files_already_exist:
         print(
             'Python file' if python_file_exists else 'Input file',
