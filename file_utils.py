@@ -77,11 +77,8 @@ def main() -> 'None':
     ### CHECK THAT FILES DON'T ALREADY EXIST FOR THE GIVEN YEAR & DAY ###
     #####################################################################
     
-    year = int(sys.argv[1])
-    day = int(sys.argv[2])
-
-    python_file_path = get_file_path(year, day)
-    input_file_path = get_file_path(year, day, input=True)
+    python_file_path = get_file_path(args.year, args.day)
+    input_file_path = get_file_path(args.year, args.day, input=True)
 
     python_file_exists = os.path.exists(python_file_path)
     input_file_exists = os.path.exists(input_file_path)
