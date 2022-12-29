@@ -178,11 +178,14 @@ def main() -> 'None':
     ### CREATE INPUT FILE ###
     #########################
 
-    puzzle_input_link = wait_for(driver.find_element, By.CSS_SELECTOR, 'a[href="15/input"]')
-    puzzle_input_link.click()
+    driver.get(f'{AOC_BASE_URL}/{args.year}/day/{args.day}/input')
 
-    input = wait_for(driver.find_element, By.TAG_NAME, 'pre').text
-    create_input_txt_file(input_file_path, input)
+    puzzle_input = wait_for(driver.find_element, By.TAG_NAME, 'pre').text
+    create_input_txt_file(input_file_path, puzzle_input)
+
+    #############
+    ### Done! ###
+    #############
 
     driver.quit()
 
