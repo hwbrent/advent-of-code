@@ -1,5 +1,6 @@
 import sys
 import os
+import time
 from argparse import ArgumentParser
 import selenium
 from selenium import webdriver
@@ -69,6 +70,19 @@ def get_arg_parser() -> 'ArgumentParser':
     parser.add_argument('--desc', action="store_true", default=False)
     return parser
 
+def wait_for(find:'function', by:'By', param_string:'str'):
+    ''' Enables selenium to 'wait' for things to appear in the DOM. Raises an exception if it takes longer than 30 seconds. '''
+    value = None
+    start = time.time()
+    while value is None:
+        if time.time() - start > 30:
+            raise Exception(f'Error in searching webpage.')
+        try:
+            value = find(by, param_string)
+        except:
+            continue
+    return value
+
 def main() -> 'None':
     env = get_env_variables()
     args = get_arg_parser().parse_args()
@@ -101,26 +115,20 @@ def main() -> 'None':
     options.add_argument("headless")
     driver = webdriver.Chrome(executable_path = CHROMEDRIVER_PATH, options = options)
 
-    driver.get(AOC_LOGIN_PAGE)
-    login_page_link = driver.find_element(By.CSS_SELECTOR, 'a[href="/auth/reddit"]')
+    driver.get(f'{AOC_BASE_URL}/2022/auth/login')
+    login_page_link = wait_for(driver.find_element, By.CSS_SELECTOR, 'a[href="/auth/reddit"]')
     login_page_link.click()
 
-    username_input = driver.find_element(By.ID, 'loginUsername')
+    username_input = wait_for(driver.find_element, By.ID, 'loginUsername')
     username_input.send_keys(env['REDDIT_USERNAME'])
 
-    password_input = driver.find_element(By.ID, 'loginPassword')
+    password_input = wait_for(driver.find_element, By.ID, 'loginPassword')
     password_input.send_keys(env['REDDIT_PASSWORD'])
 
-    login_button = driver.find_element(By.CSS_SELECTOR, 'button[type="submit"]')
+    login_button = wait_for(driver.find_element, By.CSS_SELECTOR, 'button[type="submit"]')
     login_button.click()
 
-    allow_button = None
-    while allow_button is None:
-        try:
-            allow_button = driver.find_element(By.CSS_SELECTOR, 'input.fancybutton.newbutton.allow')
-        except:
-            continue
-
+    allow_button = wait_for(driver.find_element, By.CSS_SELECTOR, 'input.fancybutton.newbutton.allow')
     allow_button.click()
 
     # print('Successfully logged into Advent Of Code website!')
@@ -133,8 +141,8 @@ def main() -> 'None':
 
     # The description is a bunch of elements under an <article> with class 'day-desc'
     # These tags are <p> and <pre>. <pre> contains the code blocks
-    day_desc = driver.find_element(By.CLASS_NAME, 'day-desc') # <article>
-    children = day_desc.find_elements(By.XPATH, './child::*')
+    day_desc = wait_for(driver.find_element, By.CLASS_NAME, 'day-desc') # <article>
+    children = wait_for(day_desc.find_elements, By.XPATH, './child::*')
     desc_string = '\n\n'.join(child.text for child in children)
 
     create_python_file(python_file_path, driver.current_url, desc_string)
@@ -143,10 +151,10 @@ def main() -> 'None':
     ### CREATE INPUT FILE ###
     #########################
 
-    puzzle_input_link = driver.find_element(By.CSS_SELECTOR, 'a[href="15/input"]')
+    puzzle_input_link = wait_for(driver.find_element, By.CSS_SELECTOR, 'a[href="15/input"]')
     puzzle_input_link.click()
 
-    input = driver.find_element(By.TAG_NAME, 'pre').text
+    input = wait_for(driver.find_element, By.TAG_NAME, 'pre').text
     create_input_txt_file(input_file_path, input)
 
     driver.quit()
