@@ -3,7 +3,6 @@ import os
 import time
 import re
 from argparse import ArgumentParser
-import selenium
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 
@@ -36,15 +35,26 @@ def create_python_file(file_path:'str', driver_url:'str', desc_string:'str' = No
 
     print('Creating python file...', end="\r", flush=True)
 
+    tab = '    '
+    if desc_string:
+        desc_string = os.linesep + desc_string
+        desc_string = "'''"      + desc_string
+        desc_string = tab        + desc_string
+
+        desc_string = desc_string.replace(os.linesep, os.linesep+tab)
+        desc_string += os.linesep
+
+        desc_string += tab
+        desc_string += "'''"
+        desc_string += os.linesep
+
     with open(file_path, 'w') as f:
         f.write(f"""from utils import get_input
 from pprint import PrettyPrinter
 pp = PrettyPrinter(indent=4)
 
-{'' if desc_string is None else f"'''{os.linesep}{desc_string.strip()}'''"}
-
 def part1(input):
-    print('Part 1 -->', None)
+{desc_string or ''}    print('Part 1 -->', None)
 
 def part2(input):
     print('Part 2 -->', None)
@@ -103,7 +113,7 @@ def main() -> 'None':
     #####################################################################
     ### CHECK THAT FILES DON'T ALREADY EXIST FOR THE GIVEN YEAR & DAY ###
     #####################################################################
-    
+
     python_file_path = get_file_path(args.year, args.day)
     input_file_path = get_file_path(args.year, args.day, input=True)
 
@@ -126,7 +136,7 @@ def main() -> 'None':
 
     options = webdriver.chrome.options.Options()
     options.add_argument("headless")
-    driver = webdriver.Chrome(executable_path = CHROMEDRIVER_PATH, options = options)
+    driver = webdriver.Chrome(executable_path=CHROMEDRIVER_PATH, options=options)
 
     driver.get(f'{AOC_BASE_URL}/2022/auth/login')
     login_page_link = wait_for(driver.find_element, By.CSS_SELECTOR, 'a[href="/auth/reddit"]')
@@ -152,11 +162,13 @@ def main() -> 'None':
 
     driver.get(f'{AOC_BASE_URL}/{args.year}/day/{args.day}')
 
-    # The description is a bunch of elements under an <article> with class 'day-desc'
-    # These tags are <p> and <pre>. <pre> contains the code blocks
-    day_desc = wait_for(driver.find_element, By.CLASS_NAME, 'day-desc') # <article>
-    children = wait_for(day_desc.find_elements, By.XPATH, './child::*')
-    desc_string = '\n\n'.join(child.text for child in children)
+    desc_string = None
+    if args.desc:
+        # The description is a bunch of elements under an <article> with class 'day-desc'
+        # These tags are <p> and <pre>. <pre> contains the code blocks
+        day_desc = wait_for(driver.find_element, By.CLASS_NAME, 'day-desc') # <article>
+        children = wait_for(day_desc.find_elements, By.XPATH, './child::*')
+        desc_string = '\n\n'.join(child.text for child in children)
 
     create_python_file(python_file_path, driver.current_url, desc_string)
 
