@@ -34,6 +34,8 @@ def get_file_path(year:'int', day:'int', input = False) -> 'str':
 def create_python_file(file_path:'str', driver_url:'str', desc_string:'str' = None) -> 'None':
     assert file_path[-3:] == '.py'
 
+    print('Creating python file...', end="\r", flush=True)
+
     with open(file_path, 'w') as f:
         f.write(f"""from utils import get_input
 from pprint import PrettyPrinter
@@ -56,6 +58,7 @@ if __name__ == '__main__':
 
 def create_input_txt_file(file_path:'str', input:'str') -> 'None':
     assert file_path[-4:] == '.txt'
+    print('Creating input file...', end="\r", flush=True)
     with open(file_path, 'w') as f:
         f.write(input)
     print(f'Successfully created input file at {file_path}!')
@@ -119,7 +122,7 @@ def main() -> 'None':
     ### LOG IN ###
     ##############
 
-    # print('Logging into Advent Of Code website...')
+    print('Logging into Advent of Code account...', end="\r", flush=True)
 
     options = webdriver.chrome.options.Options()
     options.add_argument("headless")
@@ -141,7 +144,7 @@ def main() -> 'None':
     allow_button = wait_for(driver.find_element, By.CSS_SELECTOR, 'input.fancybutton.newbutton.allow')
     allow_button.click()
 
-    # print('Successfully logged into Advent Of Code website!')
+    print('Successfully logged into Advent of Code account!', end="\r", flush=True)
 
     ##########################
     ### CREATE PYTHON FILE ###
@@ -168,6 +171,8 @@ def main() -> 'None':
     create_input_txt_file(input_file_path, input)
 
     driver.quit()
+
+    print('Done!')
 
 if __name__ == '__main__':
     main()
