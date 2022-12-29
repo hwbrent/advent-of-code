@@ -30,7 +30,7 @@ def get_file_path(year:'int', day:'int', input = False) -> 'str':
     file_extension = '.txt' if input else '.py'
     return os.path.join(str(year), 'inputs' if input else 'python', day_segment + file_extension)
 
-def create_python_file(file_path:'str', driver_url:'str', desc_string:'str' = None) -> 'None':
+def create_python_file(file_path:'str', page_url:'str', desc_string:'str' = None) -> 'None':
     assert file_path[-3:] == '.py'
 
     print('Creating python file...', end="\r", flush=True)
@@ -48,6 +48,9 @@ def create_python_file(file_path:'str', driver_url:'str', desc_string:'str' = No
         f.write(f"""from utils import get_input
 from pprint import PrettyPrinter
 pp = PrettyPrinter(indent=4)
+
+# Puzzle description: {page_url}
+# Puzzle input:       {page_url}/input
 
 def part1(input):
 {desc_string or ''}    print('Part 1 -->', None)
