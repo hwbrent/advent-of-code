@@ -1,6 +1,7 @@
 import sys
 import os
 import time
+import re
 from argparse import ArgumentParser
 import selenium
 from selenium import webdriver
@@ -70,15 +71,24 @@ def get_arg_parser() -> 'ArgumentParser':
     parser.add_argument('--desc', action="store_true", default=False)
     return parser
 
-def wait_for(find:'function', by:'By', param_string:'str'):
-    ''' Enables selenium to 'wait' for things to appear in the DOM. Raises an exception if it takes longer than 30 seconds. '''
+def wait_for(method:'function', by:'By', param_string:'str'):
+    '''
+    Enables selenium to 'wait' for things to appear in the DOM before searching.
+    An Exception is raised if it takes longer than 30 seconds.
+    '''
+
+    # Assert that `method` is a method on either WebDriver or WebElement
+    webdriver_regex = re.search(r'bound method WebDriver\.(.+) of <selenium\.webdriver\.chrome\.webdriver\.WebDriver', repr(method))
+    webelement_regex = re.search(r'bound method WebElement\.(.+) of <selenium\.webdriver\.remote\.webelement\.WebElement', repr(method))
+    assert webdriver_regex or webelement_regex
+
     value = None
     start = time.time()
     while value is None:
         if time.time() - start > 30:
             raise Exception(f'Error in searching webpage.')
         try:
-            value = find(by, param_string)
+            value = method(by, param_string)
         except:
             continue
     return value
