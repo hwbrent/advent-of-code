@@ -103,11 +103,8 @@ def main() -> 'None':
     # print('Logging into Advent Of Code website...')
 
     options = webdriver.chrome.options.Options()
-    # options.add_argument("headless")
-    driver = webdriver.Chrome(
-        executable_path = CHROMEDRIVER_PATH,
-        options = options
-    )
+    options.add_argument("headless")
+    driver = webdriver.Chrome(executable_path = CHROMEDRIVER_PATH, options = options)
 
     driver.get(AOC_LOGIN_PAGE)
     login_page_link = driver.find_element(By.CSS_SELECTOR, 'a[href="/auth/reddit"]')
