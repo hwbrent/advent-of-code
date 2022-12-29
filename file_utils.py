@@ -6,9 +6,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 
 CHROMEDRIVER_PATH = './chromedriver_mac64'
-REDDIT_LOGIN_PAGE = 'https://adventofcode.com/auth/reddit'
-AOC_LOGIN_PAGE = 'https://adventofcode.com/2022/auth/login'
-AOC_BASE_URL = 'https://adventofcode.com/'
+AOC_BASE_URL = 'https://adventofcode.com'
 
 def get_env_variables() -> 'dict':
     ''' Gets and returns the data in `.env`. '''
@@ -92,7 +90,7 @@ def main() -> 'None':
     if files_already_exist:
         print(
             'Python file' if python_file_exists else 'Input file',
-            f'already exists for {year} and {day}. Quitting...'
+            f'already exists for {args.year} and {args.day}. Quitting...'
         )
         sys.exit()
 
@@ -134,7 +132,7 @@ def main() -> 'None':
     ### CREATE PYTHON FILE ###
     ##########################
 
-    driver.get(f'{AOC_BASE_URL}{year}/day/{day}')
+    driver.get(f'{AOC_BASE_URL}/{args.year}/day/{args.day}')
 
     # The description is a bunch of elements under an <article> with class 'day-desc'
     # These tags are <p> and <pre>. <pre> contains the code blocks
