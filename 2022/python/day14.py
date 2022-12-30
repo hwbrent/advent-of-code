@@ -1,6 +1,5 @@
 from utils import get_input
 import copy
-import sys
 import itertools
 from pprint import PrettyPrinter
 pp = PrettyPrinter(indent=4)
@@ -9,10 +8,11 @@ pp = PrettyPrinter(indent=4)
 # Puzzle input:       https://adventofcode.com/2022/day/14/input
 
 def parse(raw_input):
-    # Generator that yields generators, each of which yields a set of tuples with x,y coordinates
+    # Generator which yields generators which yield tuples with x,y coordinates
     input = (
         (
-            (int(coord.split(',')[0]),int(coord.split(',')[1]))
+        #   (     x coordinate       ,       y coordinate      )
+            (int(coord.split(',')[0]), int(coord.split(',')[1]))
             for coord in line.split(" -> ")
         )
         for line in raw_input.strip().split('\n')
@@ -59,7 +59,7 @@ def move_sand(current, new):
 def is_in_abyss(sand, lowest_obstacle):
     return sand[1] > lowest_obstacle
 
-def part1(input):
+def part(part_no, input):
     '''
     Using your scan, simulate the falling sand.
     How many units of sand come to rest before sand starts flowing into the abyss below?
@@ -67,19 +67,22 @@ def part1(input):
     all_obstacles = copy.deepcopy(input)
 
     lowest_obstacle = max(coord[1] for coord in all_obstacles)
+    floor_height = 2 + lowest_obstacle
 
     units_of_sand = 0
-    not_falling_into_abyss = True
-    while not_falling_into_abyss:
+    done = False
+    while not done:
 
         # Simulate grain of sand falling down.
         # Sand falls from [500,0].
         sand = [500,0]
         while True:
 
-            falling_into_abyss = is_in_abyss(sand, lowest_obstacle)
-            if falling_into_abyss:
-                not_falling_into_abyss = False
+            # Circumstances under which to stop placing sand.
+            part1_stop_condition = part_no == 1 and is_in_abyss(sand, lowest_obstacle)
+            part2_stop_condition = part_no == 2 and (500,0) in all_obstacles
+            if part1_stop_condition or part2_stop_condition:
+                done = True
                 break
 
             # Check space below.
@@ -95,27 +98,28 @@ def part1(input):
             blocked_left = is_blocked(all_obstacles, left)
             blocked_right = is_blocked(all_obstacles, right)
 
-            if not blocked_below:
+            completely_blocked = blocked_below and blocked_left and blocked_right
+            on_floor = sand[1] == floor_height - 1
+
+            if (part_no == 2 and on_floor) or completely_blocked:
+                # Sand can't move any further.
+                assert tuple(sand) not in all_obstacles
+                all_obstacles.add(tuple(sand))
+                break
+
+            elif not blocked_below:
                 move_sand(sand, below)
             elif not blocked_left:
                 move_sand(sand, left)
             elif not blocked_right:
                 move_sand(sand, right)
-            else:
-                # Sand can't move any further
-                assert tuple(sand) not in all_obstacles
-                all_obstacles.add(tuple(sand))
-                break
 
         units_of_sand += 1
     units_of_sand -= 1
 
-    print('Part 1 -->', units_of_sand)
-
-def part2(input):
-    pass
+    print(f'Part {part_no} --> {units_of_sand}')
 
 if __name__ == '__main__':
     input = parse(get_input())
-    part1(input)
-    part2(input)
+    part(1,input)
+    part(2,input)
