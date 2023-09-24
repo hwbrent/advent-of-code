@@ -1,239 +1,78 @@
 from utils import get_input
+from pprint import PrettyPrinter
 
-# def part1(input):
+pp = PrettyPrinter(indent=4)
 
-#     x = 1
-#     waiting = {
-#         # cycle number: value to increment x by
-#     }
+# Puzzle description: https://adventofcode.com/2022/day/10
+# Puzzle input:       https://adventofcode.com/2022/day/10/input
 
-#     total = 0
 
-#     cycle = 0
-#     while cycle <= 220:
+def parse(raw_input):
+    for line in raw_input.strip().split("\n"):
+        line = line.split()
+        if len(line) == 2:
+            line[1] = int(line[1])
+        yield line
 
-#         # Check to see if there are any operations to handle.
-#         if cycle < len(input):
-#             line = input[cycle]
 
-#             if line[0] == 'addx':
-#                 value = int(line[1])
+def check_add(cycle, X):
+    return cycle * X if cycle % 40 == 20 else 0
 
-#                 waiting[cycle + 2] = value
 
-#         # 20th, 60th, 100th, 140th, 180th, and 220th
-#         if cycle in [19,59,99,139,179,219]:
-#             signal_strength = cycle * x
-#             total += signal_strength
-#             print(cycle, x, signal_strength)
+def pixel(cycle, X):
+    X_range = range(X - 1, X + 2)
+    pixel_row_index = (cycle % 40) - 1
+    pixel_char = "#" if pixel_row_index in X_range else "."
+    prefix = "\n" if cycle % 40 == 1 else ""
+    return prefix + pixel_char
 
-#         # Apply any changes from `waiting`.
-#         if cycle in waiting:
-#             x += waiting[cycle]
-
-#         cycle += 1
-    
-#     print('Part 1 -->', total)
-#     # 21893 - too high
-#     # 21817 - too high
-
-small_example = [
-    ["noop"],
-    ["addx", "3"],
-    ["addx", "-5"],
-]
-
-bigger_example = [line.split() for line in '''addx 15
-addx -11
-addx 6
-addx -3
-addx 5
-addx -1
-addx -8
-addx 13
-addx 4
-noop
-addx -1
-addx 5
-addx -1
-addx 5
-addx -1
-addx 5
-addx -1
-addx 5
-addx -1
-addx -35
-addx 1
-addx 24
-addx -19
-addx 1
-addx 16
-addx -11
-noop
-noop
-addx 21
-addx -15
-noop
-noop
-addx -3
-addx 9
-addx 1
-addx -3
-addx 8
-addx 1
-addx 5
-noop
-noop
-noop
-noop
-noop
-addx -36
-noop
-addx 1
-addx 7
-noop
-noop
-noop
-addx 2
-addx 6
-noop
-noop
-noop
-noop
-noop
-addx 1
-noop
-noop
-addx 7
-addx 1
-noop
-addx -13
-addx 13
-addx 7
-noop
-addx 1
-addx -33
-noop
-noop
-noop
-addx 2
-noop
-noop
-noop
-addx 8
-noop
-addx -1
-addx 2
-addx 1
-noop
-addx 17
-addx -9
-addx 1
-addx 1
-addx -3
-addx 11
-noop
-noop
-addx 1
-noop
-addx 1
-noop
-noop
-addx -13
-addx -19
-addx 1
-addx 3
-addx 26
-addx -30
-addx 12
-addx -1
-addx 3
-addx 1
-noop
-noop
-noop
-addx -9
-addx 18
-addx 1
-addx 2
-noop
-noop
-addx 9
-noop
-noop
-noop
-addx -1
-addx 2
-addx -37
-addx 1
-addx 3
-noop
-addx 15
-addx -21
-addx 22
-addx -6
-addx 1
-noop
-addx 2
-addx 1
-noop
-addx -10
-noop
-noop
-addx 20
-addx 1
-addx 2
-addx 2
-addx -6
-addx -11
-noop
-noop
-noop
-'''.strip().split("\n")] 
 
 def part1(input):
+    X = 1
+    cycle = 1
 
-    input = bigger_example
+    signal_strengths_total = 0
 
-    x = 1
-    waiting = {}
+    crt = ""
 
-    cycle = 0
-    # while cycle <= 5:
-    while cycle < len(input) or len(waiting) != 0:
+    for line in input:
+        if line[0] == "noop":
 
-        if x in [21,19,18,16]:
-            print(cycle)
+            signal_strengths_total += check_add(cycle, X)
+            crt += pixel(cycle, X)
 
-        # Check to see if there is an actionable operation from the input that we need to schedule.
-        if cycle < len(input):
-            line = input[cycle]
-            command = line[0]
-            if command == "addx":
-                value = int(line[1])
-                waiting[cycle + 2] = value
-        
-        # Output signal strength
-        if cycle in [19, 59, 99, 139, 179, 219]:
-        # if cycle in [20, 60, 100, 140, 180, 220]:
-            signal_strength = cycle * x
-            # print(cycle, signal_strength)
-        
-        # Check `waiting` to see if there are operations we need to carry out now.
-        if cycle in waiting:
-            x += waiting[cycle]
-            del waiting[cycle]
-        
-        cycle += 1
-    
-    # print('Part 1 -->', x)
+            cycle += 1
 
-def part2(input):
-    pass
+        elif line[0] == "addx":
 
-''' ****************************************************************** '''
+            signal_strengths_total += check_add(cycle, X)
+            crt += pixel(cycle, X)
+
+            cycle += 1
+
+            signal_strengths_total += check_add(cycle, X)
+            crt += pixel(cycle, X)
+            X += line[1]
+
+            cycle += 1
+
+    signal_strengths_total += check_add(cycle, X)
+
+    print(f"\nPart 1 --> {signal_strengths_total}")
+
+    print("\nPart 2 \u2193\n", crt, "\n")
+
+
+# fmt: off
+examples = (
+    "noop\naddx 3\naddx -5\n",
+    "addx 15\naddx -11\naddx 6\naddx -3\naddx 5\naddx -1\naddx -8\naddx 13\naddx 4\nnoop\naddx -1\naddx 5\naddx -1\naddx 5\naddx -1\naddx 5\naddx -1\naddx 5\naddx -1\naddx -35\naddx 1\naddx 24\naddx -19\naddx 1\naddx 16\naddx -11\nnoop\nnoop\naddx 21\naddx -15\nnoop\nnoop\naddx -3\naddx 9\naddx 1\naddx -3\naddx 8\naddx 1\naddx 5\nnoop\nnoop\nnoop\nnoop\nnoop\naddx -36\nnoop\naddx 1\naddx 7\nnoop\nnoop\nnoop\naddx 2\naddx 6\nnoop\nnoop\nnoop\nnoop\nnoop\naddx 1\nnoop\nnoop\naddx 7\naddx 1\nnoop\naddx -13\naddx 13\naddx 7\nnoop\naddx 1\naddx -33\nnoop\nnoop\nnoop\naddx 2\nnoop\nnoop\nnoop\naddx 8\nnoop\naddx -1\naddx 2\naddx 1\nnoop\naddx 17\naddx -9\naddx 1\naddx 1\naddx -3\naddx 11\nnoop\nnoop\naddx 1\nnoop\naddx 1\nnoop\nnoop\naddx -13\naddx -19\naddx 1\naddx 3\naddx 26\naddx -30\naddx 12\naddx -1\naddx 3\naddx 1\nnoop\nnoop\nnoop\naddx -9\naddx 18\naddx 1\naddx 2\nnoop\nnoop\naddx 9\nnoop\nnoop\nnoop\naddx -1\naddx 2\naddx -37\naddx 1\naddx 3\nnoop\naddx 15\naddx -21\naddx 22\naddx -6\naddx 1\nnoop\naddx 2\naddx 1\nnoop\naddx -10\nnoop\nnoop\naddx 20\naddx 1\naddx 2\naddx 2\naddx -6\naddx -11\nnoop\nnoop\nnoop"
+)
+# fmt: on
+
 
 if __name__ == "__main__":
-    input = [line.split() for line in get_input().strip().split("\n")]
+    input = parse(get_input())
+    # input = parse(examples[0])
+    # input = parse(examples[1])
     part1(input)
-    part2(input)

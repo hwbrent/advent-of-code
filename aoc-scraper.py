@@ -52,14 +52,19 @@ pp = PrettyPrinter(indent=4)
 # Puzzle description: {page_url}
 # Puzzle input:       {page_url}/input
 
+def parse(raw_input):
+    pass
+
 def part1(input):
-{desc_string or ''}    print('Part 1 -->', None)
+{desc_string or ''}    # print('Part 1 -->', None)
+    pass
 
 def part2(input):
-    print('Part 2 -->', None)
+    # print('Part 2 -->', None)
+    pass
 
 if __name__ == '__main__':
-    input = get_input()
+    input = parse(get_input())
     part1(input)
     part2(input)
 """)
