@@ -199,6 +199,35 @@ def get_problem_input_url(problem_url: str) -> str:
     return input_url
 
 
+def authenticate_via_reddit(problem_html: str) -> None:
+    """
+    Uses selenium to login with reddit credentials. This authenticates us
+    and therefore lets us access the problems' inputs
+    """
+    # There is a link to the reddit auth page at the bottom of the page.
+    # It's in an <a> tag with inner text [Reddit]
+    soup = bs4.BeautifulSoup(problem_html, "html.parser")
+
+    anchor_tag = soup.find(lambda tag: tag.name == "a" and tag.text == "[Reddit]")
+
+    href = anchor_tag["href"]
+    full_url = urljoin(AOC_BASE_URL, href)
+
+    # ...
+
+
+def get_problem_input_file(input_url: str) -> str:
+    """
+    Fetches the input for the given problem and returns it as a string.
+    """
+    response = requests.get(input_url)
+    if not response.ok:
+        # Most likely we need to authenticate
+        response.raise_for_status()
+
+    return response.text
+
+
 def main():
     year, day = parse_args()
     url = get_problem_url(year, day)
@@ -206,8 +235,11 @@ def main():
     html = get_problem_html(url)
     description = get_problem_description(html)
 
+    authenticate_via_reddit(html)
+
     input_url = get_problem_input_url(url)
-    print(input_url)
+    input_file = get_problem_input_file(input_url)
+    print(input_file)
 
 
 if __name__ == "__main__":
