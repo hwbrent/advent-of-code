@@ -1,4 +1,5 @@
 import datetime
+import urllib.parse
 
 # The "home page" as it were
 # Seems to show the problems for the most recent year by default
@@ -21,3 +22,15 @@ def get_most_recent_year() -> int:
         year -= 1
 
     return year
+
+
+def get_year_page_url(year: int = get_most_recent_year()) -> str:
+    """
+    Gets the URL for the most recent year of AOC if `year` is not specified,
+    else gets the year specified by `year`.
+    """
+    year = str(year)
+
+    url = urllib.parse.urljoin(AOC_BASE_URL, year)
+
+    return url
