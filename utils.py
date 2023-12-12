@@ -21,6 +21,8 @@ DECEMBER = 12
 # The first year that they did AOC.
 EARLIEST_YEAR = 2015
 
+CHROMEDRIVER_PATH = "./chromedriver"
+
 
 def get_most_recent_year() -> int:
     """
