@@ -3,6 +3,7 @@ import datetime
 import urllib.parse
 
 import requests
+import bs4
 
 # The "home page" as it were
 # Seems to show the problems for the most recent year by default
@@ -163,11 +164,42 @@ def get_problem_html(url: str) -> str:
     return response.text
 
 
+def get_problem_description(html: str) -> str:
+    """
+    Given an HTML document in string format, this function extracts the
+    problem description and returns it as a string, as it appears on the
+    page itself.
+    """
+
+    soup = bs4.BeautifulSoup(html, "html.parser")
+
+    # The majority of the text we want is contained within an
+    # <article> tag with class="day-desc"
+
+    article = soup.select("article.day-desc")[0]
+
+    # This gets all the inner text within the <article> and its subtree.
+    # As it is, the formatting is pretty much perfect.
+    text = article.text
+
+    # The only issue is that the title appears on the same line as the first
+    # paragraph. So we should fix that.
+    title = article.h2.text.strip()
+    title_with_newlines = title + "\n\n"
+    text = text.replace(title, title_with_newlines)
+
+    # Strip for good measure
+    text = text.strip()
+
+    return text
+
+
 def main():
     year, day = parse_args()
     url = get_problem_url(year, day)
     html = get_problem_html(url)
-    print(html)
+    description = get_problem_description(html)
+    print(description)
 
 
 if __name__ == "__main__":
