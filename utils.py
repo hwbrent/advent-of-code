@@ -1,9 +1,15 @@
+import os
 import sys
 import datetime
 import urllib.parse
 
 import requests
 import bs4
+from dotenv import load_dotenv
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service as ChromeService
+from selenium.webdriver.common.by import By
+
 
 # The "home page" as it were
 # Seems to show the problems for the most recent year by default
@@ -204,16 +210,38 @@ def authenticate_via_reddit(problem_html: str) -> None:
     Uses selenium to login with reddit credentials. This authenticates us
     and therefore lets us access the problems' inputs
     """
-    # There is a link to the reddit auth page at the bottom of the page.
-    # It's in an <a> tag with inner text [Reddit]
     soup = bs4.BeautifulSoup(problem_html, "html.parser")
 
+    # There is a link to the reddit auth page at the bottom of the page.
+    # It's in an <a> tag with inner text [Reddit]
     anchor_tag = soup.find(lambda tag: tag.name == "a" and tag.text == "[Reddit]")
-
     href = anchor_tag["href"]
     full_url = urljoin(AOC_BASE_URL, href)
 
-    # ...
+    # Init selenium webdriver
+    chromedriver_path = "./chromedriver"
+    options = webdriver.ChromeOptions()
+    options.add_argument("--headless")  # Run Chrome in headless mode (no GUI)
+    options.add_argument("--disable-gpu")  # Disable GPU acceleration in headless mode
+    service = ChromeService(chromedriver_path)
+    driver = webdriver.Chrome(options=options, service=service)
+
+    # Navigate to the reddit login page
+    driver.get(full_url)
+
+    # Find username and password input elements, and input values from .env
+    load_dotenv()
+    username_input = driver.find_element(By.ID, "loginUsername")
+    REDDIT_USERNAME = os.getenv("REDDIT_USERNAME")
+    username_input.send_keys(REDDIT_USERNAME)
+
+    password_input = driver.find_element(By.ID, "loginPassword")
+    REDDIT_PASSWORD = os.getenv("REDDIT_PASSWORD")
+    password_input.send_keys(REDDIT_PASSWORD)
+
+    # Click the login button
+    submit_button = driver.find_element(By.CSS_SELECTOR, "button[type='submit']")
+    submit_button.click()
 
 
 def get_problem_input_file(input_url: str) -> str:
