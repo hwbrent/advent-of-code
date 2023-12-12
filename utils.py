@@ -277,6 +277,16 @@ def get_problem_input_html(driver: webdriver.Chrome, input_url: str) -> str:
     return driver.page_source
 
 
+def get_raw_problem_input(html: str) -> str:
+    """
+    Given the HTML for the input page, this function extracts the actual
+    input and returns it as a string.
+    """
+    soup = bs4.BeautifulSoup(html, "html.parser")
+    inner_text = soup.get_text()
+    return inner_text.strip()
+
+
 def main():
     year, day = parse_args()
     url = get_problem_url(year, day)
@@ -291,7 +301,8 @@ def main():
     input_html = get_problem_input_html(driver, input_url)
     driver.quit()
 
-    print(input_html)
+    raw_input_string = get_raw_problem_input(input_html)
+    print(raw_input_string)
 
 
 if __name__ == "__main__":
