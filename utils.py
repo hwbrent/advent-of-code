@@ -194,12 +194,20 @@ def get_problem_description(html: str) -> str:
     return text
 
 
+def get_problem_input_url(problem_url: str) -> str:
+    input_url = urljoin(problem_url, "input")
+    return input_url
+
+
 def main():
     year, day = parse_args()
     url = get_problem_url(year, day)
+
     html = get_problem_html(url)
     description = get_problem_description(html)
-    print(description)
+
+    input_url = get_problem_input_url(url)
+    print(input_url)
 
 
 if __name__ == "__main__":
