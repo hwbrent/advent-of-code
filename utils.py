@@ -205,6 +205,21 @@ def get_problem_input_url(problem_url: str) -> str:
     return input_url
 
 
+def init_webdriver() -> webdriver.Chrome:
+    """
+    Initialises and returns a selenium webdriver
+    """
+
+    options = webdriver.ChromeOptions()
+    options.add_argument("--headless")  # Run Chrome in headless mode (no GUI)
+    options.add_argument("--disable-gpu")  # Disable GPU acceleration in headless mode
+
+    service = ChromeService(CHROMEDRIVER_PATH)
+    driver = webdriver.Chrome(options=options, service=service)
+
+    return driver
+
+
 def authenticate_via_reddit(problem_html: str) -> None:
     """
     Uses selenium to login with reddit credentials. This authenticates us
@@ -219,12 +234,7 @@ def authenticate_via_reddit(problem_html: str) -> None:
     full_url = urljoin(AOC_BASE_URL, href)
 
     # Init selenium webdriver
-    chromedriver_path = "./chromedriver"
-    options = webdriver.ChromeOptions()
-    options.add_argument("--headless")  # Run Chrome in headless mode (no GUI)
-    options.add_argument("--disable-gpu")  # Disable GPU acceleration in headless mode
-    service = ChromeService(chromedriver_path)
-    driver = webdriver.Chrome(options=options, service=service)
+    driver = init_webdriver()
 
     # Navigate to the reddit login page
     driver.get(full_url)
