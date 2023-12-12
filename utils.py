@@ -9,6 +9,8 @@ from dotenv import load_dotenv
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 
 # The "home page" as it were
@@ -222,24 +224,19 @@ def init_webdriver() -> webdriver.Chrome:
     return driver
 
 
-def authenticate_via_reddit(problem_html: str) -> None:
+def authenticate_via_reddit(driver: webdriver.Chrome, problem_url: str) -> None:
     """
     Uses selenium to login with reddit credentials. This authenticates us
     and therefore lets us access the problems' inputs
     """
-    soup = bs4.BeautifulSoup(problem_html, "html.parser")
+    driver.get(problem_url)
 
     # There is a link to the reddit auth page at the bottom of the page.
     # It's in an <a> tag with inner text [Reddit]
-    anchor_tag = soup.find(lambda tag: tag.name == "a" and tag.text == "[Reddit]")
-    href = anchor_tag["href"]
-    full_url = urljoin(AOC_BASE_URL, href)
-
-    # Init selenium webdriver
-    driver = init_webdriver()
+    anchor_tag = driver.find_element(By.LINK_TEXT, "[Reddit]")
 
     # Navigate to the reddit login page
-    driver.get(full_url)
+    anchor_tag.click()
 
     # Find username and password input elements, and input values from .env
     load_dotenv()
@@ -254,6 +251,21 @@ def authenticate_via_reddit(problem_html: str) -> None:
     # Click the login button
     submit_button = driver.find_element(By.CSS_SELECTOR, "button[type='submit']")
     submit_button.click()
+
+    # Wait until we are redirected to the page where it asks if we want to
+    # allow AOC to access our reddit account
+    wait = WebDriverWait(driver, 10)
+    wait.until(EC.url_contains("https://www.reddit.com/api/v1/authorize"))
+
+    # Click the "Allow" button
+    allow_button = driver.find_element(By.CSS_SELECTOR, "input.allow")
+    allow_button.click()
+
+    # Wait until we are redirected back to the AOC problem page
+    wait = WebDriverWait(driver, 10)
+    wait.until(EC.url_contains(problem_url))
+
+    # If there's no timeout error, the authentication was successful
 
 
 def get_problem_input_file(input_url: str) -> str:
@@ -275,7 +287,8 @@ def main():
     html = get_problem_html(url)
     description = get_problem_description(html)
 
-    authenticate_via_reddit(html)
+    driver = init_webdriver()
+    authenticate_via_reddit(driver, url)
 
     input_url = get_problem_input_url(url)
     input_file = get_problem_input_file(input_url)
