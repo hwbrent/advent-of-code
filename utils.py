@@ -268,16 +268,13 @@ def authenticate_via_reddit(driver: webdriver.Chrome, problem_url: str) -> None:
     # If there's no timeout error, the authentication was successful
 
 
-def get_problem_input_file(input_url: str) -> str:
+def get_problem_input_html(driver: webdriver.Chrome, input_url: str) -> str:
     """
-    Fetches the input for the given problem and returns it as a string.
+    Fetches the page for the input for the given problem and returns it as
+    a string.
     """
-    response = requests.get(input_url)
-    if not response.ok:
-        # Most likely we need to authenticate
-        response.raise_for_status()
-
-    return response.text
+    driver.get(input_url)
+    return driver.page_source
 
 
 def main():
@@ -291,8 +288,10 @@ def main():
     authenticate_via_reddit(driver, url)
 
     input_url = get_problem_input_url(url)
-    input_file = get_problem_input_file(input_url)
-    print(input_file)
+    input_html = get_problem_input_html(driver, input_url)
+    driver.quit()
+
+    print(input_html)
 
 
 if __name__ == "__main__":
