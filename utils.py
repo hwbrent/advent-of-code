@@ -121,8 +121,40 @@ def parse_args() -> tuple[int, int]:
     return year, day
 
 
+def urljoin(*args: tuple[str]) -> str:
+    """
+    Pretty much does the same thing as `urllib.parse.urljoin`, but this
+    implementation lets you pass as many args as you want, rather than just
+    two.
+    """
+    joined = args[0]
+    for segment in args[1:]:
+        # For some reason, if you don't do this weird stuff with the slash,
+        # it replaces the last segment in the url rather than adding to it
+        if not joined.endswith("/"):
+            joined += "/"
+
+        joined = urllib.parse.urljoin(joined, segment)
+
+    return joined
+
+
+def get_problem_url(year: int, day: int) -> str:
+    """
+    Returns the URL for the problem for the given year and day
+    """
+    year = str(year)
+    day = str(day)
+
+    url = urljoin(AOC_BASE_URL, year, "day", day)
+
+    return url
+
+
 def main():
-    print(parse_args())
+    year, day = parse_args()
+    url = get_problem_url(year, day)
+    print(url)
 
 
 if __name__ == "__main__":
