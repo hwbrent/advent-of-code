@@ -151,10 +151,23 @@ def get_problem_url(year: int, day: int) -> str:
     return url
 
 
+def get_problem_html(url: str) -> str:
+    """
+    Fetches the AOC problem located at `url` and returns the HTML as a
+    string.
+    """
+
+    response = requests.get(url)
+    response.raise_for_status()
+
+    return response.text
+
+
 def main():
     year, day = parse_args()
     url = get_problem_url(year, day)
-    print(url)
+    html = get_problem_html(url)
+    print(html)
 
 
 if __name__ == "__main__":
