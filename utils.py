@@ -211,11 +211,9 @@ def get_problem_description(html: str) -> str:
     # As it is, the formatting is pretty much perfect.
     text = article.text
 
-    # The only issue is that the title appears on the same line as the first
-    # paragraph. So we should fix that.
-    title = article.h2.text.strip()
-    title_with_newlines = title + "\n\n"
-    text = text.replace(title, title_with_newlines)
+    # Remove the title so that we only have the description
+    title = get_problem_title(html)
+    text = text.replace(title, "")
 
     # Strip for good measure
     text = text.strip()
