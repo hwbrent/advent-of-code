@@ -240,7 +240,7 @@ def get_problem_title(html: str) -> str:
     return title.strip()
 
 
-def get_problem_description(html: str) -> str:
+def get_problem_description(html: str) -> list[dict]:
     """
     Given an HTML document in string format, this function extracts the
     problem description and returns it as a string, as it appears on the
@@ -251,21 +251,62 @@ def get_problem_description(html: str) -> str:
 
     # The majority of the text we want is contained within an
     # <article> tag with class="day-desc"
-
     article = soup.select("article.day-desc")[0]
 
-    # This gets all the inner text within the <article> and its subtree.
-    # As it is, the formatting is pretty much perfect.
-    text = article.text
+    lines = []
 
-    # Remove the title so that we only have the description
-    title = get_problem_title(html)
-    text = text.replace(title, "")
+    # Basically, to facilitate formatting we do later when generating the
+    # python file, we want to decipher which parts of the description are
+    # actually describing the problem, and which parts are in the code-block
+    # thingies.
+    for child in article.children:
+        # The actual english descriptions are in <p> tags
+        obj = {"content": child.text, "is_english": child.name == "p"}
+        lines.append(obj)
 
-    # Strip for good measure
-    text = text.strip()
+    return lines
 
-    return text
+
+def format_description(description: list[dict]) -> str:
+    print(description)
+    result = ""
+    for line in description:
+        is_english = line["is_english"]
+        content = line["content"]
+
+        # If the content is a chunk of code or something, don't do anything
+        # to it. This could confuse me when reading it in the multiline
+        # string in the python file
+        if not is_english:
+            result += content
+            continue
+
+        # We know the content is just a pure English sentence. So let's
+        # shorten it to ~75 characters to make it easier to read.
+        for i in range(74, len(content) + 1, 75):
+            char = content[i]
+
+            # If the character at the 75th position is a space, we can
+            # replace the space with a newline worry-free
+            if char == " ":
+                # content[i] = "\n"
+                content = content[:i] + "\n" + content[i + 1 :]
+                continue
+
+            # Else, we want to keep the line as close to 75 characters as
+            # possible. So find the nearest space, and put the newline there
+
+            left = content.rindex(" ", 0, i)
+            right = content.index(" ", i)
+
+            index_for_newline = min(left, right, key=lambda x: abs(i - x))
+            content = (
+                content[:index_for_newline] + "\n" + content[index_for_newline + 1 :]
+            )
+
+        result += content
+
+    return result
 
 
 def get_input_url(problem_url: str) -> str:
@@ -399,6 +440,8 @@ def generate_python_file(
     """
     file_path = get_file_path(year, day)
 
+    description = description.replace(title, "")
+
     with open(file_path, "w") as f:
         # fmt: off
         formatted = PYTHON_FILE_TEMPLATE.format(
@@ -458,7 +501,8 @@ def main():
     # Generate the python file
     title = get_problem_title(html)
     description = get_problem_description(html)
-    input_url = get_input_url(url)
+    description = format_description(description)
+
     generate_python_file(title, description, url, input_url, year, day)
 
 
