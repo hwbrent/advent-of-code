@@ -275,6 +275,12 @@ def get_problem_description(html: str) -> list[dict]:
 
 
 def format_description(description: list[dict]) -> str:
+    """
+    Pretty much, this function truncates each line to be ~75 characters, in
+    order to make the description easier to read once it's put into the
+    generated python script
+    """
+
     result = ""
     for line in description:
         is_english = line["is_english"]
