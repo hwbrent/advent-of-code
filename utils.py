@@ -176,6 +176,23 @@ def get_problem_html(url: str) -> str:
     return response.text
 
 
+def get_problem_title(html: str) -> str:
+    """
+    Given the problem page's HTML, this function extracts the problem
+    title and returns it as a string
+    """
+    soup = bs4.BeautifulSoup(html, "html.parser")
+
+    # The majority of the important text is in an <article> tag with
+    # class="day-desc"
+    article = soup.select("article.day-desc")[0]
+
+    # The title is in an <h2> tag
+    title = article.h2.text
+
+    return title.strip()
+
+
 def get_problem_description(html: str) -> str:
     """
     Given an HTML document in string format, this function extracts the
