@@ -304,29 +304,40 @@ def get_raw_problem_input(html: str) -> str:
     return inner_text.strip()
 
 
-def write_input_to_file(input: str, year: int, day: int) -> None:
+def get_file_path(year: int, day: int, python: bool = True) -> str:
     """
-    This function writes the given input to a file in the 'inputs' directory
+    Returns the path of the input file for the given year and day
     """
-
     year = str(year)
     day = str(day)
 
     # Get the path of the year directory.
     # And if it doesn't exist, create it
-    year_dir = os.path.join(this_dir, year)
-    if not os.path.exists(year_dir):
-        os.makedirs(year_dir)
+    year_dir_path = os.path.join(this_dir, year)
+    if not os.path.exists(year_dir_path):
+        os.makedirs(year_dir_path)
 
-    # Get the path of the inputs directory.
+    # Get the path of the next directory.
     # And if it doesn't exist, create it
-    inputs_dir = os.path.join(year_dir, "inputs")
-    if not os.path.exists(inputs_dir):
-        os.makedirs(inputs_dir)
+    next_dir_name = "python" if python else "inputs"
+    next_dir_path = os.path.join(year_dir_path, next_dir_name)
+    if not os.path.exists(next_dir_path):
+        os.makedirs(next_dir_path)
 
     # Get the name and path of the new file
-    file_name = f"day{day}.txt"
-    file_path = os.path.join(inputs_dir, file_name)
+    extension = "py" if python else "txt"
+    file_name = f"day{day}.{extension}"
+    file_path = os.path.join(next_dir_path, file_name)
+
+    return file_path
+
+
+def write_input_to_file(input: str, year: int, day: int) -> None:
+    """
+    This function writes the given input to a file in the 'inputs' directory
+    """
+
+    file_path = get_file_path(year, day, False)
 
     # Do the actual writing of the input to the file
     with open(file_path, "w") as f:
