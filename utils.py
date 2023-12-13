@@ -47,16 +47,24 @@ import utils
 \"\"\"
 
 
-def part1():
+def parse_raw_input(input: str):
+    return input
+
+
+def part1(input):
     pass
 
 
-def part2():
+def part2(input):
     pass
 
 
 def main():
-    pass
+    raw_input = utils.get_raw_input()
+    parsed_input = parse_raw_input(raw_input)
+
+    part1(parsed_input)
+    part2(parsed_input)
 
 
 if __name__ == "__main__":
@@ -333,7 +341,7 @@ def get_input_html(driver: webdriver.Chrome, input_url: str) -> str:
     return driver.page_source
 
 
-def get_raw_input(html: str) -> str:
+def __get_raw_input(html: str) -> str:
     """
     Given the HTML for the input page, this function extracts the actual
     input and returns it as a string.
@@ -442,7 +450,7 @@ def main():
     input_url = get_input_url(url)
     input_html = get_input_html(driver, input_url)
     driver.quit()
-    input_str = get_raw_input(input_html)
+    input_str = __get_raw_input(input_html)
 
     # Write the raw input string to a file
     write_input_to_file(input_str, year, day)
