@@ -50,11 +50,26 @@ calibration values?
 
 
 def parse_raw_input(input: str):
-    return input
+    return input.strip().split("\n")
 
 
 def part1(input):
-    pass
+    total = 0
+
+    def find_num(line):
+        for char in line:
+            if char.isnumeric():
+                return char
+
+    for line in input:
+        digit1 = find_num(line)
+        digit2 = find_num(line[::-1])
+
+        num = int(digit1 + digit2)
+
+        total += num
+
+    print(total)
 
 
 def part2(input):
@@ -65,10 +80,9 @@ def main():
     raw_input = utils.get_raw_input()
     parsed_input = parse_raw_input(raw_input)
 
-    part1(parsed_input)
+    part1(parsed_input)  # 54708
     part2(parsed_input)
 
 
 if __name__ == "__main__":
     main()
-
