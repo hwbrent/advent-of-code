@@ -410,10 +410,6 @@ def get_raw_input() -> str:
     corresponding problem input
     """
 
-    inputs_dir_path = os.path.abspath(
-        os.path.join(file_path, os.pardir, os.pardir, "inputs")
-    )
-
     # Do some magic to figure out where this function was called from.
     # Thank you ChatGPT for this haha. No idea what this code is doing tbh
     file_path = inspect.getouterframes(inspect.currentframe(), 2)[1].filename
@@ -422,6 +418,9 @@ def get_raw_input() -> str:
     # e.g. "day13"
     file_name = pathlib.Path(file_path).stem
 
+    inputs_dir_path = os.path.abspath(
+        os.path.join(file_path, os.pardir, os.pardir, "inputs")
+    )
     input_file_path = os.path.join(inputs_dir_path, f"{file_name}.txt")
     with open(input_file_path) as f:
         return f.read()
