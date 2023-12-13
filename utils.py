@@ -25,6 +25,36 @@ EARLIEST_YEAR = 2015
 
 CHROMEDRIVER_PATH = "./chromedriver"
 
+PYTHON_FILE_TEMPLATE = """
+import utils
+
+# Problem URL: {problem_url}
+# Input URL:   {input_url}
+
+\"\"\"
+{title}
+
+{part1_description}
+\"\"\"
+
+
+def part1():
+    pass
+
+
+def part2():
+    pass
+
+
+def main():
+    pass
+
+
+if __name__ == "__main__":
+    main()
+
+""".lstrip()
+
 this_dir = os.path.dirname(__file__)
 
 
@@ -344,23 +374,38 @@ def write_input_to_file(input: str, year: int, day: int) -> None:
         f.write(input)
 
 
+def generate_python_file(
+    title: str, description: str, problem_url: str, input_url: str, year: int, day: int
+) -> None:
+    """
+    This function generates a python file for the given problem
+    """
+    file_path = get_file_path(year, day)
+
+    with open(file_path, "w") as f:
+        # fmt: off
+        formatted = PYTHON_FILE_TEMPLATE.format(
+            problem_url=problem_url,
+            input_url=input_url,
+            title=title,
+            part1_description=description,
+        )
+        # fmt: on
+        f.write(formatted)
+
+
 def main():
     year, day = parse_args()
     url = get_problem_url(year, day)
 
     html = get_problem_html(url)
+
+    title = get_problem_title(html)
     description = get_problem_description(html)
 
-    driver = init_webdriver()
-    authenticate_via_reddit(driver, url)
-
     input_url = get_problem_input_url(url)
-    input_html = get_problem_input_html(driver, input_url)
-    driver.quit()
 
-    raw_input_string = get_raw_problem_input(input_html)
-
-    write_input_to_file(raw_input_string, year, day)
+    generate_python_file(title, description, url, input_url, year, day)
 
 
 if __name__ == "__main__":
