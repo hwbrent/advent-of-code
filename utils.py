@@ -26,6 +26,13 @@ EARLIEST_YEAR = 2015
 CHROMEDRIVER_PATH = "./chromedriver"
 
 PYTHON_FILE_TEMPLATE = """
+import os
+import sys
+
+# Enable imports from advent-of-code/utils.py
+root = os.path.abspath(os.path.join(__file__, os.pardir, os.pardir, os.pardir))
+sys.path.append(root)
+
 import utils
 
 # Problem URL: {problem_url}
