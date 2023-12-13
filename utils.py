@@ -275,7 +275,6 @@ def get_problem_description(html: str) -> list[dict]:
 
 
 def format_description(description: list[dict]) -> str:
-    print(description)
     result = ""
     for line in description:
         is_english = line["is_english"]
