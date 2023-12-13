@@ -407,11 +407,25 @@ def main():
 
     html = get_problem_html(url)
 
+    # Scrape the input. We have to use selenium to do this, because AOC
+    # requires us to be authenticated in order to access the input, because
+    # apparently each user's input is different. So we use selenium
+    # to log in with reddit, then go to the page containing the input, then
+    # save it
+    driver = init_webdriver()
+    authenticate_via_reddit(driver, url)
+    input_url = get_input_url(url)
+    input_html = get_input_html(driver, input_url)
+    driver.quit()
+    input_str = get_raw_input(input_html)
+
+    # Write the raw input string to a file
+    write_input_to_file(input_str, year, day)
+
+    # Generate the python file
     title = get_problem_title(html)
     description = get_problem_description(html)
-
     input_url = get_input_url(url)
-
     generate_python_file(title, description, url, input_url, year, day)
 
 
