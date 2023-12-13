@@ -2,6 +2,8 @@ import os
 import sys
 import datetime
 import urllib.parse
+import pathlib
+import inspect
 
 import requests
 import bs4
@@ -399,6 +401,30 @@ def generate_python_file(
         )
         # fmt: on
         f.write(formatted)
+
+
+def get_raw_input() -> str:
+    """
+    Using some ChatGPT-suggested magic, this function figures out the path
+    of the file it was called from, then using that info, returns the
+    corresponding problem input
+    """
+
+    inputs_dir_path = os.path.abspath(
+        os.path.join(file_path, os.pardir, os.pardir, "inputs")
+    )
+
+    # Do some magic to figure out where this function was called from.
+    # Thank you ChatGPT for this haha. No idea what this code is doing tbh
+    file_path = inspect.getouterframes(inspect.currentframe(), 2)[1].filename
+
+    # The .stem part gets rid of the file extension
+    # e.g. "day13"
+    file_name = pathlib.Path(file_path).stem
+
+    input_file_path = os.path.join(inputs_dir_path, f"{file_name}.txt")
+    with open(input_file_path) as f:
+        return f.read()
 
 
 def main():
