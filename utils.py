@@ -25,6 +25,8 @@ EARLIEST_YEAR = 2015
 
 CHROMEDRIVER_PATH = "./chromedriver"
 
+this_dir = os.path.dirname(__file__)
+
 
 def get_most_recent_year() -> int:
     """
@@ -287,6 +289,35 @@ def get_raw_problem_input(html: str) -> str:
     return inner_text.strip()
 
 
+def write_input_to_file(input: str, year: int, day: int) -> None:
+    """
+    This function writes the given input to a file in the 'inputs' directory
+    """
+
+    year = str(year)
+    day = str(day)
+
+    # Get the path of the year directory.
+    # And if it doesn't exist, create it
+    year_dir = os.path.join(this_dir, year)
+    if not os.path.exists(year_dir):
+        os.makedirs(year_dir)
+
+    # Get the path of the inputs directory.
+    # And if it doesn't exist, create it
+    inputs_dir = os.path.join(year_dir, "inputs")
+    if not os.path.exists(inputs_dir):
+        os.makedirs(inputs_dir)
+
+    # Get the name and path of the new file
+    file_name = f"day{day}.txt"
+    file_path = os.path.join(inputs_dir, file_name)
+
+    # Do the actual writing of the input to the file
+    with open(file_path, "w") as f:
+        f.write(input)
+
+
 def main():
     year, day = parse_args()
     url = get_problem_url(year, day)
@@ -302,7 +333,8 @@ def main():
     driver.quit()
 
     raw_input_string = get_raw_problem_input(input_html)
-    print(raw_input_string)
+
+    write_input_to_file(raw_input_string, year, day)
 
 
 if __name__ == "__main__":
