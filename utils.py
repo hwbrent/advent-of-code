@@ -318,7 +318,7 @@ def format_description(description: list[dict]) -> str:
 
         result += content
 
-    return result
+    return result.strip()
 
 
 def get_input_url(problem_url: str) -> str:
