@@ -251,7 +251,7 @@ def get_problem_description(html: str) -> str:
     return text
 
 
-def get_problem_input_url(problem_url: str) -> str:
+def get_input_url(problem_url: str) -> str:
     input_url = urljoin(problem_url, "input")
     return input_url
 
@@ -315,7 +315,7 @@ def authenticate_via_reddit(driver: webdriver.Chrome, problem_url: str) -> None:
     # If there's no timeout error, the authentication was successful
 
 
-def get_problem_input_html(driver: webdriver.Chrome, input_url: str) -> str:
+def get_input_html(driver: webdriver.Chrome, input_url: str) -> str:
     """
     Fetches the page for the input for the given problem and returns it as
     a string.
@@ -324,7 +324,7 @@ def get_problem_input_html(driver: webdriver.Chrome, input_url: str) -> str:
     return driver.page_source
 
 
-def get_raw_problem_input(html: str) -> str:
+def get_raw_input(html: str) -> str:
     """
     Given the HTML for the input page, this function extracts the actual
     input and returns it as a string.
@@ -403,7 +403,7 @@ def main():
     title = get_problem_title(html)
     description = get_problem_description(html)
 
-    input_url = get_problem_input_url(url)
+    input_url = get_input_url(url)
 
     generate_python_file(title, description, url, input_url, year, day)
 
