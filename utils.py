@@ -260,6 +260,13 @@ def get_problem_description(html: str) -> list[dict]:
     # actually describing the problem, and which parts are in the code-block
     # thingies.
     for child in article.children:
+        text = child.text
+
+        # We get the title separately from the description, so ignore it
+        # here
+        if text == get_problem_title(html):
+            continue
+
         # The actual english descriptions are in <p> tags
         obj = {"content": child.text, "is_english": child.name == "p"}
         lines.append(obj)
@@ -439,8 +446,6 @@ def generate_python_file(
     This function generates a python file for the given problem
     """
     file_path = get_file_path(year, day)
-
-    description = description.replace(title, "")
 
     with open(file_path, "w") as f:
         # fmt: off
