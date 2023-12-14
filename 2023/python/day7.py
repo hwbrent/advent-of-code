@@ -55,7 +55,16 @@ Find the rank of every hand in your set. What are the total winnings?
 
 
 def parse_raw_input(input: str):
-    return input
+    pairs = []
+    for line in input.strip().split("\n"):
+        cards, bid = line.split()
+
+        cards = tuple(char for char in cards)
+        bid = int(bid)
+
+        pairs.append((cards, bid))
+
+    return pairs
 
 
 def part1(input):
