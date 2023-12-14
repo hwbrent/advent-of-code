@@ -125,7 +125,38 @@ def part1(input):
 
 
 def part2(input):
-    pass
+    races, input = input
+
+    # Reformat the time and distance
+    time_concat = ""
+    distance_concat = ""
+    for race in races:
+        time_concat += str(race["time"])
+        distance_concat += str(race["distance"])
+
+    ways_to_beat_record = 0
+
+    # - 'time_alloted' is a constant obviously.
+    # - We want to get a distance which is greater than or equal to
+    #   'record_distance'.
+    # - The one variable we have control over is how long to hold the
+    #   button for. So obviously we need to find the range of times that
+    #   allow us to get a distance above 'record_distance'.
+
+    # speed = distance/time, therefore:
+    # distance = speed * time
+    # 'record_distance' < speed * time
+    # 'record_distance' < time_held * (time_allotted - time_held)
+
+    time_allotted = int(time_concat)
+    record_distance = int(distance_concat)
+
+    for time_held in range(1, time_allotted):
+        hypothetical_distance = time_held * (time_allotted - time_held)
+        if hypothetical_distance > record_distance:
+            ways_to_beat_record += 1
+
+    print(ways_to_beat_record)
 
 
 def main():
@@ -133,10 +164,13 @@ def main():
     #     raw_input = """Time:      7  15   30
     # Distance:  9  40  200
     # """
+    #     raw_input = """Time:      71530
+    # Distance:  940200
+    # """
     parsed_input = parse_raw_input(raw_input)
 
     part1(parsed_input)  # 1159152
-    part2(parsed_input)
+    part2(parsed_input)  # 41513103
 
 
 if __name__ == "__main__":
