@@ -138,19 +138,30 @@ def part1(input):
     total = 0
 
     for symbol, neighbours in symbols.items():
+        # The indices of the Match objects whose numbers we have already
+        # added to 'total'.
         part_numbers_added = []
 
         for row in neighbours:
             for neighbour in row:
+                # Check if one of the digits of a part number can be found
+                # at this coord
                 match_index = numbers.get(neighbour, None)
                 if not match_index:
                     continue
 
+                # Check if the part number has already been accounted for
+                # and added to 'total'
                 if match_index in part_numbers_added:
                     continue
 
+                # Get the actual integer of the part number from the Match
+                # object, and add it to 'total'
                 number = int(matches[match_index][0])
                 total += number
+
+                # Record the fact that we just accounted for this specific
+                # part number
                 part_numbers_added.append(match_index)
 
     print(total)
