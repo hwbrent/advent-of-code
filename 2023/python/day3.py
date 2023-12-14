@@ -37,11 +37,20 @@ Of course, the actual engine schematic is much larger. What is the sum of all of
 
 
 def parse_raw_input(input: str):
-    return input
+    symbols = (
+        (row, col)
+        for row, line in enumerate(input.split("\n"))
+        for col, char in enumerate(line)
+        if (not char.isnumeric()) and char != "."
+    )
+    return symbols, input.strip()
 
 
 def part1(input):
-    pass
+    symbols, input = input
+    # for row in symbols:
+    #     print(list(row))
+    #     print()
 
 
 def part2(input):
@@ -58,4 +67,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
