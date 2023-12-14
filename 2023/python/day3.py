@@ -73,13 +73,10 @@ def parse_raw_input(input: str):
         # For each coord in this row where there's a number, add an entry to
         # 'numbers' saying what the full number is
         for result in re.finditer(r"\d+", row):
-            num_str = result[0]
-            num_int = int(num_str)
             cols_spanned = tuple(range(*result.span()))
             for col in cols_spanned:
                 coord = (row_index, col)
-                # numbers[coord] = num_str
-                numbers[coord] = num_int
+                numbers[coord] = result
 
         for col_index, char in enumerate(row):
             if char.isnumeric() or char == ".":
@@ -87,7 +84,7 @@ def parse_raw_input(input: str):
 
             # Get the coordinates of every point surrounding this symbol
 
-            surrounding_coords = []
+            surrounding_coords = [[], [], []]
 
             for i in range(-1, 2):
                 surrounding_row_index = row_index + i
@@ -102,7 +99,7 @@ def parse_raw_input(input: str):
                     if i == j == 0:
                         continue
 
-                    surrounding_coords.append(
+                    surrounding_coords[i].append(
                         (surrounding_row_index, surrounding_col_index)
                     )
 
@@ -114,12 +111,37 @@ def parse_raw_input(input: str):
 def part1(input):
     symbols, numbers, input = input
 
-    # print(pp.pprint(numbers))
-
     # pp.pprint(symbols)
-    # for row in symbols:
-    #     print(list(row))
-    #     print()
+    # pp.pprint(numbers)
+    # return
+
+    total = 0
+
+    for symbol, neighbours in symbols.items():
+        # print(symbol)
+
+        part_numbers_added = []
+
+        for row in neighbours:
+            for neighbour in row:
+                match = numbers.get(neighbour, None)
+                if not match:
+                    continue
+
+                if match in part_numbers_added:
+                    continue
+
+                number = int(match[0])
+
+                total += number
+
+        #         print("\t", neighbour, match)
+        #     print()
+        # print()
+
+    print(total)
+
+    # 839370 -- too high
 
 
 def part2(input):
