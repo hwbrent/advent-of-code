@@ -73,25 +73,25 @@ def parse_raw_input(input: str):
 funcs = [
     # five of a kind
     # where all five cards have the same label: AAAAA
-    lambda hand: sorted(hand.count(card) for card in hand) == [5],
+    lambda hand: sorted(hand.count(card) for card in set(hand)) == [5],
     # four of a kind
     # where four cards have the same label and one card has a different label: AA8AA
-    lambda hand: sorted(hand.count(card) for card in hand) == [1, 4],
+    lambda hand: sorted(hand.count(card) for card in set(hand)) == [1, 4],
     # full house
     # where three cards have the same label, and the remaining two cards share a different label: 23332
-    lambda hand: sorted(hand.count(card) for card in hand) == [2, 3],
+    lambda hand: sorted(hand.count(card) for card in set(hand)) == [2, 3],
     # three of a kind:
     # where three cards have the same label, and the remaining two cards are each different from any other card in the hand: TTT98
-    lambda hand: sorted(hand.count(card) for card in hand) == [1, 1, 3],
+    lambda hand: sorted(hand.count(card) for card in set(hand)) == [1, 1, 3],
     # two pair:
     # where two cards share one label, two other cards share a second label, and the remaining card has a third label: 23432
-    lambda hand: sorted(hand.count(card) for card in hand) == [1, 2, 2],
+    lambda hand: sorted(hand.count(card) for card in set(hand)) == [1, 2, 2],
     # one pair:
     # where two cards share one label, and the other three cards have a different label from the pair and each other: A23A4
-    lambda hand: sorted(hand.count(card) for card in hand) == [1, 1, 1, 2],
+    lambda hand: sorted(hand.count(card) for card in set(hand)) == [1, 1, 1, 2],
     # high card:
     # where all cards' labels are distinct: 23456
-    lambda hand: sorted(hand.count(card) for card in hand) == [1, 1, 1, 1, 1],
+    lambda hand: sorted(hand.count(card) for card in set(hand)) == [1, 1, 1, 1, 1],
 ]
 
 labels = ["A", "K", "Q", "J", "T", "9", "8", "7", "6", "5", "4", "3", "2"]
