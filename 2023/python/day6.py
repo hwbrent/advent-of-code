@@ -49,7 +49,24 @@ Determine the number of ways you could beat the record in each race. What do you
 
 
 def parse_raw_input(input: str):
-    return input
+    races = []
+
+    for line in input.strip().split("\n"):
+        line = line.strip().split()
+
+        title, *values = line
+        title = title.rstrip(":").lower()
+
+        for i, value in enumerate(values):
+            value = int(value)
+
+            # If there isn't yet a dict at index i
+            if i == len(races):
+                races.append({})
+
+            races[i][title] = value
+
+    return races, input
 
 
 def part1(input):
