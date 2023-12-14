@@ -70,7 +70,42 @@ def parse_raw_input(input: str):
 
 
 def part1(input):
-    pass
+    races, input = input
+
+    multiplication = 1
+
+    for race in races:
+        time_allotted = race["time"]
+        record_distance = race["distance"]
+
+        ways_to_beat_record = 0
+
+        # - 'time_alloted' is a constant obviously.
+        # - We want to get a distance which is greater than or equal to
+        #   'record_distance'.
+        # - The one variable we have control over is how long to hold the
+        #   button for. So obviously we need to find the range of times that
+        #   allow us to get a distance above 'record_distance'.
+
+        # speed = distance/time, therefore:
+        # distance = speed * time
+        # 'record_distance' < speed * time
+        # 'record_distance' < time_held * (time_allotted - time_held)
+
+        max_holding_time = time_allotted // 2
+        for time_held in range(1, max_holding_time + 1):
+            hypothetical_distance = time_held * (time_allotted - time_held)
+            if hypothetical_distance > record_distance:
+                print(f"Hold button for {time_held} distance")
+                print(f"Yields a distance travelled of {hypothetical_distance}")
+                ways_to_beat_record += 1
+
+        if ways_to_beat_record > 0:
+            multiplication *= ways_to_beat_record
+
+    print(ways_to_beat_record)
+
+    # 16 - too low
 
 
 def part2(input):
@@ -87,4 +122,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
