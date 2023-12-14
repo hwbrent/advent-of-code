@@ -106,7 +106,7 @@ def parse_raw_input(input: str):
             if char.isnumeric() or char == ".":
                 continue
 
-            surrounding_coords = [[], [], []]
+            surrounding_coords = []
 
             # Collect all the coordinates of the points neighbouring this
             # one.
@@ -123,7 +123,7 @@ def parse_raw_input(input: str):
                     if i == j == 0:
                         continue
 
-                    surrounding_coords[i].append(
+                    surrounding_coords.append(
                         (surrounding_row_index, surrounding_col_index)
                     )
 
@@ -142,27 +142,26 @@ def part1(input):
         # added to 'total'.
         part_numbers_added = []
 
-        for row in neighbours:
-            for neighbour in row:
-                # Check if one of the digits of a part number can be found
-                # at this coord
-                match_index = numbers.get(neighbour, None)
-                if not match_index:
-                    continue
+        for neighbour in neighbours:
+            # Check if one of the digits of a part number can be found
+            # at this coord
+            match_index = numbers.get(neighbour, None)
+            if not match_index:
+                continue
 
-                # Check if the part number has already been accounted for
-                # and added to 'total'
-                if match_index in part_numbers_added:
-                    continue
+            # Check if the part number has already been accounted for
+            # and added to 'total'
+            if match_index in part_numbers_added:
+                continue
 
-                # Get the actual integer of the part number from the Match
-                # object, and add it to 'total'
-                number = int(matches[match_index][0])
-                total += number
+            # Get the actual integer of the part number from the Match
+            # object, and add it to 'total'
+            number = int(matches[match_index][0])
+            total += number
 
-                # Record the fact that we just accounted for this specific
-                # part number
-                part_numbers_added.append(match_index)
+            # Record the fact that we just accounted for this specific
+            # part number
+            part_numbers_added.append(match_index)
 
     print(total)
 
@@ -191,26 +190,25 @@ def part2(input):
         # whose values we have already factored into 'gear_ratio'
         part_numbers_added = []
 
-        for row in neighbours:
-            for neighbour in row:
-                # If this specific neighbour doesn't lie on a digit of one
-                # of the part numbers, don't do anything
-                match_index = numbers.get(neighbour, None)
-                if not match_index:
-                    continue
+        for neighbour in neighbours:
+            # If this specific neighbour doesn't lie on a digit of one
+            # of the part numbers, don't do anything
+            match_index = numbers.get(neighbour, None)
+            if not match_index:
+                continue
 
-                # If we've already accounted for this part number, do nothing
-                if match_index in part_numbers_added:
-                    continue
+            # If we've already accounted for this part number, do nothing
+            if match_index in part_numbers_added:
+                continue
 
-                # Get the actual number that the Match object represents,
-                # and use it to calculate this gear's gear ratio
-                number = int(matches[match_index][0])
-                gear_ratio *= number
+            # Get the actual number that the Match object represents,
+            # and use it to calculate this gear's gear ratio
+            number = int(matches[match_index][0])
+            gear_ratio *= number
 
-                # Record the fact that we just accounted for this specific
-                # part number
-                part_numbers_added.append(match_index)
+            # Record the fact that we just accounted for this specific
+            # part number
+            part_numbers_added.append(match_index)
 
         # If this year doesn't have exactly two part numbers, it's not valid,
         # so don't add its gear ratio to the overall sum
