@@ -71,55 +71,45 @@ What is the sum of all of the gear ratios in your engine schematic?
 
 
 def parse_raw_input(input: str):
-    symbols = {
-        # e.g.:
-        # (138, 115): [
-        #   (137, 114),
-        #   (137, 115),
-        #   (137, 116),
-        #   (138, 114),
-        #   (138, 116),
-        #   (139, 114),
-        #   (139, 115),
-        #   (139, 116)
-        # ]
-        # ...
-    }
-    numbers = {
-        # e.g.:
-        # (139, 52): 261,
-        # (139, 53): 261,
-        # (139, 54): 261,
-        # (139, 84): 42,
-        # (139, 85): 42}
-        # ...
-    }
+    # key=xy coordinate, value=nested list of tuples of neighbouring coords
+    symbols = {}
+
+    # key=xy coordinate, value=the index of the Match object in 'matches'
+    numbers = {}
+
+    # Collection of unique re.Match objects. We need this so that we only
+    # account for each number in the engine schematic once
     matches = []
 
     input = input.strip().split("\n")
     rows = input
+
     rows_range = range(0, len(rows))
     cols_range = range(0, len(rows[0]))
 
     for row_index, row in enumerate(rows):
-        # For each coord in this row where there's a number, add an entry to
-        # 'numbers' saying what the full number is
+        # Find all the part numbers in the row
         for result in re.finditer(r"\d+", row):
+            # For each "column" that the part number spans, add an entry to
+            # 'matches' with the Match object representing the number that
+            # was found, and add an entry to 'numbers' which points to the
+            # aforementioned unique Match object
             cols_spanned = tuple(range(*result.span()))
             for col in cols_spanned:
-                coord = (row_index, col)
                 if not result in matches:
                     matches.append(result)
-                numbers[coord] = len(matches) - 1
+                numbers[(row_index, col)] = len(matches) - 1
 
         for col_index, char in enumerate(row):
+            # If the character is a number or an empty space (i.e. a full
+            # stop), do nothing
             if char.isnumeric() or char == ".":
                 continue
 
-            # Get the coordinates of every point surrounding this symbol
-
             surrounding_coords = [[], [], []]
 
+            # Collect all the coordinates of the points neighbouring this
+            # one.
             for i in range(-1, 2):
                 surrounding_row_index = row_index + i
                 if not row_index in rows_range:
