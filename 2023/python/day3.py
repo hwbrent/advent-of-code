@@ -80,7 +80,7 @@ def parse_raw_input(input: str):
 
             # Get the coordinates of every point surrounding this symbol
 
-            surrounding_coords = set()
+            surrounding_coords = []
 
             for i in range(-1, 2):
                 surrounding_row_index = row_index + i
@@ -95,7 +95,7 @@ def parse_raw_input(input: str):
                     if i == j == 0:
                         continue
 
-                    surrounding_coords.add(
+                    surrounding_coords.append(
                         (surrounding_row_index, surrounding_col_index)
                     )
 
