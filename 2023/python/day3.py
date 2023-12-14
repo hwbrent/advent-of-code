@@ -1,5 +1,9 @@
 import os
 import sys
+import re
+from pprint import PrettyPrinter
+
+pp = PrettyPrinter(indent=4)
 
 # Enable imports from advent-of-code/utils.py
 root = os.path.abspath(os.path.join(__file__, os.pardir, os.pardir, os.pardir))
@@ -37,17 +41,82 @@ Of course, the actual engine schematic is much larger. What is the sum of all of
 
 
 def parse_raw_input(input: str):
-    symbols = (
-        (row, col)
-        for row, line in enumerate(input.split("\n"))
-        for col, char in enumerate(line)
-        if (not char.isnumeric()) and char != "."
-    )
-    return symbols, input.strip()
+    symbols = {
+        # e.g.:
+        # (138, 115): [
+        #     (137, 114),
+        #     (137, 114),
+        #     (137, 114),
+        #     (138, 115),
+        #     (138, 115),
+        #     (139, 116),
+        #     (139, 116),
+        #     (139, 116)
+        # ],
+        # ...
+    }
+    numbers = {
+        # e.g.:
+        # (139, 52): 261,
+        # (139, 53): 261,
+        # (139, 54): 261,
+        # (139, 84): 42,
+        # (139, 85): 42}
+        # ...
+    }
+
+    rows = input.strip().split("\n")
+    rows_range = range(0, len(rows))
+    cols_range = range(0, len(rows[0]))
+
+    for row_index, row in enumerate(rows):
+        # For each coord in this row where there's a number, add an entry to
+        # 'numbers' saying what the full number is
+        for result in re.finditer(r"\d+", row):
+            num_str = result[0]
+            num_int = int(num_str)
+            cols_spanned = tuple(range(*result.span()))
+            for col in cols_spanned:
+                coord = (row_index, col)
+                # numbers[coord] = num_str
+                numbers[coord] = num_int
+
+        for col_index, char in enumerate(row):
+            if char.isnumeric() or char == ".":
+                continue
+
+            # Get the coordinates of every point surrounding this symbol
+
+            surrounding_coords = []
+
+            for i in range(-1, 2):
+                surrounding_row_index = row_index + i
+                if not row_index in rows_range:
+                    continue
+
+                for j in range(-1, 2):
+                    surrounding_col_index = col_index + i
+                    if not col_index in cols_range:
+                        continue
+
+                    if i == j == 0:
+                        continue
+
+                    surrounding_coords.append(
+                        (surrounding_row_index, surrounding_col_index)
+                    )
+
+            symbols[(row_index, col_index)] = surrounding_coords
+
+    return symbols, numbers, input.strip()
 
 
 def part1(input):
-    symbols, input = input
+    symbols, numbers, input = input
+
+    # print(pp.pprint(numbers))
+
+    # pp.pprint(symbols)
     # for row in symbols:
     #     print(list(row))
     #     print()
