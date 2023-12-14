@@ -280,7 +280,7 @@ def format_description(description: list[dict]) -> str:
     order to make the description easier to read once it's put into the
     generated python script
     """
-    return "".join(line["content"] for line in description)
+    return "".join(line["content"] for line in description).strip()
 
     result = ""
     for line in description:
