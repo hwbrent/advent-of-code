@@ -280,14 +280,12 @@ def format_description(description: list[dict]) -> str:
     order to make the description easier to read once it's put into the
     generated python script
     """
+    return "".join(line["content"] for line in description)
 
     result = ""
     for line in description:
         is_english = line["is_english"]
         content = line["content"]
-
-        result += content + "\n"
-        continue
 
         # If the content is a chunk of code or something, don't do anything
         # to it. This could confuse me when reading it in the multiline
@@ -514,7 +512,7 @@ def main():
     # Generate the python file
     title = get_problem_title(html)
     description = get_problem_description(html)
-    # description = format_description(description)
+    description = format_description(description)
 
     generate_python_file(title, description, url, input_url, year, day)
 
