@@ -175,30 +175,45 @@ def part2(input):
     overall_total = 0
 
     for symbol_coord in symbols:
+        # Check if the actual symbol character is an asterisk - if not, do
+        # nothing
         symbol_row, symbol_col = symbol_coord
         symbol = input[symbol_row][symbol_col]
-
         if symbol != "*":
             continue
 
         gear_ratio = 1
 
+        # The coordinates of the points surrounding this particular asterisk
         neighbours = symbols[symbol_coord]
+
+        # A list of unique indices pointing to Match objects in 'matches'
+        # whose values we have already factored into 'gear_ratio'
         part_numbers_added = []
 
         for row in neighbours:
             for neighbour in row:
+                # If this specific neighbour doesn't lie on a digit of one
+                # of the part numbers, don't do anything
                 match_index = numbers.get(neighbour, None)
                 if not match_index:
                     continue
 
+                # If we've already accounted for this part number, do nothing
                 if match_index in part_numbers_added:
                     continue
 
+                # Get the actual number that the Match object represents,
+                # and use it to calculate this gear's gear ratio
                 number = int(matches[match_index][0])
                 gear_ratio *= number
+
+                # Record the fact that we just accounted for this specific
+                # part number
                 part_numbers_added.append(match_index)
 
+        # If this year doesn't have exactly two part numbers, it's not valid,
+        # so don't add its gear ratio to the overall sum
         if len(part_numbers_added) != 2:
             continue
 
