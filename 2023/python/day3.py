@@ -135,15 +135,9 @@ def parse_raw_input(input: str):
 def part1(input):
     symbols, numbers, matches, input = input
 
-    # pp.pprint(symbols)
-    # pp.pprint(numbers)
-    # return
-
     total = 0
 
     for symbol, neighbours in symbols.items():
-        print(symbol)
-
         part_numbers_added = []
 
         for row in neighbours:
@@ -152,19 +146,12 @@ def part1(input):
                 if not match_index:
                     continue
 
-                print("\t", neighbour, matches[match_index][0])
-                # print(match_index, dir(match_index))
-                print()
                 if match_index in part_numbers_added:
                     continue
 
                 number = int(matches[match_index][0])
                 total += number
                 part_numbers_added.append(match_index)
-
-            print()
-        print([matches[z][0] for z in part_numbers_added])
-        print()
 
     print(total)
 
