@@ -99,7 +99,30 @@ def part1(input):
 
 
 def part2(input):
-    pass
+    counts = {}
+
+    def get(card_number):
+        return counts.get(card_number, 0)
+
+    def increment(card_number):
+        if not card_number in counts:
+            counts[card_number] = 0
+        counts[card_number] += 1
+
+    for i, (guesses, winners) in enumerate(input):
+        i += 1
+
+        increment(i)
+
+        wins = guesses.intersection(winners)
+
+        for j in range(len(wins)):
+            won_card_number = i + j + 1
+
+            for _ in range(get(i)):
+                increment(won_card_number)
+
+    print(sum(counts.values()))
 
 
 def main():
