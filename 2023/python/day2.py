@@ -33,11 +33,47 @@ Determine which games would have been possible if the bag had been loaded with o
 
 
 def parse_raw_input(input: str):
-    return input
+    games = []
+    for line in input.strip().split("\n"):
+        # Get rid of the "Game _: " part
+        colon = line.index(": ")
+        line = line[colon + 2 :]
+
+        # Split the line into the different sets of cubes
+        line = line.split("; ")
+
+        line = tuple(seg.split(", ") for seg in line)
+
+        dics = []
+        for seg in line:
+            dic = {}
+            for pair in seg:
+                count, colour = pair.split()
+                dic[colour] = int(count)
+            dics.append(dic)
+
+        games.append(dics)
+
+    return games
 
 
 def part1(input):
-    pass
+    original = {"red": 12, "green": 13, "blue": 14}
+
+    ids_sum = 0
+
+    for id, game in enumerate(input):
+        possible = True
+
+        for combos in game:
+            for colour, count in combos.items():
+                if count > original[colour]:
+                    possible = False
+
+        if possible:
+            ids_sum += id + 1
+
+    print(ids_sum)
 
 
 def part2(input):
@@ -54,4 +90,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
