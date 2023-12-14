@@ -1,5 +1,6 @@
 import os
 import sys
+import itertools as it
 
 # Enable imports from advent-of-code/utils.py
 root = os.path.abspath(os.path.join(__file__, os.pardir, os.pardir, os.pardir))
@@ -55,6 +56,7 @@ Find the rank of every hand in your set. What are the total winnings?
 
 
 def parse_raw_input(input: str):
+    only_hands = []
     pairs = []
     for line in input.strip().split("\n"):
         cards, bid = line.split()
@@ -62,13 +64,71 @@ def parse_raw_input(input: str):
         cards = tuple(char for char in cards)
         bid = int(bid)
 
+        only_hands.append(cards)
         pairs.append((cards, bid))
 
-    return pairs
+    return only_hands, pairs
+
+
+funcs = [
+    # five of a kind
+    # where all five cards have the same label: AAAAA
+    lambda hand: sorted(hand.count(card) for card in hand) == [5],
+    # four of a kind
+    # where four cards have the same label and one card has a different label: AA8AA
+    lambda hand: sorted(hand.count(card) for card in hand) == [1, 4],
+    # full house
+    # where three cards have the same label, and the remaining two cards share a different label: 23332
+    lambda hand: sorted(hand.count(card) for card in hand) == [2, 3],
+    # three of a kind:
+    # where three cards have the same label, and the remaining two cards are each different from any other card in the hand: TTT98
+    lambda hand: sorted(hand.count(card) for card in hand) == [1, 1, 3],
+    # two pair:
+    # where two cards share one label, two other cards share a second label, and the remaining card has a third label: 23432
+    lambda hand: sorted(hand.count(card) for card in hand) == [1, 2, 2],
+    # one pair:
+    # where two cards share one label, and the other three cards have a different label from the pair and each other: A23A4
+    lambda hand: sorted(hand.count(card) for card in hand) == [1, 1, 1, 2],
+    # high card:
+    # where all cards' labels are distinct: 23456
+    lambda hand: sorted(hand.count(card) for card in hand) == [1, 1, 1, 1, 1],
+]
+
+labels = ["A", "K", "Q", "J", "T", "9", "8", "7", "6", "5", "4", "3", "2"]
+
+
+def get_hand_rank(hand: tuple) -> int:
+    """
+    Gets the strength of this hand purely in terms of the hand type
+    """
+    for index, hand_checker in enumerate(funcs):
+        if hand_checker(hand):
+            return len(funcs) - index
+    else:
+        print(hand)
+
+
+def group(arr):
+    arr2 = []
+    for _, value in it.groupby(arr):
+        group = list(value)
+        if len(group) == 1:
+            group = group[0]
+        arr2.append(group)
+    return arr2
 
 
 def part1(input):
-    pass
+    only_hands, pairs = input
+    # First, sort the lines based on purely their hand.
+    # Then
+
+    for hand in only_hands:
+        print(hand, sorted(hand.count(card) for card in hand), get_hand_rank(hand))
+
+    # only_hands.sort(key=get_hand_rank)
+    # only_hands = group(only_hands)
+    # print(only_hands)
 
 
 def part2(input):
@@ -76,7 +136,13 @@ def part2(input):
 
 
 def main():
-    raw_input = utils.get_raw_input()
+    # raw_input = utils.get_raw_input()
+    raw_input = """32T3K 765
+T55J5 684
+KK677 28
+KTJJT 220
+QQQJA 483
+"""
     parsed_input = parse_raw_input(raw_input)
 
     part1(parsed_input)
@@ -85,4 +151,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
