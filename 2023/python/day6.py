@@ -92,11 +92,11 @@ def part1(input):
         # 'record_distance' < speed * time
         # 'record_distance' < time_held * (time_allotted - time_held)
 
-        max_holding_time = time_allotted // 2
-        for time_held in range(1, max_holding_time + 1):
+        # max_holding_time = time_allotted // 2
+        for time_held in range(1, time_allotted):
             hypothetical_distance = time_held * (time_allotted - time_held)
             if hypothetical_distance > record_distance:
-                print(f"Hold button for {time_held} distance")
+                print(f"Hold button for {time_held} seconds")
                 print(
                     f"Yields a distance travelled of {hypothetical_distance} (compared to {record_distance})"
                 )
@@ -120,9 +120,12 @@ def part2(input):
 
 def main():
     raw_input = utils.get_raw_input()
+    #     raw_input = """Time:      7  15   30
+    # Distance:  9  40  200
+    # """
     parsed_input = parse_raw_input(raw_input)
 
-    part1(parsed_input)
+    part1(parsed_input)  # 1159152
     part2(parsed_input)
 
 
