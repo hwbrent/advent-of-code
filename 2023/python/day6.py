@@ -97,15 +97,21 @@ def part1(input):
             hypothetical_distance = time_held * (time_allotted - time_held)
             if hypothetical_distance > record_distance:
                 print(f"Hold button for {time_held} distance")
-                print(f"Yields a distance travelled of {hypothetical_distance}")
+                print(
+                    f"Yields a distance travelled of {hypothetical_distance} (compared to {record_distance})"
+                )
                 ways_to_beat_record += 1
 
         if ways_to_beat_record > 0:
+            print(f"Ways to beat record: {ways_to_beat_record}")
             multiplication *= ways_to_beat_record
 
-    print(ways_to_beat_record)
+        print()
+
+    print(multiplication)
 
     # 16 - too low
+    # 80640 - too low
 
 
 def part2(input):
