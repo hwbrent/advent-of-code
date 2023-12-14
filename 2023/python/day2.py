@@ -101,7 +101,27 @@ def part1(input):
 
 
 def part2(input):
-    pass
+    total = 0
+
+    for game in input:
+        fewest = {}
+
+        for combo in game:
+            for colour, count in combo.items():
+                if not colour in fewest:
+                    fewest[colour] = count
+
+                if count > fewest[colour]:
+                    fewest[colour] = count
+
+        power = 1
+
+        for value in fewest.values():
+            power *= value
+
+        total += power
+
+    print(total)
 
 
 def main():
