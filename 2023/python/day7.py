@@ -61,7 +61,7 @@ def parse_raw_input(input: str):
     for line in input.strip().split("\n"):
         cards, bid = line.split()
 
-        cards = tuple(char for char in cards)
+        # cards = tuple(char for char in cards)
         bid = int(bid)
 
         only_hands.append(cards)
@@ -111,7 +111,7 @@ funcs = {
 labels = ["A", "K", "Q", "J", "T", "9", "8", "7", "6", "5", "4", "3", "2"]
 
 
-def get_hand_rank(hand: tuple) -> int:
+def get_hand_rank(hand: str) -> int:
     """
     Gets the strength of this hand purely in terms of the hand type
     """
@@ -134,7 +134,7 @@ def part1(input):
     only_hands, pairs = input
 
     for hand in only_hands:
-        print("".join(hand), get_hand_rank(hand))
+        print(hand, get_hand_rank(hand))
 
 
 def part2(input):
