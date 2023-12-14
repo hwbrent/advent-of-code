@@ -95,7 +95,49 @@ def part1(input):
 
 
 def part2(input):
-    pass
+    words = ("one", "two", "three", "four", "five", "six", "seven", "eight", "nine")
+    digits = tuple(str(num) for num in range(10))
+
+    indices = {}
+
+    def add(line: str, seq: tuple) -> int:
+        for entry in seq:
+            if entry in line:
+                earliest = line.index(entry)
+                latest = line.rindex(entry)
+                indices[entry] = (earliest, latest)
+
+    total = 0
+
+    for line in input:
+        add(line, words)
+        add(line, digits)
+
+        # print(line, indices)
+
+        earliest_index = len(line)
+        latest_index = -1
+        earliest_number = None
+        latest_number = None
+
+        for number, (early, late) in indices.items():
+            if early < earliest_index:
+                earliest_index = early
+                earliest_number = number
+            if late > latest_index:
+                latest_index = late
+                latest_number = number
+
+        if earliest_number in words:
+            earliest_number = str(words.index(earliest_number) + 1)
+        if latest_number in words:
+            latest_number = str(words.index(latest_number) + 1)
+
+        total += int(earliest_number + latest_number)
+
+        indices.clear()
+
+    print(total)
 
 
 def main():
@@ -103,7 +145,7 @@ def main():
     parsed_input = parse_raw_input(raw_input)
 
     part1(parsed_input)  # 54708
-    part2(parsed_input)
+    part2(parsed_input)  # 54087
 
 
 if __name__ == "__main__":
