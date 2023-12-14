@@ -42,11 +42,29 @@ Take a seat in the large pile of colorful cards. How many points are they worth 
 
 
 def parse_raw_input(input: str):
-    return input
+    cards = []
+    for line in input.strip().split("\n"):
+        line = line[line.index(": ") + 2 :]
+        line = line.split("|")
+        line = tuple(s.split() for s in line)
+        line = tuple(set(int(x) for x in d) for d in line)
+
+        cards.append(line)
+
+    return cards
 
 
 def part1(input):
-    pass
+    score = 0
+    for guesses, winners in input:
+        wins = guesses.intersection(winners)
+
+        if len(wins) == 0:
+            continue
+
+        score += 2 ** (len(wins) - 1)
+
+    print(score)
 
 
 def part2(input):
@@ -63,4 +81,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
