@@ -64,6 +64,7 @@ def parse_raw_input(input: str):
         # (139, 85): 42}
         # ...
     }
+    matches = []
 
     rows = input.strip().split("\n")
     rows_range = range(0, len(rows))
@@ -76,7 +77,9 @@ def parse_raw_input(input: str):
             cols_spanned = tuple(range(*result.span()))
             for col in cols_spanned:
                 coord = (row_index, col)
-                numbers[coord] = result
+                if not result in matches:
+                    matches.append(result)
+                numbers[coord] = len(matches) - 1
 
         for col_index, char in enumerate(row):
             if char.isnumeric() or char == ".":
@@ -105,11 +108,11 @@ def parse_raw_input(input: str):
 
             symbols[(row_index, col_index)] = surrounding_coords
 
-    return symbols, numbers, input.strip()
+    return symbols, numbers, matches, input.strip()
 
 
 def part1(input):
-    symbols, numbers, input = input
+    symbols, numbers, matches, input = input
 
     # pp.pprint(symbols)
     # pp.pprint(numbers)
@@ -118,26 +121,29 @@ def part1(input):
     total = 0
 
     for symbol, neighbours in symbols.items():
-        # print(symbol)
+        print(symbol)
 
         part_numbers_added = []
 
         for row in neighbours:
             for neighbour in row:
-                match = numbers.get(neighbour, None)
-                if not match:
+                match_index = numbers.get(neighbour, None)
+                if not match_index:
                     continue
 
-                if match in part_numbers_added:
+                print("\t", neighbour, matches[match_index][0])
+                # print(match_index, dir(match_index))
+                print()
+                if match_index in part_numbers_added:
                     continue
 
-                number = int(match[0])
-
+                number = int(matches[match_index][0])
                 total += number
+                part_numbers_added.append(match_index)
 
-        #         print("\t", neighbour, match)
-        #     print()
-        # print()
+            print()
+        print([matches[z][0] for z in part_numbers_added])
+        print()
 
     print(total)
 
@@ -152,7 +158,7 @@ def main():
     raw_input = utils.get_raw_input()
     parsed_input = parse_raw_input(raw_input)
 
-    part1(parsed_input)
+    part1(parsed_input)  # 522726
     part2(parsed_input)
 
 
