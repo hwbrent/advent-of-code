@@ -43,16 +43,9 @@ Of course, the actual engine schematic is much larger. What is the sum of all of
 def parse_raw_input(input: str):
     symbols = {
         # e.g.:
-        # (138, 115): [
-        #     (137, 114),
-        #     (137, 114),
-        #     (137, 114),
-        #     (138, 115),
-        #     (138, 115),
-        #     (139, 116),
-        #     (139, 116),
-        #     (139, 116)
-        # ],
+        # (138, 105): {(138, 105), (139, 106), (137, 104)},
+        # (138, 108): {(137, 107), (139, 109), (138, 108)},
+        # (138, 115): {(138, 115), (137, 114), (139, 116)},
         # ...
     }
     numbers = {
@@ -87,7 +80,7 @@ def parse_raw_input(input: str):
 
             # Get the coordinates of every point surrounding this symbol
 
-            surrounding_coords = []
+            surrounding_coords = set()
 
             for i in range(-1, 2):
                 surrounding_row_index = row_index + i
@@ -95,14 +88,14 @@ def parse_raw_input(input: str):
                     continue
 
                 for j in range(-1, 2):
-                    surrounding_col_index = col_index + i
+                    surrounding_col_index = col_index + j
                     if not col_index in cols_range:
                         continue
 
                     if i == j == 0:
                         continue
 
-                    surrounding_coords.append(
+                    surrounding_coords.add(
                         (surrounding_row_index, surrounding_col_index)
                     )
 
