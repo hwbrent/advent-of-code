@@ -66,7 +66,8 @@ def parse_raw_input(input: str):
     }
     matches = []
 
-    rows = input.strip().split("\n")
+    input = input.strip().split("\n")
+    rows = input
     rows_range = range(0, len(rows))
     cols_range = range(0, len(rows[0]))
 
@@ -108,7 +109,7 @@ def parse_raw_input(input: str):
 
             symbols[(row_index, col_index)] = surrounding_coords
 
-    return symbols, numbers, matches, input.strip()
+    return symbols, numbers, matches, input
 
 
 def part1(input):
@@ -151,7 +152,41 @@ def part1(input):
 
 
 def part2(input):
-    pass
+    symbols, numbers, matches, input = input
+
+    overall_total = 0
+
+    for symbol_coord in symbols:
+        symbol_row, symbol_col = symbol_coord
+        symbol = input[symbol_row][symbol_col]
+
+        if symbol != "*":
+            continue
+
+        gear_ratio = 1
+
+        neighbours = symbols[symbol_coord]
+        part_numbers_added = []
+
+        for row in neighbours:
+            for neighbour in row:
+                match_index = numbers.get(neighbour, None)
+                if not match_index:
+                    continue
+
+                if match_index in part_numbers_added:
+                    continue
+
+                number = int(matches[match_index][0])
+                gear_ratio *= number
+                part_numbers_added.append(match_index)
+
+        if len(part_numbers_added) != 2:
+            continue
+
+        overall_total += gear_ratio
+
+    print(overall_total)
 
 
 def main():
@@ -159,7 +194,7 @@ def main():
     parsed_input = parse_raw_input(raw_input)
 
     part1(parsed_input)  # 522726
-    part2(parsed_input)
+    part2(parsed_input)  # 81721933
 
 
 if __name__ == "__main__":
