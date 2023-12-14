@@ -129,8 +129,8 @@ def main():
     raw_input = utils.get_raw_input()
     parsed_input = parse_raw_input(raw_input)
 
-    part1(parsed_input)
-    part2(parsed_input)
+    part1(parsed_input)  # 25010
+    part2(parsed_input)  # 9924412
 
 
 if __name__ == "__main__":
