@@ -53,12 +53,12 @@ def parse_raw_input(input: str):
 
 
 def part1(input):
-    answer = 0
+    answer = None
     return answer
 
 
 def part2(input):
-    answer = 0
+    answer = None
     return answer
 
 
