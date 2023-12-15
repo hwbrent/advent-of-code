@@ -57,7 +57,7 @@ Find the rank of every hand in your set. What are the total winnings?
 
 def parse_raw_input(input: str):
     only_hands = []
-    pairs = []
+    pairs = {}
     for line in input.strip().split("\n"):
         cards, bid = line.split()
 
@@ -65,7 +65,7 @@ def parse_raw_input(input: str):
         bid = int(bid)
 
         only_hands.append(cards)
-        pairs.append((cards, bid))
+        pairs[cards] = int(bid)
 
     return only_hands, pairs
 
@@ -110,9 +110,9 @@ def get_hand_rank(hand: str) -> int:
             return hand_type, len(funcs) - index
 
 
-def group(arr):
+def group(arr, key):
     arr2 = []
-    for _, value in it.groupby(arr):
+    for _, value in it.groupby(arr, key):
         group = list(value)
         if len(group) == 1:
             group = group[0]
@@ -123,8 +123,42 @@ def group(arr):
 def part1(input):
     only_hands, pairs = input
 
-    for hand in only_hands:
-        print(hand, get_hand_rank(hand))
+    # print(only_hands)
+
+    # First, sort by the strength of the hand solely
+    only_hands.sort(key=lambda x: get_hand_rank(x)[1])
+
+    # print(only_hands)
+
+    # Group hands with same hand strength into lists, so that we can easily
+    # iterate over the list to figure out the order between them
+    only_hands = group(only_hands, key=lambda x: get_hand_rank(x)[1])
+
+    # Sort by card suit
+    for index, entry in enumerate(only_hands):
+        if type(entry) != list:
+            continue
+
+        entry.sort(key=lambda x: tuple(len(x) - labels.index(c) for c in x))
+
+        # print(only_hands[index])
+
+        del only_hands[index]
+
+        # We have to order them in reversed order so that they end up in
+        # the list in the correct order
+        for value in reversed(entry):
+            only_hands.insert(index, value)
+
+    total = 0
+
+    # Now get each hand's bid, and multiply it by its rank, then add that to
+    # our overall total
+    for index, hand in enumerate(only_hands):
+        bid = pairs[hand]
+        total += (index + 1) * bid
+
+    print(total)
 
 
 def part2(input):
@@ -132,13 +166,13 @@ def part2(input):
 
 
 def main():
-    # raw_input = utils.get_raw_input()
-    raw_input = """32T3K 765
-T55J5 684
-KK677 28
-KTJJT 220
-QQQJA 483
-"""
+    raw_input = utils.get_raw_input()
+    #     raw_input = """32T3K 765
+    # T55J5 684
+    # KK677 28
+    # KTJJT 220
+    # QQQJA 483
+    # """
     parsed_input = parse_raw_input(raw_input)
 
     part1(parsed_input)
