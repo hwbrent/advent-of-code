@@ -94,43 +94,64 @@ def parse_raw_input(input: str):
     return only_hands, pairs
 
 
-def counts(hand: str) -> list:
-    return sorted(hand.count(card) for card in set(hand))
+def counts(hand: str, part: int) -> list:
+    label_counts = sorted(hand.count(card) for card in set(hand))
+
+    if part == 1:
+        return label_counts
+
+    jokers = hand.count("J")
+
+    if jokers == 0:
+        return label_counts
+
+    # Remove the jokers, and turn them into whatever the most frequently
+    # occuring label is
+    label_counts.remove(jokers)
+
+    max_occurring = label_counts.index(max(label_counts))
+    label_counts[max_occurring] += jokers
+
+    return label_counts
 
 
 funcs = {
     # five of a kind
     # where all five cards have the same label: AAAAA
-    "five of a kind": (lambda hand: counts(hand) == [5]),
+    "five of a kind": (lambda hand, part: counts(hand, part) == [5]),
     # four of a kind
     # where four cards have the same label and one card has a different label: AA8AA
-    "four of a kind": (lambda hand: counts(hand) == [1, 4]),
+    "four of a kind": (lambda hand, part: counts(hand, part) == [1, 4]),
     # full house
     # where three cards have the same label, and the remaining two cards share a different label: 23332
-    "full house": (lambda hand: counts(hand) == [2, 3]),
+    "full house": (lambda hand, part: counts(hand, part) == [2, 3]),
     # three of a kind
     # where three cards have the same label, and the remaining two cards are each different from any other card in the hand: TTT98
-    "three of a kind": (lambda hand: counts(hand) == [1, 1, 3]),
+    "three of a kind": (lambda hand, part: counts(hand, part) == [1, 1, 3]),
     # two pair
     # where two cards share one label, two other cards share a second label, and the remaining card has a third label: 23432
-    "two pair": (lambda hand: counts(hand) == [1, 2, 2]),
+    "two pair": (lambda hand, part: counts(hand, part) == [1, 2, 2]),
     # one pair
     # where two cards share one label, and the other three cards have a different label from the pair and each other: A23A4
-    "one pair": (lambda hand: counts(hand) == [1, 1, 1, 2]),
+    "one pair": (lambda hand, part: counts(hand, part) == [1, 1, 1, 2]),
     # high card
     # where all cards' labels are distinct: 23456
-    "high card": (lambda hand: counts(hand) == [1, 1, 1, 1, 1]),
+    "high card": (lambda hand, part: counts(hand, part) == [1, 1, 1, 1, 1]),
 }
 
-labels = ["A", "K", "Q", "J", "T", "9", "8", "7", "6", "5", "4", "3", "2"]
+
+def get_labels(part: int):
+    if part == 1:
+        return ["A", "K", "Q", "J", "T", "9", "8", "7", "6", "5", "4", "3", "2"]
+    return ["A", "K", "Q", "T", "9", "8", "7", "6", "5", "4", "3", "2", "J"]
 
 
-def get_hand_rank(hand: str) -> int:
+def get_hand_rank(hand: str, part: int) -> int:
     """
     Gets the strength of this hand purely in terms of the hand type
     """
     for index, (hand_type, hand_checker) in enumerate(funcs.items()):
-        if hand_checker(hand):
+        if hand_checker(hand, part):
             return hand_type, len(funcs) - index
 
 
@@ -145,25 +166,26 @@ def group(arr, key):
 
 
 def part1(input):
+    part = 1
     only_hands, pairs = input
 
     # print(only_hands)
 
     # First, sort by the strength of the hand solely
-    only_hands.sort(key=lambda x: get_hand_rank(x)[1])
+    only_hands.sort(key=lambda x: get_hand_rank(x, part)[1])
 
     # print(only_hands)
 
     # Group hands with same hand strength into lists, so that we can easily
     # iterate over the list to figure out the order between them
-    only_hands = group(only_hands, key=lambda x: get_hand_rank(x)[1])
+    only_hands = group(only_hands, key=lambda x: get_hand_rank(x, part)[1])
 
     # Sort by card suit
     for index, entry in enumerate(only_hands):
         if type(entry) != list:
             continue
 
-        entry.sort(key=lambda x: tuple(len(x) - labels.index(c) for c in x))
+        entry.sort(key=lambda x: tuple(len(x) - get_labels(part).index(c) for c in x))
 
         # print(only_hands[index])
 
