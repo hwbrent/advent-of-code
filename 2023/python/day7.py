@@ -102,7 +102,10 @@ def counts(hand: str, part: int) -> list:
 
     jokers = hand.count("J")
 
-    if jokers == 0:
+    # If we don't include (jokers == 5), when we encounter a hand with only
+    # jokers, we encounter an error, because after you do label_counts.remove(jokers)
+    # there will be no elements left in the list
+    if (jokers == 0) or (jokers == 5):
         return label_counts
 
     # Remove the jokers, and turn them into whatever the most frequently
@@ -111,6 +114,8 @@ def counts(hand: str, part: int) -> list:
 
     max_occurring = label_counts.index(max(label_counts))
     label_counts[max_occurring] += jokers
+
+    label_counts.sort()
 
     return label_counts
 
@@ -165,8 +170,7 @@ def group(arr, key):
     return arr2
 
 
-def part1(input):
-    part = 1
+def do(input, part) -> int:
     only_hands, pairs = input
 
     # print(only_hands)
@@ -204,11 +208,15 @@ def part1(input):
         bid = pairs[hand]
         total += (index + 1) * bid
 
-    print(total)
+    return total
+
+
+def part1(input):
+    print(do(input, 1))
 
 
 def part2(input):
-    pass
+    print(do(input, 2))
 
 
 def main():
