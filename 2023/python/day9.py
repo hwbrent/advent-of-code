@@ -152,7 +152,45 @@ def part1(input):
 
 
 def part2(input):
-    pass
+    total = 0
+
+    for sequence in input:
+        # print(sequence)
+
+        seq = sequence
+
+        diffs = []
+
+        # Keep generating the sequence from the difference at each step
+        while seq.count(0) != len(seq):
+            diff = [v2 - v1 for v1, v2 in it.pairwise(seq)]
+            diffs.append(diff)
+            seq = diff
+        # pp.pprint(diffs)
+
+        diffs[-1].append(0)
+
+        def do(i):
+            current_diff = diffs[i]
+            prev_diff = diffs[i + 1]
+
+            to_subtract = prev_diff[0]
+            subtract_from = current_diff[0]
+
+            diffs[i].insert(0, subtract_from - to_subtract)
+
+        # "Extrapolate" each list
+        # -2 to avoid the list of all zeroes that we just manually incremented
+        for i in range(len(diffs) - 2, -1, -1):
+            do(i)
+
+        next_value = sequence[0] - diffs[0][0]
+        total += next_value
+
+        # pp.pprint(diffs)
+        # print()
+
+    print(total)
 
 
 def main():
