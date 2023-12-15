@@ -115,7 +115,24 @@ def part1(input):
 
 
 def part2(input):
-    pass
+    steps, nodes_map = input
+
+    nodes = [node for node in nodes_map if node.endswith("A")]
+    index = 0
+    while True:
+        print(index, nodes)
+
+        if all(node.endswith("Z") for node in nodes):
+            print(index)
+            return
+
+        step = steps[index % len(steps)]
+
+        # Get the next nodes
+        for node_i in range(len(nodes)):
+            nodes[node_i] = nodes_map[nodes[node_i]][step]
+
+        index += 1
 
 
 def main():
