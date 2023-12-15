@@ -109,22 +109,18 @@ def parse_raw_input(input: str):
     return sequences
 
 
-def part1(input):
+def do(input, part: int):
     total = 0
 
     for sequence in input:
-        # print(sequence)
-
-        seq = sequence
-
         diffs = []
 
         # Keep generating the sequence from the difference at each step
+        seq = sequence
         while seq.count(0) != len(seq):
             diff = [v2 - v1 for v1, v2 in it.pairwise(seq)]
             diffs.append(diff)
             seq = diff
-        # pp.pprint(diffs)
 
         diffs[-1].append(0)
 
@@ -134,57 +130,29 @@ def part1(input):
             current_diff = diffs[i]
             prev_diff = diffs[i + 1]
 
-            to_add = prev_diff[-1]
-            add_to = current_diff[-1]
+            if part == 1:
+                to_add = prev_diff[-1]
+                add_to = current_diff[-1]
+                diffs[i].append(add_to + to_add)
+            elif part == 2:
+                to_subtract = prev_diff[0]
+                subtract_from = current_diff[0]
+                diffs[i].insert(0, subtract_from - to_subtract)
 
-            diffs[i].append(add_to + to_add)
-
-        next_value = sequence[-1] + diffs[0][-1]
+        next_value = (
+            sequence[-1] + diffs[0][-1] if part == 1 else sequence[0] - diffs[0][0]
+        )
         total += next_value
 
-        # pp.pprint(diffs)
-        # print()
-
     print(total)
+
+
+def part1(input):
+    do(input, 1)
 
 
 def part2(input):
-    total = 0
-
-    for sequence in input:
-        # print(sequence)
-
-        seq = sequence
-
-        diffs = []
-
-        # Keep generating the sequence from the difference at each step
-        while seq.count(0) != len(seq):
-            diff = [v2 - v1 for v1, v2 in it.pairwise(seq)]
-            diffs.append(diff)
-            seq = diff
-        # pp.pprint(diffs)
-
-        diffs[-1].append(0)
-
-        # "Extrapolate" each list
-        # -2 to avoid the list of all zeroes that we just manually incremented
-        for i in range(len(diffs) - 2, -1, -1):
-            current_diff = diffs[i]
-            prev_diff = diffs[i + 1]
-
-            to_subtract = prev_diff[0]
-            subtract_from = current_diff[0]
-
-            diffs[i].insert(0, subtract_from - to_subtract)
-
-        next_value = sequence[0] - diffs[0][0]
-        total += next_value
-
-        # pp.pprint(diffs)
-        # print()
-
-    print(total)
+    do(input, 2)
 
 
 def main():
