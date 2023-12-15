@@ -4,6 +4,7 @@ import datetime
 import urllib.parse
 import pathlib
 import inspect
+import time
 
 import requests
 import bs4
@@ -51,17 +52,22 @@ def parse_raw_input(input: str):
     return input
 
 
-def part1(input):
-    pass
+def part_1(input):
+    answer = 0
+    return answer
 
 
-def part2(input):
-    pass
+def part_2(input):
+    answer = 0
+    return answer
 
 
 def main():
     raw_input = utils.get_raw_input()
     parsed_input = parse_raw_input(raw_input)
+
+    utils.handle(part1(input), 1)
+    utils.handle(part2(input), 2)
 
     part1(parsed_input)
     part2(parsed_input)
@@ -486,6 +492,17 @@ def get_raw_input() -> str:
     input_file_path = os.path.join(inputs_dir_path, f"{file_name}.txt")
     with open(input_file_path) as f:
         return f.read()
+
+
+def handle(
+    answer,
+    part: int,
+    message: str = "Part {part}:\t{answer}\t({duration} seconds)",
+) -> None:
+    start = time.time()
+    end = time.time()
+    duration = end - start
+    print(message.format(part=part, answer=answer, duration=duration))
 
 
 def main():
