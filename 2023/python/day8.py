@@ -64,7 +64,19 @@ def parse_raw_input(input: str):
 
 
 def part1(input):
-    pass
+    steps, nodes_map = input
+
+    node = "AAA"
+    index = 0
+    while True:
+        if node == "ZZZ":
+            print(index)
+            return
+
+        step = steps[index % len(steps)]
+        node = nodes_map[node][step]
+
+        index += 1
 
 
 def part2(input):
@@ -75,7 +87,7 @@ def main():
     raw_input = utils.get_raw_input()
     parsed_input = parse_raw_input(raw_input)
 
-    part1(parsed_input)
+    part1(parsed_input)  # 16409
     part2(parsed_input)
 
 
