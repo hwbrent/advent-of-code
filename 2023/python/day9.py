@@ -1,5 +1,9 @@
 import os
 import sys
+import itertools as it
+from pprint import PrettyPrinter
+
+pp = PrettyPrinter(indent=4)
 
 # Enable imports from advent-of-code/utils.py
 root = os.path.abspath(os.path.join(__file__, os.pardir, os.pardir, os.pardir))
@@ -86,7 +90,40 @@ def parse_raw_input(input: str):
 
 
 def part1(input):
-    pass
+    for sequence in input:
+        print(sequence)
+
+        seq = sequence
+
+        diffs = []
+
+        # Keep generating the sequence from the difference at each step
+        while seq.count(0) != len(seq):
+            diff = [v2 - v1 for v1, v2 in it.pairwise(seq)]
+            diffs.append(diff)
+            seq = diff
+        pp.pprint(diffs)
+
+        diffs[-1].append(0)
+
+        # diffs.insert(0, seq)
+
+        # "Extrapolate" each list
+        # -2 to avoid the list of all zeroes that we just manually incremented
+        for i in range(len(diffs) - 2, -1, -1):
+            current_diff = diffs[i]
+            prev_diff = diffs[i + 1]
+
+            to_add = prev_diff[-1]
+            add_to = current_diff[-1]
+
+            current_diff.append(add_to + to_add)
+
+        pp.pprint(diffs)
+
+        # pp.pprint(diffs[1:])
+        # print(diffs[0])
+        print()
 
 
 def part2(input):
@@ -94,7 +131,11 @@ def part2(input):
 
 
 def main():
-    raw_input = utils.get_raw_input()
+    # raw_input = utils.get_raw_input()
+    raw_input = """0 3 6 9 12 15
+1 3 6 10 15 21
+10 13 16 21 30 45
+"""
     parsed_input = parse_raw_input(raw_input)
 
     part1(parsed_input)
@@ -103,4 +144,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
