@@ -229,8 +229,8 @@ def main():
     # """
     parsed_input = parse_raw_input(raw_input)
 
-    part1(parsed_input)
-    part2(parsed_input)
+    part1(parsed_input)  # 252052080
+    part2(parsed_input)  # 252898370
 
 
 if __name__ == "__main__":
