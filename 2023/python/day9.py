@@ -71,7 +71,18 @@ Analyze your OASIS report and extrapolate the next value for each history. What 
 
 
 def parse_raw_input(input: str):
-    return input
+    # return tuple(
+    #     tuple(int(x) for x in line.strip()) for line in input.strip().split("\n")
+    # )
+    sequences = []
+
+    for line in input.strip().split("\n"):
+        seq = []
+        for value in line.split():
+            seq.append(int(value))
+        sequences.append(seq)
+
+    return sequences
 
 
 def part1(input):
