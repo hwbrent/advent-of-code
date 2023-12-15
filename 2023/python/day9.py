@@ -128,7 +128,9 @@ def part1(input):
 
         diffs[-1].append(0)
 
-        def do(i):
+        # "Extrapolate" each list
+        # -2 to avoid the list of all zeroes that we just manually incremented
+        for i in range(len(diffs) - 2, -1, -1):
             current_diff = diffs[i]
             prev_diff = diffs[i + 1]
 
@@ -136,11 +138,6 @@ def part1(input):
             add_to = current_diff[-1]
 
             diffs[i].append(add_to + to_add)
-
-        # "Extrapolate" each list
-        # -2 to avoid the list of all zeroes that we just manually incremented
-        for i in range(len(diffs) - 2, -1, -1):
-            do(i)
 
         next_value = sequence[-1] + diffs[0][-1]
         total += next_value
@@ -170,7 +167,9 @@ def part2(input):
 
         diffs[-1].append(0)
 
-        def do(i):
+        # "Extrapolate" each list
+        # -2 to avoid the list of all zeroes that we just manually incremented
+        for i in range(len(diffs) - 2, -1, -1):
             current_diff = diffs[i]
             prev_diff = diffs[i + 1]
 
@@ -178,11 +177,6 @@ def part2(input):
             subtract_from = current_diff[0]
 
             diffs[i].insert(0, subtract_from - to_subtract)
-
-        # "Extrapolate" each list
-        # -2 to avoid the list of all zeroes that we just manually incremented
-        for i in range(len(diffs) - 2, -1, -1):
-            do(i)
 
         next_value = sequence[0] - diffs[0][0]
         total += next_value
