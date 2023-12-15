@@ -201,8 +201,8 @@ def main():
     # """
     parsed_input = parse_raw_input(raw_input)
 
-    part1(parsed_input)
-    part2(parsed_input)
+    part1(parsed_input)  # 2174807968
+    part2(parsed_input)  # 1208
 
 
 if __name__ == "__main__":
