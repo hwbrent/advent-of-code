@@ -52,12 +52,12 @@ def parse_raw_input(input: str):
     return input
 
 
-def part_1(input):
+def part1(input):
     answer = 0
     return answer
 
 
-def part_2(input):
+def part2(input):
     answer = 0
     return answer
 
@@ -66,16 +66,12 @@ def main():
     raw_input = utils.get_raw_input()
     parsed_input = parse_raw_input(raw_input)
 
-    utils.handle(part1(input), 1)
-    utils.handle(part2(input), 2)
-
-    part1(parsed_input)
-    part2(parsed_input)
+    utils.handle(part1(parsed_input), 1)
+    utils.handle(part2(parsed_input), 2)
 
 
 if __name__ == "__main__":
     main()
-
 """.lstrip()
 
 this_dir = os.path.dirname(__file__)
