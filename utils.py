@@ -31,6 +31,9 @@ CHROMEDRIVER_PATH = "./chromedriver"
 PYTHON_FILE_TEMPLATE = """
 import os
 import sys
+from pprint import PrettyPrinter
+
+pp = PrettyPrinter(indent=4)
 
 # Enable imports from advent-of-code/utils.py
 root = os.path.abspath(os.path.join(__file__, os.pardir, os.pardir, os.pardir))
