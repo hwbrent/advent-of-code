@@ -1,5 +1,8 @@
 import os
 import sys
+from pprint import PrettyPrinter
+
+pp = PrettyPrinter(indent=4)
 
 # Enable imports from advent-of-code/utils.py
 root = os.path.abspath(os.path.join(__file__, os.pardir, os.pardir, os.pardir))
@@ -99,12 +102,126 @@ Here are the distances for each tile on that loop:
 Find the single giant loop starting at S. How many steps along the loop does it take to get from the starting position to the point farthest from the starting position?
 """
 
+directions = ["north", "east", "south", "west"]
+
+
+connections = {
+    "|": ("north", "south"),
+    "-": ("east", "west"),
+    "L": ("north", "east"),
+    "J": ("north", "west"),
+    "7": ("south", "west"),
+    "F": ("south", "east"),
+    ".": None,
+    "S": None,
+}
+
+
+def north(coord: tuple[int, int]) -> tuple[int, int]:
+    row1, col1 = coord
+    row2 = row1 - 1
+    return (row2, col1)
+
+
+def south(coord: tuple[int, int]) -> tuple[int, int]:
+    row1, col1 = coord
+    row2 = row1 + 1
+    return (row2, col1)
+
+
+def east(coord: tuple[int, int]) -> tuple[int, int]:
+    row1, col1 = coord
+    col2 = col1 + 1
+    return (row1, col2)
+
+
+def west(coord: tuple[int, int]) -> tuple[int, int]:
+    row1, col1 = coord
+    col2 = col1 - 1
+    return (row1, col2)
+
+
+def is_valid(coord: tuple[int, int], row_limit: range, col_limit: range) -> bool:
+    row, col = coord
+    return (row in row_limit) and (col in col_limit)
+
+
+def opposite(direction):
+    i = directions.index(direction)
+    length = len(directions)
+    return directions[(i + 2) % length]
+
 
 def parse_raw_input(input: str):
-    return input
+    input = input.strip().split("\n")
+
+    row_limit = range(0, len(input))
+    col_limit = range(0, len(input[0]))
+
+    pipes = {}
+
+    for row_i, row in enumerate(input):
+        for col_i, pipe in enumerate(row):
+            if pipe == ".":
+                continue
+            coord = (row_i, col_i)
+            pipes[coord] = {
+                "pipe": pipe,
+                "connections": connections[pipe],
+            }
+
+    # Figure out which pipes are connected with each other
+    for coord, tile in pipes.items():
+        c_pipes = []
+        tile["c_pipes"] = c_pipes
+
+        for direction in directions:
+            # If this tile doesn't connect in this direction:
+            t_connections = tile["connections"]
+            if (t_connections is None) or (not direction in t_connections):
+                continue
+
+            # Get the neighbour in this direction.
+            neighbour = eval(f"{direction}(coord)")
+            if not is_valid(neighbour, row_limit, col_limit):
+                continue
+
+            # Make sure neighbour coord isn't a blank space
+            n_row, n_col = neighbour
+            n_tile = input[n_row][n_col]
+            if n_tile == ".":
+                continue
+
+            # Check if the opposite 'direction' is in the neighbour's 'connections'
+            n_connections = pipes[neighbour]["connections"]
+            if n_connections is None:
+                continue
+            for n_connection in n_connections:
+                opp = opposite(n_connection)
+                if opp == direction:
+                    c_pipes.append(neighbour)
+                    break
+
+        print(coord, c_pipes)
+
+    # For each tile:
+    #   For each direction (i.e. north, south, east, west):
+    #       If this tile doesn't connect in this direction:
+    #           continue
+    #       Get the neighbour in this direction.
+    #       If it's invalid:
+    #           continue
+    #       If the neighbour doesn't connect in the opposite direction of the one we're iterating over:
+    #           continue
+    #       Append neighbour to list
+
+    return pipes, input
 
 
 def part1(input):
+    pipes, input = input
+    # pp.pprint(pipes)
+
     answer = None
     return answer
 
