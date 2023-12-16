@@ -171,7 +171,15 @@ def part1(input):
 
 
 def part2(input):
-    answer = None
+    answer = 0
+
+    # Do pretty much the same as part 1, but rather than actually adding all
+    # the new rows and columns, we can iterate over each pair of galaxies
+    # and check how many expansions they would have been impacted by. Since
+    # we're using taxicab distance, all we need to do is get that number and
+    # multiply it by 1 million, then add it to the distance between the pair
+    # without any expansions
+
     return answer
 
 
