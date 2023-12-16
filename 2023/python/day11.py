@@ -102,7 +102,7 @@ Expand the universe, then find the length of the shortest path between every pai
 
 
 def parse_raw_input(input: str):
-    return input
+    return input.strip().split("\n")
 
 
 def part1(input):
