@@ -1,6 +1,7 @@
 import os
 import sys
 from pprint import PrettyPrinter
+import itertools as it
 
 pp = PrettyPrinter(indent=4)
 
@@ -105,8 +106,56 @@ def parse_raw_input(input: str):
     return input.strip().split("\n")
 
 
+GALAXY = "#"
+
+
 def part1(input):
-    answer = None
+    answer = 0
+
+    row_length = len(input[0])
+
+    ### Figure out which rows and cols are empty ###
+
+    empty_rows = tuple(i for i, row in enumerate(input) if not GALAXY in row)
+    empty_cols = tuple(
+        i for i in range(row_length) if not GALAXY in (row[i] for row in input)
+    )
+
+    ### Duplicate the empty rows and cols
+
+    empty_row = "." * row_length
+    rows_added = 0
+    for row_index in empty_rows:
+        row_index += rows_added
+        input.insert(row_index, empty_row)
+        rows_added += 1
+
+    cols_added = 0
+    for col_index in empty_cols:
+        col_index += cols_added
+        for row_index, row in enumerate(input):
+            row = row[:col_index] + "." + row[col_index:]
+            input[row_index] = row
+            # row.insert(col_index, ".")
+        cols_added += 1
+
+    galaxies = []
+    for row_i, row in enumerate(input):
+        for col_i, value in enumerate(row):
+            if value != GALAXY:
+                continue
+            galaxies.append((row_i, col_i))
+
+    # Get all combinations of pairs of galaxies
+    pairs = [x for x in it.combinations(galaxies, 2)]
+
+    for galaxy1, galaxy2 in pairs:
+        x1, y1 = galaxy1
+        x2, y2 = galaxy2
+
+        taxicab_distance = abs(x1 - x2) + abs(y1 - y2)
+        answer += taxicab_distance
+
     return answer
 
 
@@ -117,9 +166,20 @@ def part2(input):
 
 def main():
     raw_input = utils.get_raw_input()
+    #     raw_input = """...#......
+    # .......#..
+    # #.........
+    # ..........
+    # ......#...
+    # .#........
+    # .........#
+    # ..........
+    # .......#..
+    # #...#.....
+    # """
     parsed_input = parse_raw_input(raw_input)
 
-    utils.handle(part1(parsed_input), 1)
+    utils.handle(part1(parsed_input), 1)  # 9445168 (9.5367431640625e-07 seconds)
     utils.handle(part2(parsed_input), 2)
 
 
