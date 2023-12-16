@@ -200,7 +200,6 @@ def parse_raw_input(input: str):
                 opp = opposite(n_connection)
                 if opp == direction:
                     c_pipes.append(neighbour)
-                    break
 
         print(coord, c_pipes)
 
