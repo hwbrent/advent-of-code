@@ -156,9 +156,10 @@ def part1(input):
                 continue
             galaxies.append((row_i, col_i))
 
-    # Get all combinations of pairs of galaxies
+    ### Get all combinations of pairs of galaxies ###
     pairs = [x for x in it.combinations(galaxies, 2)]
 
+    ### Calculate the distances between the pairs of galaxies ###
     for galaxy1, galaxy2 in pairs:
         x1, y1 = galaxy1
         x2, y2 = galaxy2
