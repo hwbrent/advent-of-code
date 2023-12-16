@@ -119,8 +119,10 @@ def parse_raw_input(input: str):
 GALAXY = "#"
 
 
-def part1(input):
+def do(input, part: int) -> int:
     answer = 0
+
+    expansion_size = 1 if part == 1 else 1_000_000
 
     ### Figure out where the galaxies are ###
     galaxies = []
@@ -155,28 +157,24 @@ def part1(input):
         for row_i in empty_rows:
             if not row_i in x_range:
                 continue
-            taxicab_distance += 1
+            taxicab_distance += expansion_size
         for col_i in empty_cols:
             if not col_i in y_range:
                 continue
-            taxicab_distance += 1
+            taxicab_distance += expansion_size
 
         answer += taxicab_distance
 
     return answer
 
 
+def part1(input):
+    return do(input, 1)
+
+
 def part2(input):
-    answer = 0
-
-    # Do pretty much the same as part 1, but rather than actually adding all
-    # the new rows and columns, we can iterate over each pair of galaxies
-    # and check how many expansions they would have been impacted by. Since
-    # we're using taxicab distance, all we need to do is get that number and
-    # multiply it by 1 million, then add it to the distance between the pair
-    # without any expansions
-
-    return answer
+    # 742306702870 - too high
+    return do(input, 2)
 
 
 def main():
