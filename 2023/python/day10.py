@@ -196,10 +196,11 @@ def parse_raw_input(input: str):
             n_connections = pipes[neighbour]["connections"]
             if n_connections is None:
                 continue
-            if not opposite(direction) in n_connections:
-                continue
-
-            c_pipes.append(neighbour)
+            for n_connection in n_connections:
+                opp = opposite(n_connection)
+                if opp == direction:
+                    c_pipes.append(neighbour)
+                    break
 
         print(coord, c_pipes)
 
