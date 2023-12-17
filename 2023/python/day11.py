@@ -122,9 +122,33 @@ GALAXY = "#"
 def do(input, part: int) -> int:
     answer = 0
 
-    expansion_size = 1 if part == 1 else 1_000_000
+    row_length = len(input[0])
 
-    ### Figure out where the galaxies are ###
+    ### Figure out which rows and cols are empty ###
+
+    empty_rows = tuple(i for i, row in enumerate(input) if not GALAXY in row)
+    empty_cols = tuple(
+        i for i in range(row_length) if not GALAXY in (row[i] for row in input)
+    )
+
+    ### Duplicate the empty rows and cols
+
+    empty_row = "." * row_length
+    rows_added = 0
+    for row_index in empty_rows:
+        row_index += rows_added
+        input.insert(row_index, empty_row)
+        rows_added += 1
+
+    cols_added = 0
+    for col_index in empty_cols:
+        col_index += cols_added
+        for row_index, row in enumerate(input):
+            row = row[:col_index] + "." + row[col_index:]
+            input[row_index] = row
+            # row.insert(col_index, ".")
+        cols_added += 1
+
     galaxies = []
     for row_i, row in enumerate(input):
         for col_i, value in enumerate(row):
@@ -135,34 +159,12 @@ def do(input, part: int) -> int:
     ### Get all combinations of pairs of galaxies ###
     pairs = [x for x in it.combinations(galaxies, 2)]
 
-    ### Figure out which rows and cols are empty ###
-    row_length = len(input[0])
-    empty_rows = tuple(i for i, row in enumerate(input) if not GALAXY in row)
-    empty_cols = tuple(
-        i for i in range(row_length) if not GALAXY in (row[i] for row in input)
-    )
-
     ### Calculate the distances between the pairs of galaxies ###
     for galaxy1, galaxy2 in pairs:
         x1, y1 = galaxy1
         x2, y2 = galaxy2
 
         taxicab_distance = abs(x1 - x2) + abs(y1 - y2)
-
-        ### Figure out how many expansions would have affected this distance
-
-        x_range = range(min(x1, x2) + 1, max(x1, x2))
-        y_range = range(min(y1, y2) + 1, max(y1, y2))
-
-        for row_i in empty_rows:
-            if not row_i in x_range:
-                continue
-            taxicab_distance += expansion_size
-        for col_i in empty_cols:
-            if not col_i in y_range:
-                continue
-            taxicab_distance += expansion_size
-
         answer += taxicab_distance
 
     return answer
@@ -178,18 +180,18 @@ def part2(input):
 
 
 def main():
-    raw_input = utils.get_raw_input()
-    #     raw_input = """...#......
-    # .......#..
-    # #.........
-    # ..........
-    # ......#...
-    # .#........
-    # .........#
-    # ..........
-    # .......#..
-    # #...#.....
-    # """
+    # raw_input = utils.get_raw_input()
+    raw_input = """...#......
+.......#..
+#.........
+..........
+......#...
+.#........
+.........#
+..........
+.......#..
+#...#.....
+"""
     parsed_input = parse_raw_input(raw_input)
 
     utils.handle(part1(parsed_input), 1)  # 9445168 (9.5367431640625e-07 seconds)
