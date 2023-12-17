@@ -1,6 +1,7 @@
 import os
 import sys
 from pprint import PrettyPrinter
+import re
 
 pp = PrettyPrinter(indent=4)
 
@@ -139,6 +140,30 @@ def part1(input):
 
     seeds, maps = input
 
+    src = "seed"
+    while src != "location":
+        map = maps[src]
+        src = map["dest"]
+
+        ranges = map["ranges"]
+
+        for seed_i, seed in enumerate(seeds):
+            for r in ranges:
+                src_lower, src_upper = r["src"]
+                dest_lower, dest_upper = r["dest"]
+
+                if not (src_lower <= seed <= src_upper):
+                    continue
+
+                dist_into_range = seed - src_lower
+                new_seed_value = dest_lower + dist_into_range
+
+                seeds[seed_i] = new_seed_value
+
+                break
+
+    answer = min(seeds)
+
     return answer
 
 
@@ -150,11 +175,44 @@ def part2(input):
 def main():
     raw_input = utils.get_raw_input()
     # fmt: off
-    # raw_input = """"""
+    #     raw_input = """seeds: 79 14 55 13
+
+    # seed-to-soil map:
+    # 50 98 2
+    # 52 50 48
+
+    # soil-to-fertilizer map:
+    # 0 15 37
+    # 37 52 2
+    # 39 0 15
+
+    # fertilizer-to-water map:
+    # 49 53 8
+    # 0 11 42
+    # 42 0 7
+    # 57 7 4
+
+    # water-to-light map:
+    # 88 18 7
+    # 18 25 70
+
+    # light-to-temperature map:
+    # 45 77 23
+    # 81 45 19
+    # 68 64 13
+
+    # temperature-to-humidity map:
+    # 0 69 1
+    # 1 0 69
+
+    # humidity-to-location map:
+    # 60 56 37
+    # 56 93 4
+    # """
     # fmt: on
     parsed_input = parse_raw_input(raw_input)
 
-    utils.handle(part1(parsed_input), 1)
+    utils.handle(part1(parsed_input), 1)  # 324724204 (0.0 seconds)
     utils.handle(part2(parsed_input), 2)
 
 
