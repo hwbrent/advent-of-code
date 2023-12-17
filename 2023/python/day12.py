@@ -74,11 +74,20 @@ For each row, count all of the different arrangements of operational and broken 
 
 
 def parse_raw_input(input: str):
+    output = []
+    for line in input.strip().split("\n"):
+        conditions, records = line.split()
+
+        conditions = tuple(entry for entry in conditions.split(".") if entry != "")
+        records = tuple(int(x) for x in records.split(","))
+
+        output.append((conditions, records))
     return input
 
 
 def part1(input):
     answer = None
+    pp.pprint()
     return answer
 
 
