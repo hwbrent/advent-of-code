@@ -195,8 +195,8 @@ def main():
     # """
     parsed_input = parse_raw_input(raw_input)
 
-    utils.handle(part1(parsed_input), 1)  # 9445168 (9.5367431640625e-07 seconds)
-    utils.handle(part2(parsed_input), 2)
+    utils.handle(part1(parsed_input), 1)  # 9445168 (1.1920928955078125e-06 seconds)
+    utils.handle(part2(parsed_input), 2)  # 742305960572 (9.5367431640625e-07 seconds)
 
 
 if __name__ == "__main__":
