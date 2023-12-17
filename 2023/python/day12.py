@@ -78,7 +78,7 @@ def parse_raw_input(input: str):
     for line in input.strip().split("\n"):
         conditions, records = line.split()
 
-        conditions = tuple(entry for entry in conditions.split(".") if entry != "")
+        conditions = [entry for entry in conditions.split(".") if entry != ""]
         records = tuple(int(x) for x in records.split(","))
 
         output.append((conditions, records))
