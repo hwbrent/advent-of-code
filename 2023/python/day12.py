@@ -82,7 +82,7 @@ def parse_raw_input(input: str):
         records = tuple(int(x) for x in records.split(","))
 
         output.append((conditions, records))
-    return input
+    return output
 
 
 def part1(input):
