@@ -102,11 +102,43 @@ What is the lowest location number that corresponds to any of the initial seed n
 
 
 def parse_raw_input(input: str):
-    return input
+    seeds, *maps = input.strip().split("\n\n")
+    seeds = [int(x) for x in seeds.replace("seeds: ", "").split()]
+
+    overall_map = {}
+
+    for map in maps:
+        map = map.split("\n")
+
+        obj = {}
+
+        src_name, dest_name = map.pop(0).replace(" map:", "").split("-to-")
+
+        obj["dest"] = dest_name
+        ranges = []
+
+        for row in map:
+            row = [int(x) for x in row.split()]
+
+            dest_start, src_start, length = row
+
+            dest_end = dest_start + length
+            src_end = src_start + length
+
+            ranges.append({"src": (src_start, src_end), "dest": (dest_start, dest_end)})
+
+        obj["ranges"] = ranges
+
+        overall_map[src_name] = obj
+
+    return seeds, overall_map
 
 
 def part1(input):
     answer = None
+
+    seeds, maps = input
+
     return answer
 
 
