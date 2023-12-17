@@ -122,7 +122,10 @@ GALAXY = "#"
 def do(input, part: int) -> int:
     answer = 0
 
-    expansion_size = 1 if part == 1 else 1_000_000
+    # 999,999 because we want the row/column to be 1,000,000 times larger.
+    # So to do that, we add 999,999 rows to the previous row, which results
+    # in a total of 1,000,000 rows
+    expansion_size = 1 if part == 1 else 999_999
 
     ### Figure out where the galaxies are ###
     galaxies = []
