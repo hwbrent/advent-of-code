@@ -123,6 +123,7 @@ def do(input, part: int) -> int:
     answer = 0
 
     row_length = len(input[0])
+    expansion_size = 1 if part == 1 else 999_999
 
     ### Figure out which rows and cols are empty ###
 
@@ -137,16 +138,18 @@ def do(input, part: int) -> int:
     rows_added = 0
     for row_index in empty_rows:
         row_index += rows_added
-        input.insert(row_index, empty_row)
+        for _ in range(expansion_size):
+            input.insert(row_index, empty_row)
         rows_added += 1
 
     cols_added = 0
     for col_index in empty_cols:
         col_index += cols_added
         for row_index, row in enumerate(input):
-            row = row[:col_index] + "." + row[col_index:]
-            input[row_index] = row
-            # row.insert(col_index, ".")
+            for _ in range(expansion_size):
+                row = row[:col_index] + "." + row[col_index:]
+                input[row_index] = row
+                # row.insert(col_index, ".")
         cols_added += 1
 
     galaxies = []
