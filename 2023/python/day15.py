@@ -74,7 +74,7 @@ Run the HASH algorithm on each step in the initialization sequence. What is the 
 
 
 def parse_raw_input(input: str):
-    return input
+    return input.strip().split(",")
 
 
 def part1(input):
