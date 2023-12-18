@@ -1,6 +1,7 @@
 import os
 import sys
 from pprint import PrettyPrinter
+import itertools as it
 
 pp = PrettyPrinter(indent=4)
 
@@ -74,6 +75,8 @@ def parse_raw_input(input: str):
 def part1(input):
     answer = 0
 
+    height = len(input)
+
     for col in input:
         cubes = [i for i, value in enumerate(col) if value == "#"]
 
@@ -81,6 +84,26 @@ def part1(input):
         # of the column and the first cube
         cubes.insert(0, -1)
 
+        for pair in it.pairwise(cubes):
+            lower_index, upper_index = pair
+
+            section = col[lower_index + 1 : upper_index]
+            # print(section)
+
+            rounded_count = section.count("O")
+            if rounded_count == 0:
+                continue
+
+            cube_height = height - lower_index
+
+            first_rounded_height = cube_height + 1
+            last_rounded_height = first_rounded_height + rounded_count
+            for rounded_height in range(first_rounded_height, last_rounded_height):
+                answer += rounded_height
+
+        # print()
+
+    # 115592 (too high)
     return answer
 
 
@@ -92,7 +115,18 @@ def part2(input):
 def main():
     raw_input = utils.get_raw_input()
     # fmt: off
-    # raw_input = """"""
+    #     raw_input = """
+    # O....#....
+    # O.OO#....#
+    # .....##...
+    # OO.#O....O
+    # .O.....O#.
+    # O.#..O.#.#
+    # ..O..#O..O
+    # .......O..
+    # #....###..
+    # #OO..#....
+    # """
     # fmt: on
     parsed_input = parse_raw_input(raw_input)
 
