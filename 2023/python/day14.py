@@ -74,27 +74,8 @@ def parse_raw_input(input: str):
 def part1(input):
     answer = 0
 
-    # For each column:
-    #   Find the first cube rock.
-    #   Calculate the number of rounded rocks that come before it
-    #   Then calculate the load on that column
-
     for col in input:
-        first_cube = col.index("#")
-        if first_cube == 0:
-            continue
-
-        # Now we're dealing with the section before the first cube rock in
-        # the column
-        section = col[:first_cube]
-        rounded_indices = [i for i, value in enumerate(section) if value == "O"]
-
-        if len(rounded_indices) == 0:
-            continue
-
-        col_load = 1
-
-        # print(first_cube, section, rounded_indices)
+        continue
 
     return answer
 
@@ -116,4 +97,16 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    # main()
+    print((5 * 10) + (2 * 9) + (4 * 8) + (3 * 7) + (3 * 4) + 3)
+
+# OOOO.#.O.. 10
+# OO..#....#  9
+# OO..O##..O  8
+# O..#.OO...  7
+# ........#.  6
+# ..#....#.#  5
+# ..O..#.O.O  4
+# ..O.......  3
+# #....###..  2
+# #....#....  1
