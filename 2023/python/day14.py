@@ -75,7 +75,11 @@ def part1(input):
     answer = 0
 
     for col in input:
-        continue
+        cubes = [i for i, value in enumerate(col) if value == "#"]
+
+        # Prepend -1 to make it easier to get the section between the bottom
+        # of the column and the first cube
+        cubes.insert(0, -1)
 
     return answer
 
@@ -97,16 +101,4 @@ def main():
 
 
 if __name__ == "__main__":
-    # main()
-    print((5 * 10) + (2 * 9) + (4 * 8) + (3 * 7) + (3 * 4) + 3)
-
-# OOOO.#.O.. 10
-# OO..#....#  9
-# OO..O##..O  8
-# O..#.OO...  7
-# ........#.  6
-# ..#....#.#  5
-# ..O..#.O.O  4
-# ..O.......  3
-# #....###..  2
-# #....#....  1
+    main()
