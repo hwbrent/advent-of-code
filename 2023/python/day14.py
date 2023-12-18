@@ -84,15 +84,17 @@ def part1(input):
         if first_cube == 0:
             continue
 
-        section_before_cube = col[:first_cube]
-        rounded_before_cube = section_before_cube.count("O")
+        # Now we're dealing with the section before the first cube rock in
+        # the column
+        section = col[:first_cube]
+        rounded_before_cube = section.count("O")
 
         if rounded_before_cube == 0:
             continue
 
         col_load = 1
 
-        # print(first_cube, section_before_cube, rounded_before_cube)
+        # print(first_cube, section, rounded_before_cube)
 
     return answer
 
