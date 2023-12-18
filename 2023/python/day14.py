@@ -100,10 +100,10 @@ def part1(input):
 
             cube_height = height - lower_index
 
-            first_rounded_height = cube_height + 1
-            last_rounded_height = first_rounded_height + rounded_count
-            for rounded_height in range(first_rounded_height, last_rounded_height):
-                answer += rounded_height
+            # first_rounded_height = cube_height + 1
+            # last_rounded_height = first_rounded_height + rounded_count
+            # for rounded_height in range(first_rounded_height, last_rounded_height):
+            #     answer += rounded_height
 
         # print()
 
