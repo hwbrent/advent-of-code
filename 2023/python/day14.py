@@ -63,7 +63,12 @@ Tilt the platform so that the rounded rocks all roll north. Afterward, what is t
 
 
 def parse_raw_input(input: str):
-    return input
+    input = input.strip().split("\n")
+
+    col_length = len(input[0])
+    cols = [[row[i] for row in input] for i in range(col_length)]
+
+    return cols
 
 
 def part1(input):
