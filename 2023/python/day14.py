@@ -98,7 +98,9 @@ def part1(input):
             if rounded_count == 0:
                 continue
 
-            cube_height = height - lower_index
+            # We use 'min' here to account for when lower_index is -1, because
+            # otherwise, the height gets increased, which messes up the output
+            cube_height = min(height, height - lower_index)
 
             first_rounded_height = cube_height + 1
             last_rounded_height = first_rounded_height + rounded_count
