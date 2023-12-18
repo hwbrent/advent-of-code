@@ -84,6 +84,10 @@ def part1(input):
         # of the column and the first cube
         cubes.insert(0, -1)
 
+        # Add last index of column to make sure that we account for the
+        # section between the last cube and the end of the column
+        cubes.append(height)
+
         for pair in it.pairwise(cubes):
             lower_index, upper_index = pair
 
