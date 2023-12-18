@@ -87,14 +87,14 @@ def part1(input):
         # Now we're dealing with the section before the first cube rock in
         # the column
         section = col[:first_cube]
-        rounded_before_cube = section.count("O")
+        rounded_indices = [i for i, value in enumerate(section) if value == "O"]
 
-        if rounded_before_cube == 0:
+        if len(rounded_indices) == 0:
             continue
 
         col_load = 1
 
-        # print(first_cube, section, rounded_before_cube)
+        # print(first_cube, section, rounded_indices)
 
     return answer
 
