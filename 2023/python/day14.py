@@ -133,7 +133,7 @@ O.#..O.#.#
     # fmt: on
     parsed_input = parse_raw_input(raw_input)
 
-    utils.handle(part1(parsed_input), 1)
+    utils.handle(part1(parsed_input), 1)  # 108614 (0.0 seconds)
     utils.handle(part2(parsed_input), 2)
 
 
