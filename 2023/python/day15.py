@@ -1,6 +1,7 @@
 import os
 import sys
 from pprint import PrettyPrinter
+import re
 
 pp = PrettyPrinter(indent=4)
 
@@ -211,6 +212,10 @@ def part2(input):
     boxes = {}
 
     for label in input:
+        # Separate the operator and any numbers from the letters in the label
+        operator = re.search(r"(-|=)", label)[0]
+        label, *rest = label.split(operator)
+
         box_number = HASH(label)
 
         if not box_number in boxes:
@@ -247,8 +252,8 @@ def part2(input):
             label, focal_length = label.split("=")
             lenses[label] = focal_length
 
-        print(boxes)
-        print()
+        # print(boxes)
+        # print()
 
     # pp.pprint(boxes)
 
