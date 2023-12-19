@@ -73,6 +73,13 @@ def parse_raw_input(input: str):
     return input.strip().split("\n")
 
 
+# Directions:
+UP = [0, -1]
+DOWN = [0, 1]
+LEFT = [-1, 0]
+RIGHT = [1, 0]
+
+
 def part1(input):
     answer = None
     return answer
