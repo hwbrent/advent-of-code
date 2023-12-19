@@ -70,7 +70,7 @@ The light isn't energizing enough tiles to produce lava; to debug the contraptio
 
 
 def parse_raw_input(input: str):
-    return input
+    return input.strip().split("\n")
 
 
 def part1(input):
