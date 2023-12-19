@@ -87,6 +87,13 @@ def part1(input):
         {"coord": [0, 0], "direction": RIGHT},
     ]
 
+    for beam in beams:
+        ### Move the beam
+        coord = beam["coord"]
+        direction = beam["direction"]
+        coord[0] += direction[0]
+        coord[1] += direction[1]
+
     return answer
 
 
