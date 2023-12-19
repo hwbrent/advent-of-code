@@ -96,11 +96,14 @@ def part1(input):
 
     for beam in beams:
         ### Move the beam
-        direction_row, direction_col = beam["direction"]
-        beam["coord"][0] += direction_row
-        beam["coord"][1] += direction_col
+        coord = beam["coord"]
+        direction = beam["direction"]
 
-        coord_row, coord_col = beam["coord"]
+        direction_row, direction_col = direction
+        coord[0] += direction_row
+        coord[1] += direction_col
+
+        coord_row, coord_col = coord
 
         # Check if the beam is still in the area
         if (not (min_row <= coord_row <= max_row)) or (
