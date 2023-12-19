@@ -207,7 +207,7 @@ def part2(input):
       insert or remove lenses
     -
     """
-    answer = None
+    answer = 0
 
     boxes = {}
 
@@ -253,22 +253,40 @@ def part2(input):
             focal_length = int(rest[0])
             lenses[label] = focal_length
 
-        print()
-        print(f'After "{original_label}":')
-        for box, obj in boxes.items():
-            lenses = obj["lenses"]
-            if len(lenses) == 0:
-                continue
+        # print()
+        # print(f'After "{original_label}":')
+        # for box, obj in boxes.items():
+        #     lenses = obj["lenses"]
+        #     if len(lenses) == 0:
+        #         continue
 
-            print(f"Box {box}:", end=" ")
+        #     print(f"Box {box}:", end=" ")
 
-            for label, focal_length in lenses.items():
-                print(f"[{label} {focal_length}]", end=" ")
-            print()
+        #     for label, focal_length in lenses.items():
+        #         print(f"[{label} {focal_length}]", end=" ")
+        #     print()
 
-        print()
+        # print()
 
-    # pp.pprint(boxes)
+    # To confirm that all of the lenses are installed correctly, add up the
+    # focusing power of all of the lenses. The focusing power of a single
+    # lens is the result of multiplying together:
+    # - One plus the box number of the lens in question.
+    # - The slot number of the lens within the box:
+    #   - 1 for the first lens
+    #   - 2 for the second lens
+    #   - and so on.
+    # - The focal length of the lens.
+
+    for box_number, box in boxes.items():
+        lenses = box["lenses"]
+
+        for lens_i, focal_length in enumerate(lenses.values()):
+            one = box_number + 1
+            two = lens_i + 1
+            three = focal_length
+
+            answer += one * two * three
 
     return answer
 
@@ -276,7 +294,7 @@ def part2(input):
 def main():
     raw_input = utils.get_raw_input()
     # fmt: off
-    raw_input = """rn=1,cm-,qp=3,cm=2,qp-,pc=4,ot=9,ab=5,pc-,pc=6,ot=7"""
+    # raw_input = """rn=1,cm-,qp=3,cm=2,qp-,pc=4,ot=9,ab=5,pc-,pc=6,ot=7"""
     # fmt: on
     parsed_input = parse_raw_input(raw_input)
 
