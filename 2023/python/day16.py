@@ -79,7 +79,7 @@ DOWN = (1, 0)
 LEFT = (0, -1)
 RIGHT = (0, 1)
 
-directions = (UP, DOWN, LEFT, RIGHT)
+directions = (UP, RIGHT, DOWN, LEFT)
 
 
 def part1(input):
