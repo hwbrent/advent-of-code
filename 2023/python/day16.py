@@ -82,6 +82,11 @@ RIGHT = [1, 0]
 
 def part1(input):
     answer = None
+
+    beams = [
+        {"coord": [0, 0], "direction": RIGHT},
+    ]
+
     return answer
 
 
