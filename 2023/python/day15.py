@@ -211,8 +211,37 @@ def part2(input):
     boxes = {}
 
     for label in input:
-        box = HASH(label)
-        print(label, box)
+        box_number = HASH(label)
+
+        if box_number in boxes:
+            boxes[box_number] = {"lenses": {}}
+
+        box = boxes[box_number]
+
+        if "-" in label:
+            # Go to the relevant box and remove the lens with the given
+            # label if it is present in the box. Then, move any remaining
+            # lenses as far forward in the box as they can go without changing
+            # their order, filling any space made by removing the indicated
+            # lens. (If no lens in that box has the given label, nothing
+            # happens.)
+            pass
+        elif "=" in label:
+            # The number after "=" indicates the focal length of the lens that
+            # needs to go into the relevant box; be sure to use the label maker
+            # to mark the lens with the label given in the beginning of the
+            # step so you can find it later. There are two possible situations:
+            # - If there is already a lens in the box with the same label,
+            #   replace the old lens with the new lens: remove the old lens
+            #   and put the new lens in its place, not moving any other
+            #   lenses in the box.
+            # - If there is not already a lens in the box with the same label,
+            #   add the lens to the box immediately behind any lenses already
+            #   in the box. Don't move any of the other lenses when you do
+            #   this. If there aren't any lenses in the box, the new lens
+            #   goes all the way to the front of the box.
+
+            pass
 
     return answer
 
