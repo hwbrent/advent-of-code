@@ -144,11 +144,13 @@ def part1(input):
                 if not direction in (UP, DOWN):
                     beam["direction"] = UP
                     beams.append({"coord": coord, "direction": DOWN})
+
                 continue
             case "-":
                 if not direction in (LEFT, RIGHT):
                     beam["direction"] = LEFT
                     beams.append({"coord": coord, "direction": RIGHT})
+
                 continue
             case _:
                 continue
