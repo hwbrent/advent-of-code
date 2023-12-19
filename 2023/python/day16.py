@@ -106,6 +106,23 @@ def part1(input):
         ):
             beams.remove(beam)
 
+        ### Check what the beam has collided with
+        tile = input[coord_row][coord_col]
+
+        match tile:
+            case ".":
+                continue
+            case "/":
+                continue
+            case "\\":
+                continue
+            case "|":
+                continue
+            case "-":
+                continue
+            case _:
+                continue
+
     return answer
 
 
