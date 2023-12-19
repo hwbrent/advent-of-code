@@ -224,7 +224,7 @@ def part2(input):
         box = boxes[box_number]
         lenses = box["lenses"]
 
-        if "-" in label:
+        if operator == "-":
             # Go to the relevant box and remove the lens with the given
             # label if it is present in the box. Then, move any remaining
             # lenses as far forward in the box as they can go without changing
@@ -235,7 +235,7 @@ def part2(input):
             if label in lenses:
                 del lenses[label]
 
-        elif "=" in label:
+        elif operator == "=":
             # The number after "=" indicates the focal length of the lens that
             # needs to go into the relevant box; be sure to use the label maker
             # to mark the lens with the label given in the beginning of the
