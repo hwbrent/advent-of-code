@@ -212,6 +212,8 @@ def part2(input):
     boxes = {}
 
     for label in input:
+        original_label = label
+
         # Separate the operator and any numbers from the letters in the label
         operator = re.search(r"(-|=)", label)[0]
         label, *rest = label.split(operator)
@@ -251,8 +253,20 @@ def part2(input):
             focal_length = int(rest[0])
             lenses[label] = focal_length
 
-        # print(boxes)
-        # print()
+        print()
+        print(f'After "{original_label}":')
+        for box, obj in boxes.items():
+            lenses = obj["lenses"]
+            if len(lenses) == 0:
+                continue
+
+            print(f"Box {box}:", end=" ")
+
+            for label, focal_length in lenses.items():
+                print(f"[{label} {focal_length}]", end=" ")
+            print()
+
+        print()
 
     # pp.pprint(boxes)
 
@@ -262,7 +276,7 @@ def part2(input):
 def main():
     raw_input = utils.get_raw_input()
     # fmt: off
-    # raw_input = """rn=1,cm-,qp=3,cm=2,qp-,pc=4,ot=9,ab=5,pc-,pc=6,ot=7"""
+    raw_input = """rn=1,cm-,qp=3,cm=2,qp-,pc=4,ot=9,ab=5,pc-,pc=6,ot=7"""
     # fmt: on
     parsed_input = parse_raw_input(raw_input)
 
