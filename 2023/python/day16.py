@@ -123,8 +123,14 @@ def part1(input):
             case "\\":
                 continue
             case "|":
+                if direction == UP or direction == DOWN:
+                    # Do nothing
+                    continue
                 continue
             case "-":
+                if direction == LEFT or direction == RIGHT:
+                    # Do nothing
+                    continue
                 continue
             case _:
                 continue
