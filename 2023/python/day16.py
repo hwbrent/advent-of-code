@@ -119,8 +119,26 @@ def part1(input):
                 # Do nothing
                 continue
             case "/":
+                if direction == RIGHT:
+                    beam["direction"] = UP
+                if direction == LEFT:
+                    beam["direction"] = DOWN
+                if direction == UP:
+                    beam["direction"] = RIGHT
+                if direction == DOWN:
+                    beam["direction"] = LEFT
+
                 continue
             case "\\":
+                if direction == RIGHT:
+                    beam["direction"] = DOWN
+                if direction == LEFT:
+                    beam["direction"] = UP
+                if direction == UP:
+                    beam["direction"] = LEFT
+                if direction == DOWN:
+                    beam["direction"] = RIGHT
+
                 continue
             case "|":
                 if not direction in (UP, DOWN):
