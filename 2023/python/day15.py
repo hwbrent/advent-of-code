@@ -198,7 +198,22 @@ def part1(input):
 
 
 def part2(input):
+    """
+    - 256 boxes in a line
+    - Boxes have holes that let light pass through
+    - Each box has several lens slots keeping lenses positioned to focus the
+      light passing through the box. Each box has a panel that lets you
+      insert or remove lenses
+    -
+    """
     answer = None
+
+    boxes = {}
+
+    for label in input:
+        box = HASH(label)
+        print(label, box)
+
     return answer
 
 
