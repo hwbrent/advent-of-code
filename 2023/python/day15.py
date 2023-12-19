@@ -231,7 +231,6 @@ def part2(input):
             # their order, filling any space made by removing the indicated
             # lens. (If no lens in that box has the given label, nothing
             # happens.)
-            label = label.rstrip("-")
             if label in lenses:
                 del lenses[label]
 
@@ -249,7 +248,7 @@ def part2(input):
             #   in the box. Don't move any of the other lenses when you do
             #   this. If there aren't any lenses in the box, the new lens
             #   goes all the way to the front of the box.
-            label, focal_length = label.split("=")
+            focal_length = int(rest[0])
             lenses[label] = focal_length
 
         # print(boxes)
