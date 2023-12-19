@@ -74,10 +74,12 @@ def parse_raw_input(input: str):
 
 
 # Directions:
-UP = [-1, 0]
-DOWN = [1, 0]
-LEFT = [0, -1]
-RIGHT = [0, 1]
+UP = (-1, 0)
+DOWN = (1, 0)
+LEFT = (0, -1)
+RIGHT = (0, 1)
+
+directions = (UP, DOWN, LEFT, RIGHT)
 
 
 def part1(input):
