@@ -94,66 +94,67 @@ def part1(input):
         {"coord": [0, 0], "direction": RIGHT},
     ]
 
-    for beam in beams:
-        ### Move the beam
-        coord = beam["coord"]
-        direction = beam["direction"]
+    while len(beams) != 0:
+        for beam in beams:
+            ### Move the beam
+            coord = beam["coord"]
+            direction = beam["direction"]
 
-        direction_row, direction_col = direction
-        coord[0] += direction_row
-        coord[1] += direction_col
+            direction_row, direction_col = direction
+            coord[0] += direction_row
+            coord[1] += direction_col
 
-        coord_row, coord_col = coord
+            coord_row, coord_col = coord
 
-        # Check if the beam is still in the area
-        if (not (min_row <= coord_row <= max_row)) or (
-            not (min_col <= coord_col <= max_col)
-        ):
-            beams.remove(beam)
+            # Check if the beam is still in the area
+            if (not (min_row <= coord_row <= max_row)) or (
+                not (min_col <= coord_col <= max_col)
+            ):
+                beams.remove(beam)
 
-        ### Check what the beam has collided with
-        tile = input[coord_row][coord_col]
+            ### Check what the beam has collided with
+            tile = input[coord_row][coord_col]
 
-        match tile:
-            case ".":
-                # Do nothing
-                continue
-            case "/":
-                if direction == RIGHT:
-                    beam["direction"] = UP
-                if direction == LEFT:
-                    beam["direction"] = DOWN
-                if direction == UP:
-                    beam["direction"] = RIGHT
-                if direction == DOWN:
-                    beam["direction"] = LEFT
+            match tile:
+                case ".":
+                    # Do nothing
+                    continue
+                case "/":
+                    if direction == RIGHT:
+                        beam["direction"] = UP
+                    if direction == LEFT:
+                        beam["direction"] = DOWN
+                    if direction == UP:
+                        beam["direction"] = RIGHT
+                    if direction == DOWN:
+                        beam["direction"] = LEFT
 
-                continue
-            case "\\":
-                if direction == RIGHT:
-                    beam["direction"] = DOWN
-                if direction == LEFT:
-                    beam["direction"] = UP
-                if direction == UP:
-                    beam["direction"] = LEFT
-                if direction == DOWN:
-                    beam["direction"] = RIGHT
+                    continue
+                case "\\":
+                    if direction == RIGHT:
+                        beam["direction"] = DOWN
+                    if direction == LEFT:
+                        beam["direction"] = UP
+                    if direction == UP:
+                        beam["direction"] = LEFT
+                    if direction == DOWN:
+                        beam["direction"] = RIGHT
 
-                continue
-            case "|":
-                if not direction in (UP, DOWN):
-                    beam["direction"] = UP
-                    beams.append({"coord": coord, "direction": DOWN})
+                    continue
+                case "|":
+                    if not direction in (UP, DOWN):
+                        beam["direction"] = UP
+                        beams.append({"coord": coord, "direction": DOWN})
 
-                continue
-            case "-":
-                if not direction in (LEFT, RIGHT):
-                    beam["direction"] = LEFT
-                    beams.append({"coord": coord, "direction": RIGHT})
+                    continue
+                case "-":
+                    if not direction in (LEFT, RIGHT):
+                        beam["direction"] = LEFT
+                        beams.append({"coord": coord, "direction": RIGHT})
 
-                continue
-            case _:
-                continue
+                    continue
+                case _:
+                    continue
 
     return answer
 
