@@ -298,8 +298,8 @@ def main():
     # fmt: on
     parsed_input = parse_raw_input(raw_input)
 
-    utils.handle(part1(parsed_input), 1)
-    utils.handle(part2(parsed_input), 2)
+    utils.handle(part1(parsed_input), 1)  # 516657 (0.0 seconds)
+    utils.handle(part2(parsed_input), 2)  # 210906 (9.5367431640625e-07 seconds)
 
 
 if __name__ == "__main__":
