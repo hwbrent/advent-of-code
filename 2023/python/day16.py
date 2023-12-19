@@ -113,6 +113,7 @@ def part1(input):
 
         match tile:
             case ".":
+                # Do nothing
                 continue
             case "/":
                 continue
