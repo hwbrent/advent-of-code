@@ -83,10 +83,10 @@ RIGHT = [1, 0]
 def part1(input):
     answer = None
 
-    min_x = 0
-    max_x = len(input[0]) - 1
-    min_y = 0
-    max_y = len(input) - 1
+    min_row = 0
+    max_row = len(input[0]) - 1
+    min_col = 0
+    max_col = len(input) - 1
 
     beams = [
         {"coord": [0, 0], "direction": RIGHT},
@@ -94,13 +94,15 @@ def part1(input):
 
     for beam in beams:
         ### Move the beam
-        cx, cy = beam["coord"]
-        dx, dy = beam["direction"]
-        cx += dx
-        cy += dy
+        coord_row, coord_col = beam["coord"]
+        direction_row, direction_col = beam["direction"]
+        coord_row += direction_row
+        coord_col += direction_col
 
         # Check if the beam is still in the area
-        if (not (min_x <= cx <= max_x)) or (not (min_y <= cy <= max_y)):
+        if (not (min_row <= coord_row <= max_row)) or (
+            not (min_col <= coord_col <= max_col)
+        ):
             beams.remove(beam)
 
     return answer
