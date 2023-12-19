@@ -213,10 +213,11 @@ def part2(input):
     for label in input:
         box_number = HASH(label)
 
-        if box_number in boxes:
+        if not box_number in boxes:
             boxes[box_number] = {"lenses": {}}
 
         box = boxes[box_number]
+        lenses = box["lenses"]
 
         if "-" in label:
             # Go to the relevant box and remove the lens with the given
@@ -225,7 +226,10 @@ def part2(input):
             # their order, filling any space made by removing the indicated
             # lens. (If no lens in that box has the given label, nothing
             # happens.)
-            pass
+            label = label.rstrip("-")
+            if label in lenses:
+                del lenses[label]
+
         elif "=" in label:
             # The number after "=" indicates the focal length of the lens that
             # needs to go into the relevant box; be sure to use the label maker
@@ -240,8 +244,13 @@ def part2(input):
             #   in the box. Don't move any of the other lenses when you do
             #   this. If there aren't any lenses in the box, the new lens
             #   goes all the way to the front of the box.
+            label, focal_length = label.split("=")
+            lenses[label] = focal_length
 
-            pass
+        print(boxes)
+        print()
+
+    # pp.pprint(boxes)
 
     return answer
 
@@ -249,7 +258,7 @@ def part2(input):
 def main():
     raw_input = utils.get_raw_input()
     # fmt: off
-    # raw_input = """"""
+    # raw_input = """rn=1,cm-,qp=3,cm=2,qp-,pc=4,ot=9,ab=5,pc-,pc=6,ot=7"""
     # fmt: on
     parsed_input = parse_raw_input(raw_input)
 
