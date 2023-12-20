@@ -65,6 +65,12 @@ def parse_raw_input(input: str):
 
 def part1(input):
     answer = None
+
+    # Movement rules:
+    # - Can only move max three blocks in one direction before turning 90°
+    #   degrees left/right
+    # - Can't reverse direction
+
     return answer
 
 
