@@ -1,6 +1,7 @@
 import os
 import sys
 from pprint import PrettyPrinter
+import math
 
 pp = PrettyPrinter(indent=4)
 
@@ -119,6 +120,13 @@ def part1(input):
     # Termination:
     # - The algorithm stops when the destination node has been visited or
     #   when there are no more unvisited nodes.
+
+    distances = {}
+
+    for row_i, row in enumerate(input):
+        for col_i, _ in enumerate(row):
+            block = (row_i, col_i)
+            distances[block] = 0 if block == tuple(start) else math.inf
 
     return answer
 
