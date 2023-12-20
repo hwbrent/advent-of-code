@@ -60,7 +60,7 @@ Directing the crucible from the lava pool to the machine parts factory, but not 
 
 
 def parse_raw_input(input: str):
-    return input
+    return input.strip().split("\n")
 
 
 def part1(input):
