@@ -98,6 +98,28 @@ def part1(input):
     # 18
     # 19      return dist[], prev[]
 
+    # Initialization:
+    # - Start at the initial node.
+    # - Assign a tentative distance value to every node. Set it to zero for
+    #   the initial node and infinity for all other nodes.
+    # - Set the initial node as the current node.
+    # Exploration:
+    # - For the current node, consider all of its neighbors and calculate
+    #   their tentative distances through the current node. Compare the newly
+    #   calculated tentative distance to the current assigned value and
+    #   assign the smaller one.
+    # - After considering all neighbors of the current node, mark the current
+    #   node as visited.
+    # - If the destination node has been visited or if the smallest tentative
+    #   distance among the nodes in the unvisited set is infinity, stop. The
+    #   algorithm has finished.
+    # Selection:
+    # - Select the unvisited node with the smallest tentative distance, set
+    #   it as the new "current node," and go back to step 2.
+    # Termination:
+    # - The algorithm stops when the destination node has been visited or
+    #   when there are no more unvisited nodes.
+
     return answer
 
 
