@@ -67,12 +67,6 @@ def parse_raw_input(input: str):
 def part1(input):
     answer = None
 
-    # [row, column]
-    start = [0, 0]
-    end = [len(input), len(input[0])]
-
-    current = [*start]
-
     # Movement rules:
     # - Can only move max three blocks in one direction before turning 90°
     #   degrees left/right
@@ -121,12 +115,18 @@ def part1(input):
     # - The algorithm stops when the destination node has been visited or
     #   when there are no more unvisited nodes.
 
+    # [row, column]
+    start = [0, 0]
+    end = [len(input), len(input[0])]
+
     distances = {}
 
     for row_i, row in enumerate(input):
         for col_i, _ in enumerate(row):
             block = (row_i, col_i)
             distances[block] = 0 if block == tuple(start) else math.inf
+
+    current = [*start]
 
     return answer
 
