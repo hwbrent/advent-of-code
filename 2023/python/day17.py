@@ -66,6 +66,10 @@ def parse_raw_input(input: str):
 def part1(input):
     answer = None
 
+    # [row, column]
+    start = [0, 0]
+    end = [len(input), len(input[0])]
+
     # Movement rules:
     # - Can only move max three blocks in one direction before turning 90°
     #   degrees left/right
