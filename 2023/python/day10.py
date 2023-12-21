@@ -112,7 +112,7 @@ connections = {
     "7": ("south", "west"),
     "F": ("south", "east"),
     ".": None,
-    "S": None,
+    "S": compass_directions,
 }
 
 north = lambda row, col: (row - 1, col)
@@ -151,10 +151,6 @@ def parse_raw_input(input: str):
         directions = pipe["directions"]
         neighbours = pipe["neighbours"]
 
-        if tile == "S":
-            # We'll come back to this one at the end
-            continue
-
         for direction in directions:
             # Get the neighbour based on the lambda function with the same
             # name above
@@ -186,26 +182,17 @@ def parse_raw_input(input: str):
             if not opposite_direction in n_directions:
                 continue
 
-            neighbours.append(neighbour)
+            neighbours.append({"direction": direction, "coord": neighbour})
 
     ### Figure out which type of pipe "S" is ###
-    # Get the (row,col) tuple and accompanying dict
-    S_coord, S_pipe = next(
-        (coord, pipe) for coord, pipe in pipes.items() if pipe["tile"] == "S"
+    S_pipe = next(pipe for pipe in pipes.values() if pipe["tile"] == "S")
+    n_compass_directions = tuple(sorted(n["direction"] for n in S_pipe["neighbours"]))
+    S_shape = next(
+        char
+        for char, c_dirs in connections.items()
+        if tuple(sorted(c_dirs)) == n_compass_directions
     )
-    # Get the coords of the surrounding
-    S_neighbours = []
-    for direction in compass_directions:
-        neighbour = globals()[direction](*S_coord)
-        n_row, n_col = neighbour
-
-        if not in_bounds(n_row, row_range, n_col, col_range):
-            continue
-
-        if not neighbour in pipes:
-            continue
-
-        S_neighbours.append(neighbour)
+    # print(S_shape)
 
     return input
 
