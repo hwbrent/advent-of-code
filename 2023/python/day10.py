@@ -120,6 +120,10 @@ south = lambda row, col: (row + 1, col)
 east = lambda row, col: (row, col + 1)
 west = lambda row, col: (row, col - 1)
 
+in_bounds = lambda row, row_range, col, col_range: (
+    row in row_range and col in col_range
+)
+
 
 def parse_raw_input(input: str):
     input = input.strip().split("\n")
@@ -158,7 +162,8 @@ def parse_raw_input(input: str):
             n_row, n_col = neighbour
 
             # Check if the neighbour is actually in the grid
-            if not (n_row in row_range and n_col in col_range):
+            # if not (n_row in row_range and n_col in col_range):
+            if not in_bounds(n_row, row_range, n_col, col_range):
                 continue
 
             # The neighbour is ".", so do nothing
@@ -182,6 +187,25 @@ def parse_raw_input(input: str):
                 continue
 
             neighbours.append(neighbour)
+
+    ### Figure out which type of pipe "S" is ###
+    # Get the (row,col) tuple and accompanying dict
+    S_coord, S_pipe = next(
+        (coord, pipe) for coord, pipe in pipes.items() if pipe["tile"] == "S"
+    )
+    # Get the coords of the surrounding
+    S_neighbours = []
+    for direction in compass_directions:
+        neighbour = globals()[direction](*S_coord)
+        n_row, n_col = neighbour
+
+        if not in_bounds(n_row, row_range, n_col, col_range):
+            continue
+
+        if not neighbour in pipes:
+            continue
+
+        S_neighbours.append(neighbour)
 
     return input
 
