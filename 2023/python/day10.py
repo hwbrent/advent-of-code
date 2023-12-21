@@ -158,7 +158,6 @@ def parse_raw_input(input: str):
             n_row, n_col = neighbour
 
             # Check if the neighbour is actually in the grid
-            # if not (n_row in row_range and n_col in col_range):
             if not in_bounds(n_row, row_range, n_col, col_range):
                 continue
 
@@ -166,7 +165,7 @@ def parse_raw_input(input: str):
             if not neighbour in pipes:
                 continue
 
-            n_pipe = pipes[(n_row, n_col)]
+            n_pipe = pipes[neighbour]
             n_tile = n_pipe["tile"]
             n_directions = n_pipe["directions"]
 
