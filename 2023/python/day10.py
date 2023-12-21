@@ -124,6 +124,8 @@ in_bounds = lambda row, row_range, col, col_range: (
     row in row_range and col in col_range
 )
 
+get_S = lambda pipes: next(entry for entry in pipes.items() if entry[1]["tile"] == "S")
+
 
 def parse_raw_input(input: str):
     input = input.strip().split("\n")
@@ -184,7 +186,7 @@ def parse_raw_input(input: str):
             neighbours.append({"direction": direction, "coord": neighbour})
 
     ### Figure out which type of pipe "S" is ###
-    S_pipe = next(pipe for pipe in pipes.values() if pipe["tile"] == "S")
+    _, S_pipe = get_S(pipes)
     n_compass_directions = tuple(sorted(n["direction"] for n in S_pipe["neighbours"]))
     S_shape = next(
         char
