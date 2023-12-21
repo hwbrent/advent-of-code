@@ -102,8 +102,34 @@ Here are the distances for each tile on that loop:
 Find the single giant loop starting at S. How many steps along the loop does it take to get from the starting position to the point farthest from the starting position?
 """
 
+connections = {
+    "|": ("north", "south"),
+    "-": ("east", "west"),
+    "L": ("north", "east"),
+    "J": ("north", "west"),
+    "7": ("south", "west"),
+    "F": ("south", "east"),
+    ".": None,
+    "S": None,
+}
+
 
 def parse_raw_input(input: str):
+    input = input.strip().split("\n")
+
+    pipes = {}
+
+    for row_i, row in enumerate(input):
+        for col_i, tile in enumerate(row):
+            if tile == ".":
+                continue
+
+            coord = (row_i, col_i)
+            pipes[coord] = {
+                "tile": tile,
+                "directions": connections[tile],
+            }
+
     return input
 
 
