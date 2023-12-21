@@ -194,7 +194,7 @@ def parse_raw_input(input: str):
     )
     # print(S_shape)
 
-    return input
+    return pipes
 
 
 def part1(input):
