@@ -102,6 +102,8 @@ Here are the distances for each tile on that loop:
 Find the single giant loop starting at S. How many steps along the loop does it take to get from the starting position to the point farthest from the starting position?
 """
 
+compass_directions = ("north", "east", "south", "west")
+
 connections = {
     "|": ("north", "south"),
     "-": ("east", "west"),
@@ -113,9 +115,17 @@ connections = {
     "S": None,
 }
 
+north = lambda row, col: (row - 1, col)
+south = lambda row, col: (row + 1, col)
+east = lambda row, col: (row, col + 1)
+west = lambda row, col: (row, col - 1)
+
 
 def parse_raw_input(input: str):
     input = input.strip().split("\n")
+
+    row_range = range(0, len(input))
+    col_range = range(0, len(input[0]))
 
     pipes = {}
 
@@ -128,7 +138,50 @@ def parse_raw_input(input: str):
             pipes[coord] = {
                 "tile": tile,
                 "directions": connections[tile],
+                "neighbours": [],
             }
+
+    ### Calculate the connections between other pipes ###
+    for coord, pipe in pipes.items():
+        tile = pipe["tile"]
+        directions = pipe["directions"]
+        neighbours = pipe["neighbours"]
+
+        if tile == "S":
+            # We'll come back to this one at the end
+            continue
+
+        for direction in directions:
+            # Get the neighbour based on the lambda function with the same
+            # name above
+            neighbour = globals()[direction](*coord)
+            n_row, n_col = neighbour
+
+            # Check if the neighbour is actually in the grid
+            if not (n_row in row_range and n_col in col_range):
+                continue
+
+            # The neighbour is ".", so do nothing
+            if not neighbour in pipes:
+                continue
+
+            n_pipe = pipes[(n_row, n_col)]
+            n_tile = n_pipe["tile"]
+            n_directions = n_pipe["directions"]
+
+            # If the neighbour is S, do nothing
+            if n_tile == "S":
+                continue
+
+            # Check if the neighbour pipe connects in the direction of this
+            # pipe
+            opposite_direction = compass_directions[
+                (compass_directions.index(direction) + 2) % len(compass_directions)
+            ]
+            if not opposite_direction in n_directions:
+                continue
+
+            neighbours.append(neighbour)
 
     return input
 
