@@ -199,7 +199,25 @@ def parse_raw_input(input: str):
 
 
 def part1(input):
+    pipes = input
+
     answer = None
+
+    S_coord, S_pipe = get_S(pipes)
+    this_coord = S_pipe["neighbours"][0]["coord"]
+
+    loop = []
+    while this_coord != S_coord:
+        loop.append(this_coord)
+
+        for pipe in pipes[this_coord]["neighbours"]:
+            coord = pipe["coord"]
+            if (coord != this_coord) and (not coord in loop):
+                this_coord = coord
+                break
+        else:
+            break
+
     return answer
 
 
@@ -209,7 +227,14 @@ def part2(input):
 
 
 def main():
-    raw_input = utils.get_raw_input()
+    # raw_input = utils.get_raw_input()
+    raw_input = """
+.....
+.S-7.
+.|.|.
+.L-J.
+.....
+"""
     parsed_input = parse_raw_input(raw_input)
 
     utils.handle(part1(parsed_input), 1)
