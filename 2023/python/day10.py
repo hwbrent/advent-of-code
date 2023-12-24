@@ -198,9 +198,7 @@ def parse_raw_input(input: str):
     return pipes
 
 
-def part1(input):
-    pipes = input
-
+def get_loop(pipes) -> tuple[int, int]:
     _, S_pipe = get_S(pipes)
     this_coord = S_pipe["neighbours"][0]["coord"]
 
@@ -216,8 +214,12 @@ def part1(input):
         else:
             break
 
-    answer = (len(loop) // 2) + 1
+    return loop
 
+
+def part1(input):
+    loop = get_loop(input)
+    answer = (len(loop) // 2) + 1
     return answer
 
 
