@@ -73,89 +73,8 @@ def parse_raw_input(input: str):
     return input.strip().split("\n")
 
 
-# Directions:
-UP = (-1, 0)
-DOWN = (1, 0)
-LEFT = (0, -1)
-RIGHT = (0, 1)
-
-directions = (UP, RIGHT, DOWN, LEFT)
-
-
 def part1(input):
     answer = None
-
-    min_row = 0
-    max_row = len(input[0]) - 1
-    min_col = 0
-    max_col = len(input) - 1
-
-    beams = [
-        {"coord": [0, 0], "direction": RIGHT},
-    ]
-
-    while len(beams) != 0:
-        for beam in beams:
-            ### Move the beam
-            coord = beam["coord"]
-            direction = beam["direction"]
-
-            direction_row, direction_col = direction
-            coord[0] += direction_row
-            coord[1] += direction_col
-
-            coord_row, coord_col = coord
-
-            # Check if the beam is still in the area
-            if (not (min_row <= coord_row <= max_row)) or (
-                not (min_col <= coord_col <= max_col)
-            ):
-                beams.remove(beam)
-
-            ### Check what the beam has collided with
-            tile = input[coord_row][coord_col]
-
-            match tile:
-                case ".":
-                    # Do nothing
-                    continue
-                case "/":
-                    if direction == RIGHT:
-                        beam["direction"] = UP
-                    if direction == LEFT:
-                        beam["direction"] = DOWN
-                    if direction == UP:
-                        beam["direction"] = RIGHT
-                    if direction == DOWN:
-                        beam["direction"] = LEFT
-
-                    continue
-                case "\\":
-                    if direction == RIGHT:
-                        beam["direction"] = DOWN
-                    if direction == LEFT:
-                        beam["direction"] = UP
-                    if direction == UP:
-                        beam["direction"] = LEFT
-                    if direction == DOWN:
-                        beam["direction"] = RIGHT
-
-                    continue
-                case "|":
-                    if not direction in (UP, DOWN):
-                        beam["direction"] = UP
-                        beams.append({"coord": coord, "direction": DOWN})
-
-                    continue
-                case "-":
-                    if not direction in (LEFT, RIGHT):
-                        beam["direction"] = LEFT
-                        beams.append({"coord": coord, "direction": RIGHT})
-
-                    continue
-                case _:
-                    continue
-
     return answer
 
 
