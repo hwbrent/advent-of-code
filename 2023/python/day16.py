@@ -73,9 +73,97 @@ def parse_raw_input(input: str):
     return input.strip().split("\n")
 
 
+RIGHT = (0, 1)
+LEFT = (0, -1)
+UP = (-1, 0)
+DOWN = (1, 0)
+
+directions = (
+    UP,
+    RIGHT,
+    DOWN,
+    LEFT,
+)
+
+
 def part1(input):
     answer = None
-    pp.pprint(input)
+
+    beams = [{"pos": [0, 0], "direction": RIGHT}]
+
+    row_range = range(0, len(input))
+    col_range = range(0, len(input[0]))
+
+    visited = set()
+
+    i = 0
+    while len(beams) != 0:
+        i += 1
+
+        to_add = []
+        to_remove = []
+        for beam in beams:
+            # move the beam forwards
+            pos, direction = beam.values()
+            pos[0] += direction[0]
+            pos[1] += direction[1]
+
+            row, col = pos
+
+            if (not row in row_range) or (not col in col_range):
+                to_remove.append(beam)
+                continue
+
+            visited.add(tuple(pos))
+
+            tile = input[row][col]
+
+            match tile:
+                case ".":
+                    continue
+                case "/":
+                    if direction == RIGHT:
+                        beam["direction"] = UP
+                    elif direction == LEFT:
+                        beam["direction"] = DOWN
+                    elif direction == DOWN:
+                        beam["direction"] = LEFT
+                    elif direction == UP:
+                        beam["direction"] = RIGHT
+                    continue
+                case "\\":
+                    if direction == RIGHT:
+                        beam["direction"] = DOWN
+                    elif direction == LEFT:
+                        beam["direction"] = UP
+                    elif direction == DOWN:
+                        beam["direction"] = RIGHT
+                    elif direction == UP:
+                        beam["direction"] = LEFT
+                    continue
+                case "-":
+                    if direction == RIGHT or direction == LEFT:
+                        continue
+                    beam["direction"] = RIGHT
+                    to_add.append({"pos": pos, "direction": LEFT})
+                    continue
+                case "|":
+                    if direction == UP or direction == DOWN:
+                        continue
+                    beam["direction"] = UP
+                    to_add.append({"pos": pos, "direction": DOWN})
+                    continue
+
+        beams += to_add
+        for beam in to_remove:
+            beams.remove(beam)
+
+        print("added:", len(to_add))
+        print("removed:", len(to_remove))
+        print()
+
+    answer = len(visited)
+
     return answer
 
 
