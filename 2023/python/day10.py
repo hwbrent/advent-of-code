@@ -206,12 +206,13 @@ def get_loop(pipes) -> tuple[int, int]:
     while True:
         loop.append(this_coord)
 
-        for pipe in pipes[this_coord]["neighbours"]:
-            coord = pipe["coord"]
-            if (coord != this_coord) and (not coord in loop):
-                this_coord = coord
-                break
-        else:
+        try:
+            this_coord = next(
+                pipe["coord"]
+                for pipe in pipes[this_coord]["neighbours"]
+                if (pipe["coord"] != this_coord) and (not pipe["coord"] in loop)
+            )
+        except StopIteration:
             break
 
     return loop
