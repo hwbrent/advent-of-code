@@ -4,6 +4,7 @@ import datetime
 import urllib.parse
 import pathlib
 import inspect
+import time
 
 import requests
 import bs4
@@ -30,6 +31,9 @@ CHROMEDRIVER_PATH = "./chromedriver"
 PYTHON_FILE_TEMPLATE = """
 import os
 import sys
+from pprint import PrettyPrinter
+
+pp = PrettyPrinter(indent=4)
 
 # Enable imports from advent-of-code/utils.py
 root = os.path.abspath(os.path.join(__file__, os.pardir, os.pardir, os.pardir))
@@ -52,24 +56,28 @@ def parse_raw_input(input: str):
 
 
 def part1(input):
-    pass
+    answer = None
+    return answer
 
 
 def part2(input):
-    pass
+    answer = None
+    return answer
 
 
 def main():
     raw_input = utils.get_raw_input()
+    # fmt: off
+    # raw_input = \"\"\"\"\"\"
+    # fmt: on
     parsed_input = parse_raw_input(raw_input)
 
-    part1(parsed_input)
-    part2(parsed_input)
+    utils.handle(part1(parsed_input), 1)
+    utils.handle(part2(parsed_input), 2)
 
 
 if __name__ == "__main__":
     main()
-
 """.lstrip()
 
 this_dir = os.path.dirname(__file__)
@@ -486,6 +494,17 @@ def get_raw_input() -> str:
     input_file_path = os.path.join(inputs_dir_path, f"{file_name}.txt")
     with open(input_file_path) as f:
         return f.read()
+
+
+def handle(
+    answer,
+    part: int,
+    message: str = "Part {part}:\t{answer}\t({duration} seconds)",
+) -> None:
+    start = time.time()
+    end = time.time()
+    duration = end - start
+    print(message.format(part=part, answer=answer, duration=duration))
 
 
 def main():
