@@ -31,6 +31,9 @@ CHROMEDRIVER_PATH = "./chromedriver"
 PYTHON_FILE_TEMPLATE = """
 import os
 import sys
+from pprint import PrettyPrinter
+
+pp = PrettyPrinter(indent=4)
 
 # Enable imports from advent-of-code/utils.py
 root = os.path.abspath(os.path.join(__file__, os.pardir, os.pardir, os.pardir))
@@ -64,6 +67,9 @@ def part2(input):
 
 def main():
     raw_input = utils.get_raw_input()
+    # fmt: off
+    # raw_input = \"\"\"\"\"\"
+    # fmt: on
     parsed_input = parse_raw_input(raw_input)
 
     utils.handle(part1(parsed_input), 1)
