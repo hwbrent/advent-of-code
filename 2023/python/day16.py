@@ -105,6 +105,7 @@ def part1(input):
         for beam in beams:
             # move the beam forwards
             pos, direction = beam.values()
+            visited.add(tuple(pos))
             pos[0] += direction[0]
             pos[1] += direction[1]
 
@@ -113,8 +114,6 @@ def part1(input):
             if (not row in row_range) or (not col in col_range):
                 to_remove.append(beam)
                 continue
-
-            visited.add(tuple(pos))
 
             tile = input[row][col]
 
