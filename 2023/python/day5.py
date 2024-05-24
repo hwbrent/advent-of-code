@@ -103,67 +103,11 @@ What is the lowest location number that corresponds to any of the initial seed n
 
 
 def parse_raw_input(input: str):
-    seeds, *maps = input.strip().split("\n\n")
-    seeds = [int(x) for x in seeds.replace("seeds: ", "").split()]
-
-    overall_map = {}
-
-    for map in maps:
-        map = map.split("\n")
-
-        obj = {}
-
-        src_name, dest_name = map.pop(0).replace(" map:", "").split("-to-")
-
-        obj["dest"] = dest_name
-        ranges = []
-
-        for row in map:
-            row = [int(x) for x in row.split()]
-
-            dest_start, src_start, length = row
-
-            dest_end = dest_start + length
-            src_end = src_start + length
-
-            ranges.append({"src": (src_start, src_end), "dest": (dest_start, dest_end)})
-
-        obj["ranges"] = ranges
-
-        overall_map[src_name] = obj
-
-    return seeds, overall_map
+    return input
 
 
 def part1(input):
     answer = None
-
-    seeds, maps = input
-
-    src = "seed"
-    while src != "location":
-        map = maps[src]
-        src = map["dest"]
-
-        ranges = map["ranges"]
-
-        for seed_i, seed in enumerate(seeds):
-            for r in ranges:
-                src_lower, src_upper = r["src"]
-                dest_lower, dest_upper = r["dest"]
-
-                if not (src_lower <= seed <= src_upper):
-                    continue
-
-                dist_into_range = seed - src_lower
-                new_seed_value = dest_lower + dist_into_range
-
-                seeds[seed_i] = new_seed_value
-
-                break
-
-    answer = min(seeds)
-
     return answer
 
 
