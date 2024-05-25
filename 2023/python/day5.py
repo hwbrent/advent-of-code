@@ -104,11 +104,12 @@ What is the lowest location number that corresponds to any of the initial seed n
 
 def parse_raw_input(input: str):
     """
-    Returns a `dict`, where each key is the source (e.g. `"soil"`), and the
-    value is a tuple, where the first value is the destination
-    (e.g. `"water"`), and the second value is a list of tuples of length two,
-    where the first value is the bottom and top values of the src range, and
-    the second value is the bottom and top values of the dest range
+    Returns a list of the seeds to be "planted", and a `dict`, where each
+    key is the source (e.g. `"soil"`), and the value is a tuple, where the
+    first value is the destination (e.g. `"water"`), and the second value
+    is a list of tuples of length two, where the first value is the bottom
+    and top values of the src range, and the second value is the bottom and
+    top values of the dest range
     """
     input = input.strip()
 
@@ -149,7 +150,7 @@ def parse_raw_input(input: str):
             map_ranges.append((src_range, dest_range))
         all_ranges[src_name] = dest_name, map_ranges
 
-    return all_ranges
+    return to_plant, all_ranges
 
 
 def part1(input):
