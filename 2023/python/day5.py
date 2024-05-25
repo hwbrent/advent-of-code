@@ -103,7 +103,53 @@ What is the lowest location number that corresponds to any of the initial seed n
 
 
 def parse_raw_input(input: str):
-    return input
+    """
+    Returns a `dict`, where each key is the source (e.g. `"soil"`), and the
+    value is a tuple, where the first value is the destination
+    (e.g. `"water"`), and the second value is a list of tuples of length two,
+    where the first value is the bottom and top values of the src range, and
+    the second value is the bottom and top values of the dest range
+    """
+    input = input.strip()
+
+    # Split everything by \n\n. This gets the individual maps
+    maps = input.split("\n\n")
+    # print(*input, sep="\n-----\n")
+
+    # The first "map" isn't actually a map - it lists which seeds need to
+    # be planted. e.g. "seeds: 79 14 55 13"
+    to_plant = maps[0].replace("seeds: ", "").split()
+
+    # Dict to contain the ranges
+    all_ranges = {}
+
+    for map in maps[1:]:
+        lines = map.split("\n")
+
+        # All the other maps start off by specifying the src and dest names
+        # e.g. "seed-to-soil map:"
+        src_name, dest_name = lines[0].replace(" map:", "").split("-to-")
+
+        # The src and dest range pairings for this specific map
+        map_ranges = []
+
+        # Each of the other lines contains three numbers: the destination
+        # range start, the source range start, and the range length.
+        for line in lines[1:]:
+            dest_range_start, src_range_start, range_length = [
+                int(x) for x in line.split()
+            ]
+
+            # The bottom value of the range is the value provided.
+            # The top value of the range is the bottom value plus the range
+            # length minus one.
+            src_range = (src_range_start, src_range_start + range_length - 1)
+            dest_range = (dest_range_start, dest_range_start + range_length - 1)
+
+            map_ranges.append((src_range, dest_range))
+        all_ranges[src_name] = dest_name, map_ranges
+
+    return all_ranges
 
 
 def part1(input):
