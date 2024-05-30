@@ -6,7 +6,6 @@ import pathlib
 import inspect
 import time
 import xml.etree.ElementTree as ET
-import json
 from difflib import SequenceMatcher
 from zipfile import ZipFile
 import shutil
