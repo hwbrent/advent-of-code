@@ -5,6 +5,7 @@ import urllib.parse
 import pathlib
 import inspect
 import time
+import xml.etree.ElementTree as ET
 
 import requests
 import bs4
@@ -14,6 +15,10 @@ from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+
+### Consts used in the retrieval of the Chrome version number
+CHROME_PLIST_PATH = "/Applications/Google Chrome.app/Contents/Info.plist"
+XML_VERSION_KEY = "KSVersion"
 
 
 # The "home page" as it were
@@ -534,6 +539,57 @@ def main():
     description = format_description(description)
 
     generate_python_file(title, description, url, input_url, year, day)
+
+
+def get_chrome_version() -> str:
+    """
+    This function dynamically inspects the package contents of our Chrome
+    application to grab the current version in the form of a string
+
+    >>> get_chrome_version()
+    "125.0.6422.113"
+    """
+
+    # - To get the version of our Chrome application, we can inspect its
+    #   'Info.plist' file
+    # - Upon visual inspection, it seems to be an XML file
+    tree = ET.parse(CHROME_PLIST_PATH)
+
+    # - I did a Ctrl+F of the current version value, and it's found in a few
+    #   places
+    # - The most accessible is probably the one which is in a <string> tag
+    #   which has a corresponding <key> tag whose inner text is "KSVersion"
+    # - These tags are within a <dict> tag which is the first child of the
+    #   root of the XML tree
+    root = tree.getroot()
+    dict_tag = next(iter(root))
+
+    # To find the target <key>, we just iterate over each child of 'dict_tag'
+    # and check the inner text. If we find the one we want, we check the
+    # inner text of the next tag - this will be the version string that we
+    # want
+
+    found_key = False
+    for child in dict_tag:
+        inner_text = child.text
+
+        # If we're looking for the "KSVersion" <key> tag
+        if not found_key:
+
+            # We only care about <key> tags
+            if child.tag != "key":
+                continue
+
+            if inner_text == XML_VERSION_KEY:
+                # The next tag will contain the version data
+                found_key = True
+
+        # We're now inspecting the <string> tag which will contain the version
+        # value. This means 'inner_text' will be the info we want
+        else:
+            return inner_text
+
+    raise Exception("Didn't find version value for some reason :(")
 
 
 if __name__ == "__main__":
