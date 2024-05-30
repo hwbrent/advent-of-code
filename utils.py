@@ -8,6 +8,8 @@ import time
 import xml.etree.ElementTree as ET
 import json
 from difflib import SequenceMatcher
+from zipfile import ZipFile
+import shutil
 
 import requests
 import bs4
@@ -657,6 +659,51 @@ def get_chromedriver_download_url(our_version: str) -> str:
     mac_x64 = next(entry for entry in platforms if entry["platform"] == "mac-x64")
     url = mac_x64["url"]
     return url
+
+
+def download_chromedriver(url: str) -> None:
+    """
+    Given the download url for the specific chromedriver version, this
+    function:
+    - Downloads the zip file
+    - Unzips it
+    - Moves the 'chromedriver' executable in the resulting directory to
+      the root of the project
+    - Removes the zip file and its resulting directory, including the
+      LICENSE.chromedriver file within
+    """
+    ### Download the .zip file ###
+
+    # The root of the project
+    dest_dir = os.path.dirname(__file__)
+    zip_name = "chromedriver.zip"
+    zip_path = os.path.join(dest_dir, zip_name)
+
+    # Cheers ChatGPT
+    with requests.get(url, stream=True) as response:
+        response.raise_for_status()
+        with open(zip_path, "wb") as file:
+            for chunk in response.iter_content(chunk_size=8192):
+                if chunk:  # filter out keep-alive new chunks
+                    file.write(chunk)
+
+    ### Extract the .zip file ###
+    with ZipFile(zip_path, "r") as zip_ref:
+        zip_ref.extractall(dest_dir)
+
+    # The previous operation creates a new directory called 'chromedriver-'
+    # plus the platform name. It contains the chromedriver executable, as
+    # well as a LICENSE.chromedriver file
+    unzipped_dir = os.path.join(dest_dir, "chromedriver-mac-x64")
+
+    ### Move 'chromedriver' to the root of the project ###
+    chromedriver_src_path = os.path.join(unzipped_dir, "chromedriver")
+    chromedriver_dest_path = os.path.join(dest_dir, "chromedriver")
+    shutil.move(chromedriver_src_path, chromedriver_dest_path)
+
+    ### Clean up .zip and the unzipped directory ###
+    os.remove(zip_path)
+    shutil.rmtree(unzipped_dir)
 
 
 if __name__ == "__main__":
