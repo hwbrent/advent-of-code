@@ -6,6 +6,8 @@ import pathlib
 import inspect
 import time
 import xml.etree.ElementTree as ET
+import json
+from difflib import SequenceMatcher
 
 import requests
 import bs4
@@ -590,6 +592,71 @@ def get_chrome_version() -> str:
             return inner_text
 
     raise Exception("Didn't find version value for some reason :(")
+
+
+def get_chromedriver_download_url(our_version: str) -> str:
+    """
+    Given the version of our Chrome download, this function gets the url of
+    the chromedriver download
+
+    Basically, we look for the download with the version number which is the
+    most similar to our Chrome download's version number. Idk how robust
+    this is, but it's all I could think of doing
+
+    >>> get_chromedriver_download_url("125.0.6422.113")
+    "https://storage.googleapis.com/chrome-for-testing-public/125.0.6422.3/mac-x64/chromedriver-mac-x64.zip"
+    """
+
+    ### Grab the json containing all the versions & download urls ###
+    # I found this url by following the below URLs:
+    # - https://developer.chrome.com/docs/chromedriver/downloads
+    # - https://googlechromelabs.github.io/chrome-for-testing/
+    # - https://github.com/GoogleChromeLabs/chrome-for-testing#json-api-endpoints
+    json_url = "https://googlechromelabs.github.io/chrome-for-testing/known-good-versions-with-downloads.json"
+    response = requests.get(json_url)
+
+    # The base response json is a 'dict' with 'timestamp' and 'versions'
+    # data. "versions" is a list of dicts; each has a "version" key, whose
+    # accompanying value is a string (e.g. "113.0.5672.0").
+    # Obviously we don't care about the timestamp...
+    data = response.json()["versions"]
+
+    ### Find which is the most similar to our version ###
+    # Basically, the idea is to just manually compare the strings to see how
+    # similar they are. The most similar version will be the one we go with
+
+    # List of each version covered
+    # e.g. ['127.0.6508.0', '127.0.6509.0', '127.0.6510.0', ...]
+    version_numbers = (entry["version"] for entry in data)
+
+    most_similar__ratio = None
+    most_similar__index = None
+    for index, version in enumerate(version_numbers):
+        # Ref: https://stackoverflow.com/a/17388505
+        similarity = SequenceMatcher(None, version, our_version).ratio()
+
+        # If the most_similar__ variables are uninitialised
+        condition1 = (most_similar__ratio is None) and (most_similar__index is None)
+
+        # If the current similarity is better than the best recorded similarity
+        # so far
+        condition2 = (not condition1) and (similarity > most_similar__ratio)
+
+        if condition1 or condition2:
+            most_similar__ratio = similarity
+            most_similar__index = index
+
+    ### Get the data corresponding to the most similar version ###
+    most_similar = data[most_similar__index]
+
+    # There is a list of dicts representing chromedriver downloads. Each
+    # varies depending on the platform (e.g. "mac-x64", "linux64", "win32").
+    # Obviously the only one we care about is mac-x64, so we just grab that
+    # data, and return the "url" property in the dict
+    platforms = most_similar["downloads"]["chromedriver"]
+    mac_x64 = next(entry for entry in platforms if entry["platform"] == "mac-x64")
+    url = mac_x64["url"]
+    return url
 
 
 if __name__ == "__main__":
