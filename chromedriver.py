@@ -177,6 +177,9 @@ def amend_permission() -> None:
     """
     This function changes the permissions for `chromedriver` to allow it
     to be executable.
+
+    It's the equivalent of entering this command into the terminal:
+    `chmod +x ./chromedriver`
     """
     root = os.path.dirname(__file__)
 
