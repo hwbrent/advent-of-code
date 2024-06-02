@@ -3,6 +3,7 @@ import xml.etree.ElementTree as ET
 from difflib import SequenceMatcher
 from zipfile import ZipFile
 import shutil
+import stat
 
 import requests
 
@@ -172,10 +173,25 @@ def download_chromedriver(url: str) -> None:
     shutil.rmtree(unzipped_dir)
 
 
+def amend_permission() -> None:
+    """
+    This function changes the permissions for `chromedriver` to allow it
+    to be executable.
+    """
+    root = os.path.dirname(__file__)
+
+    # The path of the chromedriver executable
+    path = os.path.join(root, "chromedriver")
+
+    # Change the permission of the file to be executable
+    os.chmod(path, stat.S_IRWXU)
+
+
 def main():
     version = get_chrome_version()
     url = get_chromedriver_download_url(version)
     download_chromedriver(url)
+    amend_permission()
 
 
 if __name__ == "__main__":
