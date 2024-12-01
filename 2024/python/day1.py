@@ -68,8 +68,19 @@ def parse_raw_input(input: str) -> tuple[np.ndarray, np.ndarray]:
 
 
 def part1(input):
-    answer = None
-    return answer
+    # 1. sort each from smallest to biggest
+    # 2. do pairwise diff
+    # 3. get sum of diffs
+
+    left, right = input
+
+    left.sort()
+    right.sort()
+
+    distances = abs(left - right)
+    total_distance = sum(distances)
+
+    return total_distance
 
 
 def part2(input):
