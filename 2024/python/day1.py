@@ -57,25 +57,25 @@ def parse_raw_input(input: str) -> tuple[np.ndarray, np.ndarray]:
     """
     lines = input.strip().split("\n")
 
-    left = []
-    right = []
+    left_list = []
+    right_list = []
     for line in lines:
         left_str, right_str = line.split()
-        left.append(int(left_str))
-        right.append(int(right_str))
+        left_list.append(int(left_str))
+        right_list.append(int(right_str))
 
-    return np.array(left), np.array(right)
+    left_arr = np.array(left_list)
+    right_arr = np.array(right_list)
+
+    return np.sort(left_arr), np.sort(right_arr)
 
 
 def part1(input):
-    # 1. sort each from smallest to biggest
+    # 1. sort each from smallest to biggest (done in 'parse_raw_input')
     # 2. do pairwise diff
     # 3. get sum of diffs
 
     left, right = input
-
-    left.sort()
-    right.sort()
 
     distances = abs(left - right)
     total_distance = sum(distances)
