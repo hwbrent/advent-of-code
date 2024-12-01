@@ -48,7 +48,8 @@ Your actual left and right lists contain many location IDs. What is the total di
 
 
 def parse_raw_input(input: str):
-    return input
+    lines = input.strip().split("\n")
+    return [[int(num) for num in line.split()] for line in lines]
 
 
 def part1(input):
