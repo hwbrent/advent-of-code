@@ -341,8 +341,14 @@ def init_webdriver() -> webdriver.Chrome:
     """
 
     options = webdriver.ChromeOptions()
-    options.add_argument("--headless")  # Run Chrome in headless mode (no GUI)
     options.add_argument("--disable-gpu")  # Disable GPU acceleration in headless mode
+
+    # Ideally we'd want this to run headlessly, but for some reason, if we
+    # try to do that, the part of 'authenticate_via_reddit' where we wait
+    # until we've reached 'https://www.reddit.com/api/v1/authorize' doesn't
+    # work. But it seems to work when chrome isn't running headlessly. No
+    # idea why
+    # options.add_argument("--headless")  # Run Chrome in headless mode (no GUI)
 
     service = ChromeService(CHROMEDRIVER_PATH)
     driver = webdriver.Chrome(options=options, service=service)
@@ -366,16 +372,33 @@ def authenticate_via_reddit(driver: webdriver.Chrome, problem_url: str) -> None:
 
     # Find username and password input elements, and input values from .env
     load_dotenv()
-    username_input = driver.find_element(By.ID, "loginUsername")
+    username_input = WebDriverWait(driver, 10).until(
+        EC.presence_of_element_located((By.ID, "login-username"))
+    )
     REDDIT_USERNAME = os.getenv("REDDIT_USERNAME")
     username_input.send_keys(REDDIT_USERNAME)
 
-    password_input = driver.find_element(By.ID, "loginPassword")
+    password_input = driver.find_element(By.ID, "login-password")
     REDDIT_PASSWORD = os.getenv("REDDIT_PASSWORD")
     password_input.send_keys(REDDIT_PASSWORD)
 
-    # Click the login button
-    submit_button = driver.find_element(By.CSS_SELECTOR, "button[type='submit']")
+    ### Find and click the login button ###
+    # It's located within a bunch of nested shadow DOMs, so we can't just
+    # query select it once and be done - we have to access each shadow root
+    # until we find the one containing the button, and THEN we can query
+    # select the button
+    submit_button = driver.execute_script(
+        """
+        return document
+            .querySelector('[overlay-id="auth-flow"]')
+            .shadowRoot
+            .querySelector('[auth-step="login"]')
+            .shadowRoot
+            .querySelector('shreddit-slotter')
+            .shadowRoot
+            .querySelector('button');
+        """
+    )
     submit_button.click()
 
     # Wait until we are redirected to the page where it asks if we want to
