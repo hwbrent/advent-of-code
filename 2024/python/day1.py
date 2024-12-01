@@ -57,13 +57,14 @@ def parse_raw_input(input: str) -> tuple[np.ndarray, np.ndarray, dict]:
     - The third  value is a dict containing the number of times each number
       in the right-hand list appeared
     """
-    lines = input.strip().split("\n")
-
     left_list = []
     right_list = []
     right_counts = {}
 
+    lines = input.strip().split("\n")
     for line in lines:
+        # the line will be two ints with whitespace between them, like so:
+        # "40885   43247"
         left_str, right_str = line.split()
         left_int, right_int = int(left_str), int(right_str)
         left_list.append(left_int)
@@ -80,10 +81,12 @@ def parse_raw_input(input: str) -> tuple[np.ndarray, np.ndarray, dict]:
     return np.sort(left_arr), np.sort(right_arr), right_counts
 
 
-def part1(input):
-    # 1. sort each from smallest to biggest (done in 'parse_raw_input')
-    # 2. do pairwise diff
-    # 3. get sum of diffs
+def part1(input) -> int:
+    """
+    1. Sort each from smallest to biggest (done in 'parse_raw_input')
+    2. Do pairwise diff
+    3. Get sum of diffs
+    """
 
     left, right, _ = input
 
@@ -93,7 +96,7 @@ def part1(input):
     return total_distance
 
 
-def part2(input):
+def part2(input) -> int:
     """
     1. Figure out how many times each element in 'right' appears (done in
        'parse_raw_input')
@@ -122,9 +125,6 @@ def part2(input):
 
 def main():
     raw_input = utils.get_raw_input()
-    # fmt: off
-    # raw_input = """"""
-    # fmt: on
     parsed_input = parse_raw_input(raw_input)
 
     utils.handle(part1(parsed_input), 1)  # 1941353
