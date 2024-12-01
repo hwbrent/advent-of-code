@@ -1,3 +1,5 @@
+import numpy as np
+
 import os
 import sys
 from pprint import PrettyPrinter
@@ -47,9 +49,22 @@ Your actual left and right lists contain many location IDs. What is the total di
 """
 
 
-def parse_raw_input(input: str):
+def parse_raw_input(input: str) -> tuple[np.ndarray, np.ndarray]:
+    """
+    Returns a tuple wherein:
+    - The first  value is the left-hand  list as a numpy array
+    - The second value is the right-hand list as a numpy array
+    """
     lines = input.strip().split("\n")
-    return [[int(num) for num in line.split()] for line in lines]
+
+    left = []
+    right = []
+    for line in lines:
+        left_str, right_str = line.split()
+        left.append(int(left_str))
+        right.append(int(right_str))
+
+    return np.array(left), np.array(right)
 
 
 def part1(input):
