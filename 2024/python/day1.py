@@ -49,25 +49,35 @@ Your actual left and right lists contain many location IDs. What is the total di
 """
 
 
-def parse_raw_input(input: str) -> tuple[np.ndarray, np.ndarray]:
+def parse_raw_input(input: str) -> tuple[np.ndarray, np.ndarray, dict]:
     """
     Returns a tuple wherein:
     - The first  value is the left-hand  list as a numpy array
     - The second value is the right-hand list as a numpy array
+    - The third  value is a dict containing the number of times each number
+      in the right-hand list appeared
     """
     lines = input.strip().split("\n")
 
     left_list = []
     right_list = []
+    right_counts = {}
+
     for line in lines:
         left_str, right_str = line.split()
-        left_list.append(int(left_str))
-        right_list.append(int(right_str))
+        left_int, right_int = int(left_str), int(right_str)
+        left_list.append(left_int)
+        right_list.append(right_int)
+
+        # Increment the count in right_counts. If no entry for this number
+        # exists, use a default of 0
+        count = right_counts.get(right_int, 0)
+        right_counts[right_int] = count + 1
 
     left_arr = np.array(left_list)
     right_arr = np.array(right_list)
 
-    return np.sort(left_arr), np.sort(right_arr)
+    return np.sort(left_arr), np.sort(right_arr), right_counts
 
 
 def part1(input):
@@ -75,7 +85,7 @@ def part1(input):
     # 2. do pairwise diff
     # 3. get sum of diffs
 
-    left, right = input
+    left, right, _ = input
 
     distances = abs(left - right)
     total_distance = sum(distances)
@@ -84,8 +94,30 @@ def part1(input):
 
 
 def part2(input):
-    answer = None
-    return answer
+    """
+    1. Figure out how many times each element in 'right' appears (done in
+       'parse_raw_input')
+    2. For each value in 'left', figure out how many times it appears in
+       'right' by querying the dict from step 1, and multiply the value by
+       that count
+    3. Sum up the products
+    """
+    left, _, right_counts = input
+
+    # Create a function which, given a number, gets that number's count in
+    # 'right', and 'vectorise' it so that it can be applied to every entry
+    # in a numpy array
+    getter = lambda num: right_counts.get(num, 0)
+    get_counts = np.vectorize(getter)
+
+    # Apply the vectorised function to get a new array containing the number
+    # of times each value in 'left' appears in 'right'
+    left_counts = get_counts(left)
+
+    # Get the sum of the two arrays multiplied pairwise
+    similarity_score = np.sum(left * left_counts)
+
+    return similarity_score
 
 
 def main():
@@ -95,8 +127,8 @@ def main():
     # fmt: on
     parsed_input = parse_raw_input(raw_input)
 
-    utils.handle(part1(parsed_input), 1)
-    utils.handle(part2(parsed_input), 2)
+    utils.handle(part1(parsed_input), 1)  # 1941353
+    utils.handle(part2(parsed_input), 2)  # 22539317
 
 
 if __name__ == "__main__":
