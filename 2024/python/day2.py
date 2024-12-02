@@ -83,11 +83,14 @@ def is_safe(report: list[int]) -> bool:
     return safe
 
 
-def parse_raw_input(input: str) -> int:
+def parse_raw_input(input: str) -> tuple[int, int]:
     """
-    Returns an integer indicating the number of reports that are safe
+    Returns an tuple of length two with these values:
+    1. int - the answer for part 1
+    2. int - the answer for part 2
     """
-    safe_count = 0
+    count_part1 = 0
+    count_part2 = 0
 
     lines = input.strip().split("\n")
     for report in lines:
@@ -97,7 +100,8 @@ def parse_raw_input(input: str) -> int:
 
         # check if the initial report is safe
         if is_safe(report):
-            safe_count += 1
+            count_part1 += 1
+            count_part2 += 1
             continue
 
         # Iterate over the report, and for each loop, remove the level at
@@ -108,18 +112,20 @@ def parse_raw_input(input: str) -> int:
             if not safe:
                 continue
 
-            safe_count += 1
+            count_part2 += 1
             break
 
-    return safe_count
+    return count_part1, count_part2
 
 
-def part1(answer: int) -> int:
-    return answer
+def part1(answers: tuple[int, int]) -> int:
+    p1, _ = answers
+    return p1
 
 
-def part2(answer: int) -> int:
-    return answer
+def part2(answers: tuple[int, int]) -> int:
+    _, p2 = answers
+    return p2
 
 
 def main():
