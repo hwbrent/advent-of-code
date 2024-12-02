@@ -1,5 +1,6 @@
 import os
 import sys
+import itertools as it
 from pprint import PrettyPrinter
 
 pp = PrettyPrinter(indent=4)
@@ -47,13 +48,56 @@ Analyze the unusual data from the engineers. How many reports are safe?
 """
 
 
-def parse_raw_input(input: str):
-    return input
+def parse_raw_input(input: str) -> tuple[list, list, int]:
+    """
+    Returns a tuple with the following values
+    1. `list` of `list` of `int`s - the "reports" from the input
+    2. `list` of `bool`s - whether each report in (1) is "safe"
+    3. `int` - the number of reports from (1) which are safe
+    """
+    reports = []
+    safeties = []
+    safe_count = 0
+
+    lines = input.strip().split("\n")
+    for report in lines:
+        # Get list of ints
+        report = report.split()
+        report = [int(level) for level in report]
+
+        # Do pairwise subtraction to figure out the differences between each
+        # pair of "levels" in the report
+        pairs = it.pairwise(report)
+        diffs = [b - a for a, b in pairs]
+
+        # Figure out if all the differences are either increasing or
+        # decreasing
+        all_increasing = all(diff > 0 for diff in diffs)
+        all_decreasing = all(diff < 0 for diff in diffs)
+        all_increasing_or_decreasing = all_increasing or all_decreasing
+
+        # Figure out if each difference is within the acceptable range
+        # between 1 and 3
+        diffs_in_range = all(1 <= abs(diff) <= 3 for diff in diffs)
+
+        # Using the two bools, figure out if the report is "safe"
+        safe = all_increasing_or_decreasing and diffs_in_range
+
+        reports.append(report)
+        safeties.append(safe)
+        if safe:
+            safe_count += 1
+
+    return reports, safeties, safe_count
 
 
-def part1(input):
-    answer = None
-    return answer
+def part1(input: tuple[list, list, int]) -> int:
+    """
+    1. Evaluate    WHICH of the reports are "safe" (done in 'parse_raw_input')
+    2. Evaluate HOW MANY of the reports are "safe" (done in 'parse_raw_input')
+    """
+    _, __, safe_count = input
+    return safe_count
 
 
 def part2(input):
@@ -68,7 +112,7 @@ def main():
     # fmt: on
     parsed_input = parse_raw_input(raw_input)
 
-    utils.handle(part1(parsed_input), 1)
+    utils.handle(part1(parsed_input), 1)  # 572
     utils.handle(part2(parsed_input), 2)
 
 
