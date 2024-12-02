@@ -83,26 +83,10 @@ def is_safe(report: list[int]) -> bool:
     return safe
 
 
-def parse_raw_input(input: str) -> tuple[list, list, int]:
+def parse_raw_input(input: str) -> int:
     """
-    Returns a tuple with the following values
-    1. `list` of `list` of `int`s - the "reports" from the input
-    2. `list` of `bool`s - whether each report in (1) is "safe"
-    3. `int` - the number of reports from (1) which are safe
-
-    We can tolerate a single bad level. So if there's one level which isn't
-    in the acceptable range or causes the levels to not be all increasing
-    or decreasing, we can remove that level and reevaluate
-
-    Workflow:
-    1. Evaluate initial report
-    2. If the initial report is safe, continue
-    3. Else, check which values are out of range, and which are causing the
-       levels to not solely in/decrease
-    4. If there's only offending level, remove it, and reevaluate the report
+    Returns an integer indicating the number of reports that are safe
     """
-    reports = []
-    safeties = []
     safe_count = 0
 
     lines = input.strip().split("\n")
@@ -110,11 +94,9 @@ def parse_raw_input(input: str) -> tuple[list, list, int]:
         # Get list of ints
         report = report.split()
         report = [int(level) for level in report]
-        reports.append(report)
 
         # check if the initial report is safe
         if is_safe(report):
-            safeties.append(True)
             safe_count += 1
             continue
 
@@ -122,37 +104,26 @@ def parse_raw_input(input: str) -> tuple[list, list, int]:
         # that index, and check if the resulting report is safe
         for i, _ in enumerate(report):
             removed = report[:i] + report[i + 1 :]
-            if not is_safe(removed):
+            safe = is_safe(removed)
+            if not safe:
                 continue
 
-            safeties.append(True)
             safe_count += 1
             break
 
-        safeties.append(False)
-
-    return reports, safeties, safe_count
-
-
-def part1(input: tuple[list, list, int]) -> int:
-    """
-    1. Evaluate    WHICH of the reports are "safe" (done in 'parse_raw_input')
-    2. Evaluate HOW MANY of the reports are "safe" (done in 'parse_raw_input')
-    """
-    _, __, safe_count = input
     return safe_count
 
 
-def part2(input):
-    _, __, safe_count = input
-    return safe_count
+def part1(answer: int) -> int:
+    return answer
+
+
+def part2(answer: int) -> int:
+    return answer
 
 
 def main():
     raw_input = utils.get_raw_input()
-    # fmt: off
-    # raw_input = """"""
-    # fmt: on
     parsed_input = parse_raw_input(raw_input)
 
     utils.handle(part1(parsed_input), 1)  # 572
