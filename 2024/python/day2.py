@@ -93,11 +93,11 @@ def parse_raw_input(input: str) -> tuple[list, list, int]:
 
         # Figure out if each difference is within the acceptable range
         # between 1 and 3
-        diffs_in_range = all(1 <= abs(diff) <= 3 for diff in diffs)
+        diffs_in_range = [1 <= abs(diff) <= 3 for diff in diffs]
 
-        # Using the two bools, figure out if the report is "safe"
+        # Using the two bools, figure out if the report is "safe".
         # If initially safe, keep looping
-        safe = all_increasing_or_decreasing and diffs_in_range
+        safe = all_increasing_or_decreasing and all(diffs_in_range)
         if safe:
             safeties.append(safe)
             safe_count += 1
