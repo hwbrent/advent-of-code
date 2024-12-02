@@ -69,11 +69,14 @@ def parse_raw_input(input: str) -> tuple[list, list, int]:
         # pair of "levels" in the report
         pairs = it.pairwise(report)
         diffs = [b - a for a, b in pairs]
+        diff_count = len(diffs)
 
         # Figure out if all the differences are either increasing or
         # decreasing
-        all_increasing = all(diff > 0 for diff in diffs)
-        all_decreasing = all(diff < 0 for diff in diffs)
+        increasing = sum(1 for d in diffs if d > 0)
+        decreasing = sum(1 for d in diffs if d < 0)
+        all_increasing = increasing == diff_count
+        all_decreasing = decreasing == diff_count
         all_increasing_or_decreasing = all_increasing or all_decreasing
 
         # Figure out if each difference is within the acceptable range
