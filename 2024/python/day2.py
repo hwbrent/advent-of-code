@@ -73,10 +73,10 @@ def parse_raw_input(input: str) -> tuple[list, list, int]:
 
         # Figure out if all the differences are either increasing or
         # decreasing
-        increasing = sum(1 for d in diffs if d > 0)
-        decreasing = sum(1 for d in diffs if d < 0)
-        all_increasing = increasing == diff_count
-        all_decreasing = decreasing == diff_count
+        increasing = [d > 0 for d in diffs]
+        decreasing = [d < 0 for d in diffs]
+        all_increasing = increasing.count(True) == diff_count
+        all_decreasing = decreasing.count(True) == diff_count
         all_increasing_or_decreasing = all_increasing or all_decreasing
 
         # Figure out if each difference is within the acceptable range
