@@ -54,6 +54,17 @@ def parse_raw_input(input: str) -> tuple[list, list, int]:
     1. `list` of `list` of `int`s - the "reports" from the input
     2. `list` of `bool`s - whether each report in (1) is "safe"
     3. `int` - the number of reports from (1) which are safe
+
+    We can tolerate a single bad level. So if there's one level which isn't
+    in the acceptable range or causes the levels to not be all increasing
+    or decreasing, we can remove that level and reevaluate
+
+    Workflow:
+    1. Evaluate initial report
+    2. If the initial report is safe, continue
+    3. Else, check which values are out of range, and which are causing the
+       levels to not solely in/decrease
+    4. If there's only offending level, remove it, and reevaluate the report
     """
     reports = []
     safeties = []
@@ -64,6 +75,7 @@ def parse_raw_input(input: str) -> tuple[list, list, int]:
         # Get list of ints
         report = report.split()
         report = [int(level) for level in report]
+        reports.append(report)
 
         # Do pairwise subtraction to figure out the differences between each
         # pair of "levels" in the report
@@ -84,12 +96,12 @@ def parse_raw_input(input: str) -> tuple[list, list, int]:
         diffs_in_range = all(1 <= abs(diff) <= 3 for diff in diffs)
 
         # Using the two bools, figure out if the report is "safe"
+        # If initially safe, keep looping
         safe = all_increasing_or_decreasing and diffs_in_range
-
-        reports.append(report)
-        safeties.append(safe)
         if safe:
+            safeties.append(safe)
             safe_count += 1
+            continue
 
     return reports, safeties, safe_count
 
