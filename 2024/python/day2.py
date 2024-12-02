@@ -81,23 +81,26 @@ def parse_raw_input(input: str) -> tuple[list, list, int]:
         # pair of "levels" in the report
         pairs = it.pairwise(report)
         diffs = [b - a for a, b in pairs]
-        diff_count = len(diffs)
 
         # Figure out if all the differences are either increasing or
         # decreasing
         increasing = [d > 0 for d in diffs]
         decreasing = [d < 0 for d in diffs]
-        all_increasing = increasing.count(True) == diff_count
-        all_decreasing = decreasing.count(True) == diff_count
-        all_increasing_or_decreasing = all_increasing or all_decreasing
 
         # Figure out if each difference is within the acceptable range
         # between 1 and 3
         diffs_in_range = [1 <= abs(diff) <= 3 for diff in diffs]
 
-        # Using the two bools, figure out if the report is "safe".
-        # If initially safe, keep looping
-        safe = all_increasing_or_decreasing and all(diffs_in_range)
+        # The number of times False appears in each list. For the report to
+        # be safe, the count has to be zero in ((1 OR 2) AND 3)
+        counts = (
+            increasing.count(False),
+            decreasing.count(False),
+            diffs_in_range.count(False),
+        )
+
+        # Figure out if the report is "safe"
+        safe = (counts[0] == 0 or counts[1] == 0) and counts[2] == 0
         if safe:
             safeties.append(safe)
             safe_count += 1
