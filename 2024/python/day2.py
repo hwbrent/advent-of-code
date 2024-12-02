@@ -48,6 +48,41 @@ Analyze the unusual data from the engineers. How many reports are safe?
 """
 
 
+def is_safe(report: list[int]) -> bool:
+    """
+    Returns a bool indicating whether `report` is "safe", meaning:
+    1. All of the pairwise differences are either increasing/decreasing
+    2. All of the pairwise differences are >= 0 and <= 3
+    """
+
+    # Do pairwise subtraction to figure out the differences between each
+    # pair of "levels" in the report
+    pairs = it.pairwise(report)
+    diffs = [b - a for a, b in pairs]
+
+    # Figure out if all the differences are either increasing or
+    # decreasing
+    increasing = [d > 0 for d in diffs]
+    decreasing = [d < 0 for d in diffs]
+
+    # Figure out if each difference is within the acceptable range
+    # between 1 and 3
+    diffs_in_range = [1 <= abs(diff) <= 3 for diff in diffs]
+
+    # The number of times False appears in each list. For the report to
+    # be safe, the count has to be zero in ((1 OR 2) AND 3)
+    counts = (
+        increasing.count(False),
+        decreasing.count(False),
+        diffs_in_range.count(False),
+    )
+
+    # Figure out if the report is "safe"
+    safe = (counts[0] == 0 or counts[1] == 0) and counts[2] == 0
+
+    return safe
+
+
 def parse_raw_input(input: str) -> tuple[list, list, int]:
     """
     Returns a tuple with the following values
@@ -77,34 +112,24 @@ def parse_raw_input(input: str) -> tuple[list, list, int]:
         report = [int(level) for level in report]
         reports.append(report)
 
-        # Do pairwise subtraction to figure out the differences between each
-        # pair of "levels" in the report
-        pairs = it.pairwise(report)
-        diffs = [b - a for a, b in pairs]
-
-        # Figure out if all the differences are either increasing or
-        # decreasing
-        increasing = [d > 0 for d in diffs]
-        decreasing = [d < 0 for d in diffs]
-
-        # Figure out if each difference is within the acceptable range
-        # between 1 and 3
-        diffs_in_range = [1 <= abs(diff) <= 3 for diff in diffs]
-
-        # The number of times False appears in each list. For the report to
-        # be safe, the count has to be zero in ((1 OR 2) AND 3)
-        counts = (
-            increasing.count(False),
-            decreasing.count(False),
-            diffs_in_range.count(False),
-        )
-
-        # Figure out if the report is "safe"
-        safe = (counts[0] == 0 or counts[1] == 0) and counts[2] == 0
-        if safe:
-            safeties.append(safe)
+        # check if the initial report is safe
+        if is_safe(report):
+            safeties.append(True)
             safe_count += 1
             continue
+
+        # Iterate over the report, and for each loop, remove the level at
+        # that index, and check if the resulting report is safe
+        for i, _ in enumerate(report):
+            removed = report[:i] + report[i + 1 :]
+            if not is_safe(removed):
+                continue
+
+            safeties.append(True)
+            safe_count += 1
+            break
+
+        safeties.append(False)
 
     return reports, safeties, safe_count
 
@@ -119,8 +144,8 @@ def part1(input: tuple[list, list, int]) -> int:
 
 
 def part2(input):
-    answer = None
-    return answer
+    _, __, safe_count = input
+    return safe_count
 
 
 def main():
@@ -131,7 +156,7 @@ def main():
     parsed_input = parse_raw_input(raw_input)
 
     utils.handle(part1(parsed_input), 1)  # 572
-    utils.handle(part2(parsed_input), 2)
+    utils.handle(part2(parsed_input), 2)  # 612
 
 
 if __name__ == "__main__":
