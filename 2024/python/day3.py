@@ -1,5 +1,6 @@
 import os
 import sys
+import re
 from pprint import PrettyPrinter
 
 pp = PrettyPrinter(indent=4)
@@ -28,12 +29,30 @@ Scan the corrupted memory for uncorrupted mul instructions. What do you get if y
 """
 
 
-def parse_raw_input(input: str):
-    return input
+def parse_raw_input(input: str) -> str:
+    """
+    Returns the input but with whitespace stripped off
+
+    (The input is just one long line, so no need to split into lines or
+    anything)
+    """
+    return input.strip()
 
 
-def part1(input):
-    answer = None
+def part1(input) -> int:
+    """
+    1. Create a regex pattern which targets the 'mul(<int>,<int>)' pattern,
+       capturing the two numbers as groups
+    2. Find each instance of that pattern
+    3. For each instance, get the two captured groups, cast them to `int`s,
+       multiply them together, and add that number to a running total
+    """
+    answer = 0
+    pattern = r"mul\((\d{1,3}),(\d{1,3})\)"
+    matches = re.findall(pattern, input)
+    for match in matches:
+        num1, num2 = int(match[0]), int(match[1])
+        answer += num1 * num2
     return answer
 
 
@@ -49,7 +68,7 @@ def main():
     # fmt: on
     parsed_input = parse_raw_input(raw_input)
 
-    utils.handle(part1(parsed_input), 1)
+    utils.handle(part1(parsed_input), 1)  # 170807108
     utils.handle(part2(parsed_input), 2)
 
 
