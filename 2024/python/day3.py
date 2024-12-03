@@ -57,19 +57,50 @@ def part1(input) -> int:
 
 
 def part2(input):
-    answer = None
+    """
+    Pretty much the same as part 1, except we look for "do()" and "don't()"
+    as well, and depending on which we find, we skip/proceed with doing the
+    multiplication of the 'mul' values
+    """
+
+    DO = "do()"
+    DONT = "don't()"
+
+    patterns = (
+        r"mul\((\d{1,3}),(\d{1,3})\)",  # for mul(<int,<int>)
+        r"do\(\)",  # for do()
+        r"don't\(\)",  # for don't()
+    )
+    pattern = f"(({patterns[0]})|({patterns[1]})|({patterns[2]}))"
+    matches = re.finditer(pattern, input)
+
+    answer = 0
+
+    do = True
+    for match in matches:
+        matched = match[0]
+        if matched.startswith("mul"):
+            if not do:
+                continue
+            mul = re.match(patterns[0], matched)
+            num1, num2 = int(mul[1]), int(mul[2])
+            answer += num1 * num2
+        elif matched == DO:
+            do = True
+        elif matched == DONT:
+            do = False
+        else:
+            raise ValueError("tf happened")
+
     return answer
 
 
 def main():
     raw_input = utils.get_raw_input()
-    # fmt: off
-    # raw_input = """"""
-    # fmt: on
     parsed_input = parse_raw_input(raw_input)
 
     utils.handle(part1(parsed_input), 1)  # 170807108
-    utils.handle(part2(parsed_input), 2)
+    utils.handle(part2(parsed_input), 2)  # 74838033
 
 
 if __name__ == "__main__":
