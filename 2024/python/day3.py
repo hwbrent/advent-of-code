@@ -67,31 +67,50 @@ def part2(input):
     DO = "do()"
     DONT = "don't()"
 
+    answer = 0
+
+    # The most recent instruction found.
+    # True means "do()", False means "don't()"
+    do = True
+
+    # Get the patterns of "mul", "do()" and "don't()"
     patterns = (
         r"mul\((\d{1,3}),(\d{1,3})\)",  # for mul(<int,<int>)
         r"do\(\)",  # for do()
         r"don't\(\)",  # for don't()
     )
+
+    # OR the patterns together into one big pattern.
+    # A match will be found if it sees one of the three, meaning we have to
+    # check each match to see which one it was
     pattern = f"(({patterns[0]})|({patterns[1]})|({patterns[2]}))"
+
     matches = re.finditer(pattern, input)
-
-    answer = 0
-
-    do = True
     for match in matches:
+        # Get the string which was found.
+        # It will either be "do()", "don't", or will start with "mul"
         string = match[0]
+
         if string.startswith(MUL):
+            # If the most recent instruction was "don't()", we don't bother
+            # with doing any multiplication
             if not do:
                 continue
+
+            # Get the ints within the "mul" instruction
             mul = re.match(patterns[0], string)
             num1, num2 = int(mul[1]), int(mul[2])
+
+            # Add to the final answer
             answer += num1 * num2
+
         elif string == DO:
+            # Set the flag to True
             do = True
+
         elif string == DONT:
+            # Set the flag to False
             do = False
-        else:
-            raise ValueError("tf happened")
 
     return answer
 
