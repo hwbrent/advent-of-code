@@ -39,6 +39,10 @@ def parse_raw_input(input: str) -> str:
     return input.strip()
 
 
+# function to get the two ints from a "mul" instruction
+parse_mul = lambda match: (int(match[1]), int(match[2]))
+
+
 def part1(input) -> int:
     """
     1. Create a regex pattern which targets the 'mul(<int>,<int>)' pattern,
@@ -51,7 +55,7 @@ def part1(input) -> int:
     pattern = r"mul\((\d{1,3}),(\d{1,3})\)"
     matches = re.finditer(pattern, input)
     for match in matches:
-        num1, num2 = int(match[1]), int(match[2])
+        num1, num2 = parse_mul(match)
         answer += num1 * num2
     return answer
 
@@ -99,7 +103,7 @@ def part2(input):
 
             # Get the ints within the "mul" instruction
             mul = re.match(patterns[0], string)
-            num1, num2 = int(mul[1]), int(mul[2])
+            num1, num2 = parse_mul(mul)
 
             # Add to the final answer
             answer += num1 * num2
