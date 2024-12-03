@@ -39,6 +39,11 @@ def parse_raw_input(input: str) -> str:
     return input.strip()
 
 
+# A regex pattern matching a "mul" instruction, with the two ints in groups
+# for easier retrieval
+MUL = r"mul\((\d{1,3}),(\d{1,3})\)"
+
+
 # function to get the two ints from a "mul" instruction
 parse_mul = lambda match: (int(match[1]), int(match[2]))
 
@@ -52,8 +57,7 @@ def part1(input) -> int:
        multiply them together, and add that number to a running total
     """
     answer = 0
-    pattern = r"mul\((\d{1,3}),(\d{1,3})\)"
-    matches = re.finditer(pattern, input)
+    matches = re.finditer(MUL, input)
     for match in matches:
         num1, num2 = parse_mul(match)
         answer += num1 * num2
@@ -67,7 +71,7 @@ def part2(input):
     multiplication of the 'mul' values
     """
 
-    MUL = "mul"
+    MUL_PREFIX = "mul"
     DO = "do()"
     DONT = "don't()"
 
@@ -77,9 +81,8 @@ def part2(input):
     # True means "do()", False means "don't()"
     do = True
 
-    # Get the patterns of "mul", "do()" and "don't()"
-    patterns = (
-        r"mul\((\d{1,3}),(\d{1,3})\)",  # for mul(<int,<int>)
+    # Get the patterns of "do()" and "don't()"
+    instructions = (
         r"do\(\)",  # for do()
         r"don't\(\)",  # for don't()
     )
@@ -87,7 +90,7 @@ def part2(input):
     # OR the patterns together into one big pattern.
     # A match will be found if it sees one of the three, meaning we have to
     # check each match to see which one it was
-    pattern = f"(({patterns[0]})|({patterns[1]})|({patterns[2]}))"
+    pattern = f"(({MUL})|({instructions[0]})|({instructions[1]}))"
 
     matches = re.finditer(pattern, input)
     for match in matches:
@@ -95,14 +98,14 @@ def part2(input):
         # It will either be "do()", "don't", or will start with "mul"
         string = match[0]
 
-        if string.startswith(MUL):
+        if string.startswith(MUL_PREFIX):
             # If the most recent instruction was "don't()", we don't bother
             # with doing any multiplication
             if not do:
                 continue
 
             # Get the ints within the "mul" instruction
-            mul = re.match(patterns[0], string)
+            mul = re.match(MUL, string)
             num1, num2 = parse_mul(mul)
 
             # Add to the final answer
