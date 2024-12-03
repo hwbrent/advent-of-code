@@ -63,6 +63,7 @@ def part2(input):
     multiplication of the 'mul' values
     """
 
+    MUL = "mul"
     DO = "do()"
     DONT = "don't()"
 
@@ -78,16 +79,16 @@ def part2(input):
 
     do = True
     for match in matches:
-        matched = match[0]
-        if matched.startswith("mul"):
+        string = match[0]
+        if string.startswith(MUL):
             if not do:
                 continue
-            mul = re.match(patterns[0], matched)
+            mul = re.match(patterns[0], string)
             num1, num2 = int(mul[1]), int(mul[2])
             answer += num1 * num2
-        elif matched == DO:
+        elif string == DO:
             do = True
-        elif matched == DONT:
+        elif string == DONT:
             do = False
         else:
             raise ValueError("tf happened")
