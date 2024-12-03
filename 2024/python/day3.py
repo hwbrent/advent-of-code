@@ -49,9 +49,9 @@ def part1(input) -> int:
     """
     answer = 0
     pattern = r"mul\((\d{1,3}),(\d{1,3})\)"
-    matches = re.findall(pattern, input)
+    matches = re.finditer(pattern, input)
     for match in matches:
-        num1, num2 = int(match[0]), int(match[1])
+        num1, num2 = int(match[1]), int(match[2])
         answer += num1 * num2
     return answer
 
