@@ -114,15 +114,17 @@ def part1(input: str):
 
             # Get the next chars above and to the left of the current char,
             # and combine them into a word
-            up_left_index = (row_i, col_i)
+            up_index = row_i
+            left_index = col_i
             while (
-                up_left_index[0] >= 0
-                and up_left_index[0] > row_i - 4
-                and up_left_index[1] >= 0
-                and up_left_index[1] > col_i - 4
+                up_index >= 0
+                and up_index > row_i - 4
+                and left_index >= 0
+                and left_index > col_i - 4
             ):
-                directions[4] += input[up_left_index[0]][up_left_index[1]]
-                up_left_index = (up_left_index[0] - 1, up_left_index[1] - 1)
+                directions[4] += input[up_index][left_index]
+                up_index -= 1
+                left_index -= 1
 
             # Get the next chars above and to the right of the current char,
             # and combine them into a word
