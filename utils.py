@@ -67,14 +67,8 @@ def part2(input):
 
 
 def main():
-    raw_input = utils.get_raw_input()
-    # fmt: off
-    # raw_input = \"\"\"\"\"\"
-    # fmt: on
-    parsed_input = parse_raw_input(raw_input)
-
-    utils.handle(part1(parsed_input))
-    utils.handle(part2(parsed_input))
+    utils.handle(part1)
+    utils.handle(part2)
 
 
 if __name__ == "__main__":
