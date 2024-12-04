@@ -130,39 +130,43 @@ def part1(input: str):
                 up_left_index = (up_left_index[0] - 1, up_left_index[1] - 1)
 
             # get up & right
-            up_right_index = (row_i, col_i)
+            up_index = row_i
+            right_index = col_i
             while (
-                up_right_index[0] >= 0
-                and up_right_index[0] > row_i - 4
-                and up_right_index[1] < row_length
-                and up_right_index[1] < col_i + 4
+                up_index >= 0
+                and up_index > row_i - 4
+                and right_index < row_length
+                and right_index < col_i + 4
             ):
-                directions[5] += input[up_right_index[0]][up_right_index[1]]
-                up_right_index = (up_right_index[0] - 1, up_right_index[1] + 1)
+                directions[5] += input[up_index][right_index]
+                up_index -= 1
+                right_index += 1
 
             # get down & left
-            down_left_index = (row_i, col_i)
+            down_index = row_i
+            left_index = col_i
             while (
-                down_left_index[0] < row_count
-                and down_left_index[0] < row_i + 4
-                and down_left_index[1] >= 0
-                and down_left_index[1] > col_i - 4
+                down_index < row_count
+                and down_index < row_i + 4
+                and left_index >= 0
+                and left_index > col_i - 4
             ):
-                directions[6] += input[down_left_index[0]][down_left_index[1]]
-                down_left_index = (down_left_index[0] + 1, down_left_index[1] - 1)
+                directions[6] += input[down_index][left_index]
+                down_index += 1
+                left_index -= 1
 
             # get down & right
-            down_right_index = (row_i, col_i)
+            down_index = row_i
+            right_index = col_i
             while (
-                down_right_index[0] < row_count
-                and down_right_index[0] < row_i + 4
-                and down_right_index[1] < row_length
-                and down_right_index[1] < col_i + 4
+                down_index < row_count
+                and down_index < row_i + 4
+                and right_index < row_length
+                and right_index < col_i + 4
             ):
-                directions[7] += input[down_right_index[0]][down_right_index[1]]
-                down_right_index = (down_right_index[0] + 1, down_right_index[1] + 1)
-
-            print(row_i, col_i, directions, "\n")
+                directions[7] += input[down_index][right_index]
+                down_index += 1
+                right_index += 1
 
             for direction in directions:
                 if direction != "XMAS":
