@@ -69,18 +69,33 @@ def part1(input: str):
         if char == os.linesep:
             continue
 
-        # get elements to:
-        # - left
-        # - right
-        # - above
-        # - below
-        # - diagonal:
-        #   - up and left
-        #   - up and right
-        #   - down and left
-        #   - down and right
+        # get chars to:
+        directions = [
+            "",  # left
+            "",  # right
+            "",  # up
+            "",  # down
+            # diagonal:
+            "",  # up & left
+            "",  # up & right
+            "",  # down & left
+            "",  # down & right
+        ]
 
-        pass
+        # get left
+        left_index = i
+        # move left until we hit the third neighbouring letter, or \n, or
+        # the edge of the string
+        while (left_index > i - 4 >= 0) and (input[left_index] != os.linesep):
+            directions[0] += input[left_index]
+            left_index -= 1
+
+        print(directions, "\n")
+
+        for direction in directions:
+            if direction != "XMAS":
+                continue
+            answer += 1
 
     return answer
 
