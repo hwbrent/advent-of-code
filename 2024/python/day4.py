@@ -53,15 +53,35 @@ Take a look at the little Elf's word search. How many times does XMAS appear?
 """
 
 
-def parse_raw_input(input: str) -> list[str]:
+def parse_raw_input(input: str) -> str:
     """
-    Returns the raw input stripped of outer whitespace and split into lines
+    Returns the raw input stripped of outer whitespace
     """
-    return input.strip().split("\n")
+    return input.strip()
 
 
-def part1(input):
-    answer = None
+def part1(input: str):
+    answer = 0
+
+    row_length = input.index(os.linesep)
+
+    for i, char in enumerate(input):
+        if char == os.linesep:
+            continue
+
+        # get elements to:
+        # - left
+        # - right
+        # - above
+        # - below
+        # - diagonal:
+        #   - up and left
+        #   - up and right
+        #   - down and left
+        #   - down and right
+
+        pass
+
     return answer
 
 
