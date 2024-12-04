@@ -67,10 +67,7 @@ def part1(input: str):
     row_count = len(input)  # the number of rows in the input
 
     for row_i, row in enumerate(input):
-        for col_i, char in enumerate(row):
-            if char == os.linesep:
-                continue
-
+        for col_i, _ in enumerate(row):
             # get chars to:
             directions = [
                 "",  # left
