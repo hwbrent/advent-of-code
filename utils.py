@@ -498,23 +498,17 @@ def generate_python_file(
 
 def get_raw_input() -> str:
     """
-    Using some ChatGPT-suggested magic, this function figures out the path
-    of the file it was called from, then using that info, returns the
-    corresponding problem input
+    This function figures out the year and day of the python file being
+    executed, and returns the corresponding problem input
     """
+    # get the python file being executed.
+    # e.g. '2024/python/day3.py'
+    py_file_path = sys.argv[0]
 
-    # Do some magic to figure out where this function was called from.
-    # Thank you ChatGPT for this haha. No idea what this code is doing tbh
-    file_path = inspect.getouterframes(inspect.currentframe(), 2)[1].filename
+    # get the corresponding input file
+    # e.g. '2024/inputs/day3.txt'
+    input_file_path = py_file_path.replace("python", "inputs").replace(".py", ".txt")
 
-    # The .stem part gets rid of the file extension
-    # e.g. "day13"
-    file_name = pathlib.Path(file_path).stem
-
-    inputs_dir_path = os.path.abspath(
-        os.path.join(file_path, os.pardir, os.pardir, "inputs")
-    )
-    input_file_path = os.path.join(inputs_dir_path, f"{file_name}.txt")
     with open(input_file_path) as f:
         return f.read()
 
@@ -523,12 +517,14 @@ part = 1
 
 
 def handle(
-    answer,
+    func,
+    input=get_raw_input(),
     message: str = "Part {part}:\t{answer}\t({duration} seconds)",
 ) -> None:
     global part
 
     start = time.time()
+    answer = func(input)
     end = time.time()
     duration = end - start
     print(message.format(part=part, answer=answer, duration=duration))
