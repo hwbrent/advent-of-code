@@ -116,6 +116,19 @@ def part1(input: str):
                 directions[3] += input[down_index][col_i]
                 down_index += 1
 
+            # get up & left
+            up_left_index = (row_i, col_i)
+            # move up & left until we hit the third neighbouring letter, or the
+            # top row or left edge
+            while (
+                up_left_index[0] >= 0
+                and up_left_index[0] > row_i - 4
+                and up_left_index[1] >= 0
+                and up_left_index[1] > col_i - 4
+            ):
+                directions[4] += input[up_left_index[0]][up_left_index[1]]
+                up_left_index = (up_left_index[0] - 1, up_left_index[1] - 1)
+
             print(row_i, col_i, directions, "\n")
 
             for direction in directions:
