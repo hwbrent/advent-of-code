@@ -72,8 +72,8 @@ def main():
     # fmt: on
     parsed_input = parse_raw_input(raw_input)
 
-    utils.handle(part1(parsed_input), 1)
-    utils.handle(part2(parsed_input), 2)
+    utils.handle(part1(parsed_input))
+    utils.handle(part2(parsed_input))
 
 
 if __name__ == "__main__":
@@ -519,15 +519,20 @@ def get_raw_input() -> str:
         return f.read()
 
 
+part = 1
+
+
 def handle(
     answer,
-    part: int,
     message: str = "Part {part}:\t{answer}\t({duration} seconds)",
 ) -> None:
+    global part
+
     start = time.time()
     end = time.time()
     duration = end - start
     print(message.format(part=part, answer=answer, duration=duration))
+    part += 1
 
 
 def main():
