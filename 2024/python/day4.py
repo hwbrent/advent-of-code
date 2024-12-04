@@ -175,19 +175,44 @@ def part1(input: str):
 
 
 def part2(input):
-    answer = None
+    answer = 0
+
+    row_count = len(input)  # the number of rows in the input
+    col_count = len(input[0])  # the number of columns (values in each row)
+
+    for row_i in range(1, row_count - 1):
+        for col_i in range(1, col_count - 1):
+            # the centre of the cross
+            centre = input[row_i][col_i]
+
+            # the characters diagonal to the centre
+            above_left = input[row_i - 1][col_i - 1]
+            above_right = input[row_i - 1][col_i + 1]
+            below_left = input[row_i + 1][col_i - 1]
+            below_right = input[row_i + 1][col_i + 1]
+
+            # get the strings represented by the diagonal characters
+            diag1 = above_left + centre + below_right
+            diag2 = above_right + centre + below_left
+            diag3 = diag1[::-1]
+            diag4 = diag2[::-1]
+
+            # if this is an x-mas, two of the diagonals will be "MAS". in
+            # that case, increment 'answer'
+            diagonals = diag1, diag2, diag3, diag4
+            mas_count = diagonals.count("MAS")
+            if mas_count == 2:
+                answer += 1
+
     return answer
 
 
 def main():
     raw_input = utils.get_raw_input()
-    # fmt: off
-    # raw_input = """"""
-    # fmt: on
     parsed_input = parse_raw_input(raw_input)
 
     utils.handle(part1(parsed_input), 1)  # 2496
-    utils.handle(part2(parsed_input), 2)
+    utils.handle(part2(parsed_input), 2)  # 1967
 
 
 if __name__ == "__main__":
