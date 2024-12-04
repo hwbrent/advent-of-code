@@ -129,8 +129,8 @@ def part2(answers: tuple[int, int]) -> int:
 
 
 def main():
-    utils.handle(part1)  # 572
-    utils.handle(part2)  # 612
+    utils.handle(part1)  # 572 (0.01081395149230957 seconds)
+    utils.handle(part2)  # 612 (0.011951208114624023 seconds)
 
 
 if __name__ == "__main__":
