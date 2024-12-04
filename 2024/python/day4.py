@@ -63,6 +63,7 @@ def parse_raw_input(input: str) -> str:
 def part1(input: str):
     answer = 0
 
+    overall_length = len(input)
     row_length = input.index(os.linesep)
 
     for i, char in enumerate(input):
@@ -89,6 +90,16 @@ def part1(input: str):
         while (left_index > i - 4 >= 0) and (input[left_index] != os.linesep):
             directions[0] += input[left_index]
             left_index -= 1
+
+        # get right
+        right_index = i
+        # move right until we hit the third neighbouring letter, or \n, or
+        # the edge of the string
+        while (right_index < i + 4 < overall_length) and (
+            input[right_index] != os.linesep
+        ):
+            directions[1] += input[right_index]
+            right_index += 1
 
         print(directions, "\n")
 
