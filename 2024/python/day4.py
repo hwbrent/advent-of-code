@@ -53,60 +53,58 @@ Take a look at the little Elf's word search. How many times does XMAS appear?
 """
 
 
-def parse_raw_input(input: str) -> str:
+def parse_raw_input(input: str) -> list[str]:
     """
-    Returns the raw input stripped of outer whitespace
+    Returns the raw input stripped of outer whitespace and split into lines
     """
-    return input.strip()
+    return input.strip().split(os.linesep)
 
 
 def part1(input: str):
     answer = 0
 
-    overall_length = len(input)
-    row_length = input.index(os.linesep)
+    row_length = len(input[0])
 
-    for i, char in enumerate(input):
-        if char == os.linesep:
-            continue
-
-        # get chars to:
-        directions = [
-            "",  # left
-            "",  # right
-            "",  # up
-            "",  # down
-            # diagonal:
-            "",  # up & left
-            "",  # up & right
-            "",  # down & left
-            "",  # down & right
-        ]
-
-        # get left
-        left_index = i
-        # move left until we hit the third neighbouring letter, or \n, or
-        # the edge of the string
-        while (left_index > i - 4 >= 0) and (input[left_index] != os.linesep):
-            directions[0] += input[left_index]
-            left_index -= 1
-
-        # get right
-        right_index = i
-        # move right until we hit the third neighbouring letter, or \n, or
-        # the edge of the string
-        while (right_index < i + 4 < overall_length) and (
-            input[right_index] != os.linesep
-        ):
-            directions[1] += input[right_index]
-            right_index += 1
-
-        print(directions, "\n")
-
-        for direction in directions:
-            if direction != "XMAS":
+    for row_i, row in enumerate(input):
+        for col_i, char in enumerate(row):
+            if char == os.linesep:
                 continue
-            answer += 1
+
+            # get chars to:
+            directions = [
+                "",  # left
+                "",  # right
+                "",  # up
+                "",  # down
+                # diagonal:
+                "",  # up & left
+                "",  # up & right
+                "",  # down & left
+                "",  # down & right
+            ]
+
+            # get left
+            left_index = col_i
+            # move left until we hit the third neighbouring letter, or the
+            # edge of the row
+            while left_index >= 0 and left_index > col_i - 4:
+                directions[0] += row[left_index]
+                left_index -= 1
+
+            # get right
+            right_index = col_i
+            # move right until we hit the third neighbouring letter, or the
+            # edge of the row
+            while right_index < row_length and right_index < col_i + 4:
+                directions[1] += row[right_index]
+                right_index += 1
+
+            print(directions, "\n")
+
+            for direction in directions:
+                if direction != "XMAS":
+                    continue
+                answer += 1
 
     return answer
 
