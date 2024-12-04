@@ -124,11 +124,8 @@ def part2(input) -> int:
 
 
 def main():
-    raw_input = utils.get_raw_input()
-    parsed_input = parse_raw_input(raw_input)
-
-    utils.handle(part1(parsed_input), 1)  # 1941353
-    utils.handle(part2(parsed_input), 2)  # 22539317
+    utils.handle(part1)  # 1941353  (0.003304004669189453 seconds)
+    utils.handle(part2)  # 22539317 (0.0016169548034667969 seconds)
 
 
 if __name__ == "__main__":

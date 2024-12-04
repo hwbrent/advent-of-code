@@ -129,11 +129,8 @@ def part2(answers: tuple[int, int]) -> int:
 
 
 def main():
-    raw_input = utils.get_raw_input()
-    parsed_input = parse_raw_input(raw_input)
-
-    utils.handle(part1(parsed_input), 1)  # 572
-    utils.handle(part2(parsed_input), 2)  # 612
+    utils.handle(part1)  # 572 (0.01081395149230957 seconds)
+    utils.handle(part2)  # 612 (0.011951208114624023 seconds)
 
 
 if __name__ == "__main__":

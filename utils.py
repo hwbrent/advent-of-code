@@ -2,9 +2,8 @@ import os
 import sys
 import datetime
 import urllib.parse
-import pathlib
-import inspect
 import time
+import importlib.util
 
 import requests
 import bs4
@@ -66,14 +65,8 @@ def part2(input):
 
 
 def main():
-    raw_input = utils.get_raw_input()
-    # fmt: off
-    # raw_input = \"\"\"\"\"\"
-    # fmt: on
-    parsed_input = parse_raw_input(raw_input)
-
-    utils.handle(part1(parsed_input), 1)
-    utils.handle(part2(parsed_input), 2)
+    utils.handle(part1)
+    utils.handle(part2)
 
 
 if __name__ == "__main__":
@@ -498,36 +491,46 @@ def generate_python_file(
 
 def get_raw_input() -> str:
     """
-    Using some ChatGPT-suggested magic, this function figures out the path
-    of the file it was called from, then using that info, returns the
-    corresponding problem input
+    This function figures out the year and day of the python file being
+    executed, and returns the corresponding problem input
     """
+    # get the python file being executed.
+    # e.g. '2024/python/day3.py'
+    py_file_path = sys.argv[0]
 
-    # Do some magic to figure out where this function was called from.
-    # Thank you ChatGPT for this haha. No idea what this code is doing tbh
-    file_path = inspect.getouterframes(inspect.currentframe(), 2)[1].filename
+    # get the corresponding input file
+    # e.g. '2024/inputs/day3.txt'
+    input_file_path = py_file_path.replace("python", "inputs").replace(".py", ".txt")
 
-    # The .stem part gets rid of the file extension
-    # e.g. "day13"
-    file_name = pathlib.Path(file_path).stem
-
-    inputs_dir_path = os.path.abspath(
-        os.path.join(file_path, os.pardir, os.pardir, "inputs")
-    )
-    input_file_path = os.path.join(inputs_dir_path, f"{file_name}.txt")
     with open(input_file_path) as f:
         return f.read()
 
 
+part = 1
+
+
 def handle(
-    answer,
-    part: int,
+    func,
+    input=get_raw_input(),
     message: str = "Part {part}:\t{answer}\t({duration} seconds)",
 ) -> None:
+    global part
+
+    # dynamically import the parse_raw_input function from the python file
+    file_path = sys.argv[0]
+    module_name = file_path.split("/")[-1].replace(".py", "")
+    spec = importlib.util.spec_from_file_location(module_name, file_path)
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[module_name] = module
+    spec.loader.exec_module(module)
+    parse_raw_input = module.parse_raw_input
+
     start = time.time()
+    answer = func(parse_raw_input(input))
     end = time.time()
     duration = end - start
     print(message.format(part=part, answer=answer, duration=duration))
+    part += 1
 
 
 def main():
