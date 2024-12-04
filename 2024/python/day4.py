@@ -53,8 +53,11 @@ Take a look at the little Elf's word search. How many times does XMAS appear?
 """
 
 
-def parse_raw_input(input: str):
-    return input
+def parse_raw_input(input: str) -> list[str]:
+    """
+    Returns the raw input stripped of outer whitespace and split into lines
+    """
+    return input.strip().split("\n")
 
 
 def part1(input):
