@@ -63,7 +63,8 @@ def parse_raw_input(input: str) -> list[str]:
 def part1(input: str):
     answer = 0
 
-    row_length = len(input[0])
+    row_length = len(input[0])  # the number of columns (values in each row)
+    row_count = len(input)  # the number of rows in the input
 
     for row_i, row in enumerate(input):
         for col_i, char in enumerate(row):
@@ -106,6 +107,14 @@ def part1(input: str):
             while up_index >= 0 and up_index > row_i - 4:
                 directions[2] += input[up_index][col_i]
                 up_index -= 1
+
+            # get down
+            down_index = row_i
+            # move down until we hit the third neighbouring letter, or the
+            # bottom row
+            while down_index < row_count and down_index < row_i + 4:
+                directions[3] += input[down_index][col_i]
+                down_index += 1
 
             print(row_i, col_i, directions, "\n")
 
