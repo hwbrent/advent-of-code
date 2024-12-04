@@ -5,6 +5,7 @@ import urllib.parse
 import pathlib
 import inspect
 import time
+import importlib.util
 
 import requests
 import bs4
@@ -523,8 +524,17 @@ def handle(
 ) -> None:
     global part
 
+    # dynamically import the parse_raw_input function from the python file
+    file_path = sys.argv[0]
+    module_name = file_path.split("/")[-1].replace(".py", "")
+    spec = importlib.util.spec_from_file_location(module_name, file_path)
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[module_name] = module
+    spec.loader.exec_module(module)
+    parse_raw_input = module.parse_raw_input
+
     start = time.time()
-    answer = func(input)
+    answer = func(parse_raw_input(input))
     end = time.time()
     duration = end - start
     print(message.format(part=part, answer=answer, duration=duration))
