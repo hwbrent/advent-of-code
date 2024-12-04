@@ -129,6 +129,39 @@ def part1(input: str):
                 directions[4] += input[up_left_index[0]][up_left_index[1]]
                 up_left_index = (up_left_index[0] - 1, up_left_index[1] - 1)
 
+            # get up & right
+            up_right_index = (row_i, col_i)
+            while (
+                up_right_index[0] >= 0
+                and up_right_index[0] > row_i - 4
+                and up_right_index[1] < row_length
+                and up_right_index[1] < col_i + 4
+            ):
+                directions[5] += input[up_right_index[0]][up_right_index[1]]
+                up_right_index = (up_right_index[0] - 1, up_right_index[1] + 1)
+
+            # get down & left
+            down_left_index = (row_i, col_i)
+            while (
+                down_left_index[0] < row_count
+                and down_left_index[0] < row_i + 4
+                and down_left_index[1] >= 0
+                and down_left_index[1] > col_i - 4
+            ):
+                directions[6] += input[down_left_index[0]][down_left_index[1]]
+                down_left_index = (down_left_index[0] + 1, down_left_index[1] - 1)
+
+            # get down & right
+            down_right_index = (row_i, col_i)
+            while (
+                down_right_index[0] < row_count
+                and down_right_index[0] < row_i + 4
+                and down_right_index[1] < row_length
+                and down_right_index[1] < col_i + 4
+            ):
+                directions[7] += input[down_right_index[0]][down_right_index[1]]
+                down_right_index = (down_right_index[0] + 1, down_right_index[1] + 1)
+
             print(row_i, col_i, directions, "\n")
 
             for direction in directions:
