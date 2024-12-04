@@ -99,7 +99,15 @@ def part1(input: str):
                 directions[1] += row[right_index]
                 right_index += 1
 
-            print(directions, "\n")
+            # get up
+            up_index = row_i
+            # move up until we hit the third neighbouring letter, or the
+            # top row
+            while up_index >= 0 and up_index > row_i - 4:
+                directions[2] += input[up_index][col_i]
+                up_index -= 1
+
+            print(row_i, col_i, directions, "\n")
 
             for direction in directions:
                 if direction != "XMAS":
