@@ -60,7 +60,21 @@ def parse_raw_input(input: str) -> list[str]:
     return input.strip().split(os.linesep)
 
 
-def part1(input: str):
+def part1(input: str) -> int:
+    """
+    For each char in the input:
+    - Get all the chars in these directions relative to the current char:
+      - left
+      - right
+      - up
+      - down
+      - up & left
+      - up & right
+      - down & left
+      - down & right
+    - Combine them to form full words
+    - For each word which is "XMAS", increment the answer
+    """
     answer = 0
 
     row_length = len(input[0])  # the number of columns (values in each row)
@@ -174,28 +188,40 @@ def part1(input: str):
     return answer
 
 
-def part2(input):
+def part2(input) -> int:
+    """
+    For each character which isn't on an outer row/column:
+    - Get the char at the centre of the cross
+    - Get the chars diagonal to the centre
+    - Concatenate them, and create reversed versions, to get the diagonal
+      words
+    - If two are "MAS", increment the answer
+    """
     answer = 0
 
     row_count = len(input)  # the number of rows in the input
     col_count = len(input[0])  # the number of columns (values in each row)
 
+    # Skip the first & last of each row & column, since there can't be a
+    # full cross there
     for row_i in range(1, row_count - 1):
         for col_i in range(1, col_count - 1):
             # the centre of the cross
             centre = input[row_i][col_i]
 
             # the characters diagonal to the centre
-            above_left = input[row_i - 1][col_i - 1]
+            # fmt: off
+            above_left  = input[row_i - 1][col_i - 1]
             above_right = input[row_i - 1][col_i + 1]
-            below_left = input[row_i + 1][col_i - 1]
+            below_left  = input[row_i + 1][col_i - 1]
             below_right = input[row_i + 1][col_i + 1]
 
             # get the strings represented by the diagonal characters
-            diag1 = above_left + centre + below_right
+            diag1 = above_left  + centre + below_right
             diag2 = above_right + centre + below_left
             diag3 = diag1[::-1]
             diag4 = diag2[::-1]
+            # fmt: on
 
             # if this is an x-mas, two of the diagonals will be "MAS". in
             # that case, increment 'answer'
