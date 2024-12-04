@@ -84,42 +84,37 @@ def part1(input: str):
                 "",  # down & right
             ]
 
-            # get left
+            # Get the next chars to the left of the current char, and
+            # combine them into a word
             left_index = col_i
-            # move left until we hit the third neighbouring letter, or the
-            # edge of the row
             while left_index >= 0 and left_index > col_i - 4:
                 directions[0] += row[left_index]
                 left_index -= 1
 
-            # get right
+            # Get the next chars to the right of the current char, and
+            # combine them into a word
             right_index = col_i
-            # move right until we hit the third neighbouring letter, or the
-            # edge of the row
             while right_index < row_length and right_index < col_i + 4:
                 directions[1] += row[right_index]
                 right_index += 1
 
-            # get up
+            # Get the next chars above the current char, and combine them
+            # into a word
             up_index = row_i
-            # move up until we hit the third neighbouring letter, or the
-            # top row
             while up_index >= 0 and up_index > row_i - 4:
                 directions[2] += input[up_index][col_i]
                 up_index -= 1
 
-            # get down
+            # Get the next chars below the current char, and combine them
+            # into a word
             down_index = row_i
-            # move down until we hit the third neighbouring letter, or the
-            # bottom row
             while down_index < row_count and down_index < row_i + 4:
                 directions[3] += input[down_index][col_i]
                 down_index += 1
 
-            # get up & left
+            # Get the next chars above and to the left of the current char,
+            # and combine them into a word
             up_left_index = (row_i, col_i)
-            # move up & left until we hit the third neighbouring letter, or the
-            # top row or left edge
             while (
                 up_left_index[0] >= 0
                 and up_left_index[0] > row_i - 4
@@ -129,7 +124,8 @@ def part1(input: str):
                 directions[4] += input[up_left_index[0]][up_left_index[1]]
                 up_left_index = (up_left_index[0] - 1, up_left_index[1] - 1)
 
-            # get up & right
+            # Get the next chars above and to the right of the current char,
+            # and combine them into a word
             up_index = row_i
             right_index = col_i
             while (
@@ -142,7 +138,8 @@ def part1(input: str):
                 up_index -= 1
                 right_index += 1
 
-            # get down & left
+            # Get the next chars below and to the left of the current char,
+            # and combine them into a word
             down_index = row_i
             left_index = col_i
             while (
@@ -155,7 +152,8 @@ def part1(input: str):
                 down_index += 1
                 left_index -= 1
 
-            # get down & right
+            # Get the next chars below and to the right of the current char,
+            # and combine them into a word
             down_index = row_i
             right_index = col_i
             while (
