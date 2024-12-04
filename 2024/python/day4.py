@@ -166,6 +166,7 @@ def part1(input: str):
                 down_index += 1
                 right_index += 1
 
+            # Check if any of the directional words form the word "XMAS"
             for direction in directions:
                 if direction != "XMAS":
                     continue
