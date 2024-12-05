@@ -77,12 +77,15 @@ Of course, you'll need to be careful: the actual list of page ordering rules is 
 Determine which updates are already in the correct order. What do you get if you add up the middle page number from those correctly-ordered updates?
 """
 
-Rules = dict[tuple[list[str], list[str]]]
+Rules = dict[tuple[set[str], set[str]]]
 """
 a `dict`, where each key is a number that can appear in an update, and the
-value is a tuple of two lists, where the first list contains the numbers
-that should appear before this number, and the second list contains the
+value is a tuple of two sets, where the first set contains the numbers
+that should appear before this number, and the second set contains the
 numbers that should appear after it
+
+We use sets so that we can more easily check for overlap (`intersection`)
+between the values in the rules and the actual values found in the updates
 """
 
 Updates = list[list[str]]
@@ -95,13 +98,15 @@ Input = tuple[Rules, Updates]
 
 def parse_raw_input(input: str) -> Input:
     input = input.strip()
+
+    # the two separate chunks of data
     raw_order_rules, raw_updates = input.split("\n\n")
 
     # each key will be a number, and each value will be a tuple of two lists,
     # where the first is the numbers that should appear before this number,
     # and the second is the numbers that should appear after this number
     rules = {}
-    get_entry = lambda num: rules.get(num, ([], []))  # before/after
+    get_entry = lambda num: rules.get(num, (set(), set()))  # before/after
 
     for line in raw_order_rules.split("\n"):
         # each line is two numbers separated by a pipe.
@@ -109,22 +114,63 @@ def parse_raw_input(input: str) -> Input:
         # somewhere before the second
         before, after = line.split("|")
 
+        # add 'after' to the set of numbers that should always be behind
+        # 'before'
         entry__before = get_entry(before)
-        entry__before[1].append(after)
+        entry__before[1].add(after)
 
+        # add 'before' to the set of numbers that should always be in front
+        # of 'after'
         entry__after = get_entry(after)
-        entry__after[0].append(before)
+        entry__after[0].add(before)
 
+        # add the updated entries back into 'rules'
         rules[before] = entry__before
         rules[after] = entry__after
 
+    # each line is a comma-separated collection of integers (as strings)
     updates = [line.split(",") for line in raw_updates.split("\n")]
 
     return rules, updates
 
 
-def part1(input):
-    answer = None
+def part1(input: Input):
+    answer = 0
+
+    rules, updates = input
+
+    for update in updates:
+        for i, num in enumerate(update):
+            # Get the surrounding values in the 'update' and put then into
+            # corresponding sets
+            update_before = set(update[:i])  # values before 'num'
+            update_after = set(update[i + 1 :])  # values after 'num'
+
+            # Get the orders that the rules dictate
+            rule_before, rule_after = rules[num]
+
+            # Check if there are any conflicts in terms of what the rules
+            # expect versus what's actually in the data. We do this by finding
+            # overlaps in the opposing sets of numbers (i.e. seeing if there
+            # are any numbers from the 'before' set in 'rules' that appear
+            # after 'num', and vice versa)
+            overlap1 = rule_before.intersection(update_after)
+            overlap2 = rule_after.intersection(update_before)
+
+            # If the two sets have 1 or more entries, this entire 'update'
+            # is invalid, so move onto the next 'update'
+            overlap_count = len(overlap1) + len(overlap2)
+            if overlap_count > 0:
+                break
+        else:
+            # If we never broke out of the loop above, that means this
+            # 'update' is okay. So grab the middle value, cast it to an int,
+            # and add it to the answer
+            middle_i = len(update) // 2
+            middle_str = update[middle_i]
+            middle_num = int(middle_str)
+            answer += middle_num
+
     return answer
 
 
@@ -134,7 +180,7 @@ def part2(input):
 
 
 def main():
-    utils.handle(part1)
+    utils.handle(part1)  # 7365 (0.00547027587890625 seconds)
     utils.handle(part2)
 
 
