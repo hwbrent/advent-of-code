@@ -78,8 +78,43 @@ Determine which updates are already in the correct order. What do you get if you
 """
 
 
-def parse_raw_input(input: str):
-    return input
+def parse_raw_input(input: str) -> tuple[dict, list]:
+    """
+    Returns a tuple where:
+    - The first element is a `dict`, where each key is a number that can
+      appear in an update, and the value is a tuple of two lists, where the
+      first list contains the numbers that should appear before this number,
+      and the second list contains the numbers that should appear after it
+    - The second element is a `list` of `list`s of `str`s, where each nested
+      `list` is an "update"
+    """
+    input = input.strip()
+    raw_order_rules, raw_updates = input.split("\n\n")
+
+    # each key will be a number, and each value will be a tuple of two lists,
+    # where the first is the numbers that should appear before this number,
+    # and the second is the numbers that should appear after this number
+    rules = {}
+    get_entry = lambda num: rules.get(num, ([], []))  # before/after
+
+    for line in raw_order_rules.split("\n"):
+        # each line is two numbers separated by a pipe.
+        # if both numbers are in an update, the first number must appear
+        # somewhere before the second
+        before, after = line.split("|")
+
+        entry__before = get_entry(before)
+        entry__before[1].append(after)
+
+        entry__after = get_entry(after)
+        entry__after[0].append(before)
+
+        rules[before] = entry__before
+        rules[after] = entry__after
+
+    updates = [line.split(",") for line in raw_updates.split("\n")]
+
+    return rules, updates
 
 
 def part1(input):
