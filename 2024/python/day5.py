@@ -200,16 +200,15 @@ def part2(input):
 
     rules, updates = input
 
-    # Convert rules to a list of tuples for easy comparison
-    rule_tuples = []
-    for key, (before, after) in rules.items():
-        for b in before:
-            rule_tuples.append((b, key))
-        for a in after:
-            rule_tuples.append((key, a))
-
     def compare(a, b):
-        return -1 if (a, b) in rule_tuples else 1 if (b, a) in rule_tuples else 0
+        _, a_after = rules[a]
+        b_before, _ = rules[b]
+
+        if b in a_after:
+            return -1
+        if a in b_before:
+            return 1
+        return 0
 
     key = cmp_to_key(compare)
 
