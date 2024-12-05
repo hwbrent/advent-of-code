@@ -1,5 +1,6 @@
 import os
 import sys
+from functools import cmp_to_key
 from pprint import PrettyPrinter
 
 pp = PrettyPrinter(indent=4)
@@ -195,7 +196,34 @@ def part1(input: Input):
 
 
 def part2(input):
-    answer = None
+    answer = 0
+
+    rules, updates = input
+
+    # Convert rules to a list of tuples for easy comparison
+    rule_tuples = []
+    for key, (before, after) in rules.items():
+        for b in before:
+            rule_tuples.append((b, key))
+        for a in after:
+            rule_tuples.append((key, a))
+
+    def compare(a, b):
+        return -1 if (a, b) in rule_tuples else 1 if (b, a) in rule_tuples else 0
+
+    key = cmp_to_key(compare)
+
+    for update in updates:
+        # Skip updates already in order
+        if is_correctly_ordered(update, rules):
+            continue
+
+        # Sort the update using the compare function
+        new_update = sorted(update, key=key)
+
+        # Add the middle page number to the answer
+        answer += int(new_update[len(new_update) // 2])
+
     return answer
 
 
