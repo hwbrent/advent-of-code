@@ -88,7 +88,8 @@ We use sets so that we can more easily check for overlap (`intersection`)
 between the values in the rules and the actual values found in the updates
 """
 
-Updates = list[list[str]]
+Update = list[str]
+Updates = list[Update]
 """
 A `list` of `list`s of `str`s, where each `str` is numeric
 """
@@ -134,42 +135,52 @@ def parse_raw_input(input: str) -> Input:
     return rules, updates
 
 
+def is_incorrectly_ordered(update: Update, rules: Rules) -> bool:
+    """
+    Returns False if an 'update' is in the wrong order (and vice versa)
+    according to 'rules'
+    """
+    for i, num in enumerate(update):
+        # Get the surrounding values in the 'update' and put then into
+        # corresponding sets
+        update_before = set(update[:i])  # values before 'num'
+        update_after = set(update[i + 1 :])  # values after 'num'
+
+        # Get the orders that the rules dictate
+        rule_before, rule_after = rules[num]
+
+        # Check if there are any conflicts in terms of what the rules
+        # expect versus what's actually in the data. We do this by finding
+        # overlaps in the opposing sets of numbers (i.e. seeing if there
+        # are any numbers from the 'before' set in 'rules' that appear
+        # after 'num', and vice versa)
+        overlap1 = rule_before.intersection(update_after)
+        overlap2 = rule_after.intersection(update_before)
+
+        # If the two sets have 1 or more entries, this entire 'update'
+        # is invalid, so move onto the next 'update'
+        overlap_count = len(overlap1) + len(overlap2)
+        if overlap_count > 0:
+            return True
+    return False
+
+
 def part1(input: Input):
     answer = 0
 
     rules, updates = input
 
     for update in updates:
-        for i, num in enumerate(update):
-            # Get the surrounding values in the 'update' and put then into
-            # corresponding sets
-            update_before = set(update[:i])  # values before 'num'
-            update_after = set(update[i + 1 :])  # values after 'num'
+        if is_incorrectly_ordered(update, rules):
+            continue
 
-            # Get the orders that the rules dictate
-            rule_before, rule_after = rules[num]
-
-            # Check if there are any conflicts in terms of what the rules
-            # expect versus what's actually in the data. We do this by finding
-            # overlaps in the opposing sets of numbers (i.e. seeing if there
-            # are any numbers from the 'before' set in 'rules' that appear
-            # after 'num', and vice versa)
-            overlap1 = rule_before.intersection(update_after)
-            overlap2 = rule_after.intersection(update_before)
-
-            # If the two sets have 1 or more entries, this entire 'update'
-            # is invalid, so move onto the next 'update'
-            overlap_count = len(overlap1) + len(overlap2)
-            if overlap_count > 0:
-                break
-        else:
-            # If we never broke out of the loop above, that means this
-            # 'update' is okay. So grab the middle value, cast it to an int,
-            # and add it to the answer
-            middle_i = len(update) // 2
-            middle_str = update[middle_i]
-            middle_num = int(middle_str)
-            answer += middle_num
+        # If we never broke out of the loop above, that means this
+        # 'update' is okay. So grab the middle value, cast it to an int,
+        # and add it to the answer
+        middle_i = len(update) // 2
+        middle_str = update[middle_i]
+        middle_num = int(middle_str)
+        answer += middle_num
 
     return answer
 
