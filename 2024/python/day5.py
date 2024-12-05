@@ -165,6 +165,17 @@ def is_incorrectly_ordered(update: Update, rules: Rules) -> bool:
     return False
 
 
+def get_middle_page_number(update: Update) -> int:
+    """
+    Given an 'update', this function finds the middle "page number" and
+    returns it as an `int`
+    """
+    index = len(update) // 2
+    string = update[index]
+    integer = int(string)
+    return integer
+
+
 def part1(input: Input):
     answer = 0
 
@@ -177,10 +188,7 @@ def part1(input: Input):
         # If we never broke out of the loop above, that means this
         # 'update' is okay. So grab the middle value, cast it to an int,
         # and add it to the answer
-        middle_i = len(update) // 2
-        middle_str = update[middle_i]
-        middle_num = int(middle_str)
-        answer += middle_num
+        answer += get_middle_page_number(update)
 
     return answer
 
