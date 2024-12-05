@@ -77,17 +77,23 @@ Of course, you'll need to be careful: the actual list of page ordering rules is 
 Determine which updates are already in the correct order. What do you get if you add up the middle page number from those correctly-ordered updates?
 """
 
+Rules = dict[tuple[list[str], list[str]]]
+"""
+a `dict`, where each key is a number that can appear in an update, and the
+value is a tuple of two lists, where the first list contains the numbers
+that should appear before this number, and the second list contains the
+numbers that should appear after it
+"""
 
-def parse_raw_input(input: str) -> tuple[dict, list]:
-    """
-    Returns a tuple where:
-    - The first element is a `dict`, where each key is a number that can
-      appear in an update, and the value is a tuple of two lists, where the
-      first list contains the numbers that should appear before this number,
-      and the second list contains the numbers that should appear after it
-    - The second element is a `list` of `list`s of `str`s, where each nested
-      `list` is an "update"
-    """
+Updates = list[list[str]]
+"""
+A `list` of `list`s of `str`s, where each `str` is numeric
+"""
+
+Input = tuple[Rules, Updates]
+
+
+def parse_raw_input(input: str) -> Input:
     input = input.strip()
     raw_order_rules, raw_updates = input.split("\n\n")
 
