@@ -219,10 +219,10 @@ def part2(input):
             continue
 
         # Sort the update using the compare function
-        new_update = sorted(update, key=key)
+        update.sort(key=key)
 
         # Add the middle page number to the answer
-        answer += int(new_update[len(new_update) // 2])
+        answer += get_middle_page_number(update)
 
     return answer
 
