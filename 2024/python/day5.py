@@ -165,6 +165,14 @@ def is_incorrectly_ordered(update: Update, rules: Rules) -> bool:
     return False
 
 
+def is_correctly_ordered(update: Update, rules: Rules) -> bool:
+    """
+    Returns True if an 'update' is in the wrong order (and vice versa)
+    according to 'rules'
+    """
+    return not is_incorrectly_ordered(update, rules)
+
+
 def get_middle_page_number(update: Update) -> int:
     """
     Given an 'update', this function finds the middle "page number" and
@@ -177,20 +185,13 @@ def get_middle_page_number(update: Update) -> int:
 
 
 def part1(input: Input):
-    answer = 0
-
     rules, updates = input
 
-    for update in updates:
-        if is_incorrectly_ordered(update, rules):
-            continue
-
-        # If we never broke out of the loop above, that means this
-        # 'update' is okay. So grab the middle value, cast it to an int,
-        # and add it to the answer
-        answer += get_middle_page_number(update)
-
-    return answer
+    return sum(
+        get_middle_page_number(update)
+        for update in updates
+        if is_correctly_ordered(update, rules)
+    )
 
 
 def part2(input):
