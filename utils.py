@@ -511,7 +511,7 @@ part = 1
 
 def handle(
     func,
-    input=get_raw_input(),
+    input: str = None,
     message: str = "Part {part}:\t{answer}\t({duration} seconds)",
 ) -> None:
     global part
@@ -526,7 +526,7 @@ def handle(
     parse_raw_input = module.parse_raw_input
 
     start = time.time()
-    answer = func(parse_raw_input(input))
+    answer = func(parse_raw_input(input or get_raw_input()))
     end = time.time()
     duration = end - start
     print(message.format(part=part, answer=answer, duration=duration))
