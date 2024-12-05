@@ -203,24 +203,25 @@ def part2(input):
     def compare(a, b):
         _, a_after = rules[a]
         b_before, _ = rules[b]
-
         if b in a_after:
             return -1
         if a in b_before:
             return 1
         return 0
 
-    key = cmp_to_key(compare)
+    # Convert 'compare' so it can be passed as the 'key' callback to '.sort()'
+    # or 'sorted()'
+    sort_key = cmp_to_key(compare)
 
     for update in updates:
         # Skip updates already in order
         if is_correctly_ordered(update, rules):
             continue
 
-        # Sort the update using the compare function
-        update.sort(key=key)
+        # Sort 'update' using 'compare'
+        update.sort(key=sort_key)
 
-        # Add the middle page number to the answer
+        # Get the middle page number, and add it to answer
         answer += get_middle_page_number(update)
 
     return answer
