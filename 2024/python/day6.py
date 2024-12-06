@@ -304,6 +304,33 @@ def part2(input: Input):
             # top-right is 1 below bottom-right and 1 to the left of top-right
             # bottom_right = (bottom_left[0] + 1, top_right[1] - 1)
 
+        ###################################################
+        ### Check if this obstacle is a top-right corner ###
+        ###################################################
+        # top-left coordinates:
+        # - row is one less than obstacle's
+        # - col is some amount smaller than obstacle's
+        top_left_candidates = [
+            (row_i, col_i)
+            for row_i, col_i in obstacles
+            if row_i == orow_i - 1 and col_i < ocol_i
+        ]
+        # bottom right coordinates:
+        # - col is 1 less than obstacle's
+        # - row is some amount bigger than obstacle's
+        bottom_right_candidates = [
+            (row_i, col_i)
+            for row_i, col_i in obstacles
+            if col_i == ocol_i - 1 and row_i > orow_i
+        ]
+        if len(top_left_candidates) > 0 and len(bottom_right_candidates) > 0:
+            top_right = obstacle
+            # top_left = something
+            # bottom_right = something
+
+            # bottom-left is 1 above bottom-right and 1 to left of top-left
+            # bottom_left = (bottom_right[0] - 1, top_left[1] - 1)
+
     return answer
 
 
