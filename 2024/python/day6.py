@@ -298,11 +298,6 @@ def part2(input: Input):
         ]
         if len(bottom_left_candidates) > 0 and len(top_right_candidates) > 0:
             top_left = obstacle
-            # top_right = something
-            # bottom_left = something
-
-            # top-right is 1 below bottom-right and 1 to the left of top-right
-            # bottom_right = (bottom_left[0] + 1, top_right[1] - 1)
 
         ###################################################
         ### Check if this obstacle is a top-right corner ###
@@ -325,11 +320,6 @@ def part2(input: Input):
         ]
         if len(top_left_candidates) > 0 and len(bottom_right_candidates) > 0:
             top_right = obstacle
-            # top_left = something
-            # bottom_right = something
-
-            # bottom-left is 1 above bottom-right and 1 to left of top-left
-            # bottom_left = (bottom_right[0] - 1, top_left[1] - 1)
 
         ######################################################
         ### Check if this obstacle is a bottom-left corner ###
@@ -352,11 +342,6 @@ def part2(input: Input):
         ]
         if len(top_left_candidates) > 0 and len(bottom_right_candidates) > 0:
             bottom_left = obstacle
-            # top_left = something
-            # bottom_right = something
-
-            # top-right is 1 below top-left and 1 to the right of bottom-right
-            # top_right = (top_left[0] - 1, bottom_right[1] + 1)
 
         #######################################################
         ### Check if this obstacle is a bottom-right corner ###
@@ -379,11 +364,6 @@ def part2(input: Input):
         ]
         if len(bottom_left_candidates) > 0 and len(top_right_candidates) > 0:
             bottom_right = obstacle
-            # bottom_left = something
-            # top_right = something
-
-            # top-left is 1 above bottom-left and 1 to the left of top-right
-            # top_left = (bottom_left[0] - 1, top_right[1] - 1)
 
     return answer
 
