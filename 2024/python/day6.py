@@ -248,6 +248,8 @@ def part2(input: Input):
 
     - For loop in loops:
         - For corner in loop:
+            - Check if the coordinate is actually within the bounds of the
+              input. If not, obviously this loop isn't valid
             - Check if the guard ever visited the correct side
               (e.g. if we're talking about the bottom left corner, the guard
               would have to have visited the square to the right of it,
