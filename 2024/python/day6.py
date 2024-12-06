@@ -157,7 +157,7 @@ def get_visited(input: Input) -> set[tuple[int, int]]:
     """
     Returns the set of positions that the guard visits
     """
-    positions = set()
+    visited = set()
 
     row_count = len(input)
     col_count = len(input[0])
@@ -170,13 +170,13 @@ def get_visited(input: Input) -> set[tuple[int, int]]:
     position = (row_i, col_i)
 
     # record initial position in set
-    positions.add(position)
+    visited.add(position)
 
     direction = UP  # left/right, up/down
 
     # i = 0
     while True:
-        # print(i, positions)
+        # print(i, visited)
         # i += 1
 
         # figure out what the next position will be
@@ -194,9 +194,9 @@ def get_visited(input: Input) -> set[tuple[int, int]]:
             continue
 
         position = next_pos
-        positions.add(position)
+        visited.add(position)
 
-    return positions
+    return visited
 
 
 def part1(input: Input) -> int:
