@@ -204,7 +204,7 @@ def part1(input: Input) -> int:
     return len(positions)
 
 
-def part2(input):
+def part2(input: Input):
     """
     This is how a loop has to look:
 
@@ -256,6 +256,17 @@ def part2(input):
             - If yes, this loop is valid. Else, it's not
     """
     answer = 0
+
+    # Get the coords of all the obstacles
+    obstacles = [
+        (row_i, col_i)
+        for row_i, row in enumerate(input)
+        for col_i, char in enumerate(row)
+        if char == OBSTACLE
+    ]
+
+    print(obstacles)
+
     return answer
 
 
