@@ -329,6 +329,12 @@ def part2(input: Input):
         ]
         if len(top_left_candidates) > 0 and len(bottom_right_candidates) > 0:
             top_right = obstacle
+            combos = it.product(top_left_candidates, bottom_right_candidates)
+            for tl, br in combos:
+                # Find the bottom left. it's 1 col less than tl and 1 row
+                # less than br
+                bottom_left = (br[0] - 1, tl[1] - 1)
+                possible_loops.append(tl, top_right, bottom_left, br)
 
         ######################################################
         ### Check if this obstacle is a bottom-left corner ###
