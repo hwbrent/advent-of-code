@@ -281,15 +281,15 @@ def part2(input: Input):
         ### Check if this obstacle is a top-left corner ###
         ###################################################
         # BL coordinates:
-        # - col is one less than obstacle
-        # - row is next biggest after obstacle's
+        # - col is one less than obstacle's
+        # - row is some amount bigger than obstacle's
         bottom_left_candidates = [
             (row_i, col_i)
             for row_i, col_i in obstacles
             if col_i == ocol_i - 1 and row_i > orow_i
         ]
         # Top right coordinates:
-        # - col is next biggest after obstacle's than obstacle
+        # - col is some amount bigger than obstacle's
         # - row is one more than obstacle's
         top_right_candidates = [
             (row_i, col_i)
@@ -298,10 +298,11 @@ def part2(input: Input):
         ]
         if len(bottom_left_candidates) > 0 and len(top_right_candidates) > 0:
             top_left = obstacle
-            top_right = min(top_right_candidates, key=lambda coord: coord[1])
-            bottom_left = min(bottom_left_candidates, key=lambda coord: coord[0])
+            # top_right = min(top_right_candidates, key=lambda coord: coord[1])
+            # bottom_left = min(bottom_left_candidates, key=lambda coord: coord[0])
+
             # top-right is 1 below bottom-right and 1 to the left of top-right
-            bottom_right = (bottom_left[0] + 1, top_right[1] - 1)
+            # bottom_right = (bottom_left[0] + 1, top_right[1] - 1)
 
     return answer
 
