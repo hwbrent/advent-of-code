@@ -153,7 +153,10 @@ def at(position, input):
     return input[row_i][col_i]
 
 
-def part1(input: Input) -> int:
+def get_visited(input: Input) -> set[tuple[int, int]]:
+    """
+    Returns the set of positions that the guard visits
+    """
     positions = set()
 
     row_count = len(input)
@@ -193,6 +196,11 @@ def part1(input: Input) -> int:
         position = next_pos
         positions.add(position)
 
+    return positions
+
+
+def part1(input: Input) -> int:
+    positions = get_visited(input)
     return len(positions)
 
 
