@@ -277,9 +277,9 @@ def part2(input: Input):
         bottom_left = None
         bottom_right = None
 
-        ####################################################
-        ### Check if this obstacle is a top-right corner ###
-        ####################################################
+        ###################################################
+        ### Check if this obstacle is a top-left corner ###
+        ###################################################
         # BL coordinates:
         # - col is one less than obstacle
         # - row is next biggest after obstacle's
