@@ -171,7 +171,11 @@ def part1(input: Input) -> int:
 
     direction = UP  # left/right, up/down
 
+    # i = 0
     while True:
+        # print(i, positions)
+        # i += 1
+
         # figure out what the next position will be
         next_pos = move(position, direction)
 
@@ -198,7 +202,20 @@ def part2(input):
 
 
 def main():
-    utils.handle(part1)
+    utils.handle(
+        part1,
+        #         """....#.....
+        # .........#
+        # ..........
+        # ..#.......
+        # .......#..
+        # ..........
+        # .#..^.....
+        # ........#.
+        # #.........
+        # ......#...
+        # """,
+    )  # 5312 (0.0061991214752197266 seconds)
     utils.handle(part2)
 
 
