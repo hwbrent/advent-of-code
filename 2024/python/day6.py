@@ -108,9 +108,87 @@ def parse_raw_input(input: str) -> Input:
     return [[char for char in line] for line in input.strip().split(os.linesep)]
 
 
+CARET = "^"
+OBSTACLE = "#"
+
+
+# fmt: off
+UP    = ( 0, -1)
+DOWN  = ( 0,  1)
+LEFT  = (-1,  0)
+RIGHT = ( 1,  0)
+# fmt: on
+
+
+def move(position, direction) -> tuple[int, int]:
+    return (
+        position[0] + direction[0],
+        position[1] + direction[1],
+    )
+
+
+def turn(direction) -> tuple[int, int]:
+    if direction == UP:
+        return RIGHT
+    if direction == RIGHT:
+        return DOWN
+    if direction == DOWN:
+        return LEFT
+    if direction == LEFT:
+        return UP
+
+
+def out_of_bounds(position, row_count, col_count):
+    row_i, col_i = position
+
+    row_invalid = row_i < 0 or row_i >= row_count
+    col_invalid = col_i < 0 or col_i >= col_count
+
+    return row_invalid or col_invalid
+
+
+def at(position, input):
+    row_i, col_i = position
+    return input[row_i][col_i]
+
+
 def part1(input: Input) -> int:
-    answer = None
-    return answer
+    positions = set()
+
+    row_count = len(input)
+    col_count = len(input[0])
+
+    # Find the initial position of the guard.
+    # Get the index of the row in which ^ appears, and the index of ^ within
+    # the row
+    row_i = next(i for i, row in enumerate(input) if CARET in row)
+    col_i = input[row_i].index(CARET)
+    position = (row_i, col_i)
+
+    # record initial position in set
+    positions.add(position)
+
+    direction = UP  # left/right, up/down
+
+    while True:
+        # figure out what the next position will be
+        next_pos = move(position, direction)
+
+        # if the guard left the area, break
+        if out_of_bounds(next_pos, row_count, col_count):
+            break
+
+        # if the guard is in front of an obstacle, turn, but don't move right
+        # now, because she could also be blocked in the new direction, so
+        # skip to the next loop to determine that
+        if at(next_pos, input) == OBSTACLE:
+            direction = turn(direction)
+            continue
+
+        position = next_pos
+        positions.add(position)
+
+    return len(positions)
 
 
 def part2(input):
