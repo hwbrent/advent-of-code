@@ -101,12 +101,14 @@ In this example, the guard will visit 41 distinct positions on your map.
 Predict the path of the guard. How many distinct positions will the guard visit before leaving the mapped area?
 """
 
-
-def parse_raw_input(input: str):
-    return input
+Input = list[list[str]]
 
 
-def part1(input):
+def parse_raw_input(input: str) -> Input:
+    return [[char for char in line] for line in input.strip().split(os.linesep)]
+
+
+def part1(input: Input) -> int:
     answer = None
     return answer
 
