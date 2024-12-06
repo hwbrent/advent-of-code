@@ -197,7 +197,57 @@ def part1(input: Input) -> int:
 
 
 def part2(input):
-    answer = None
+    """
+    This is how a loop has to look:
+
+     x
+            x
+    x
+           x
+
+    Corners of the rectangle:
+    - Top left:
+      - 1 above the top right
+      - 1 to the right of the bottom left
+    - Top right:
+      - 1 below the top left
+      - 1 to the right of the bottom right
+    - Bottom left:
+      - 1 above the bottom right
+      - 1 to the left of the top left
+    - Bottom right:
+      - 1 below the bottom left
+      - 1 to left of top right
+
+    So each "corner" is 1 above/below another, and 1 left/right of another
+
+    Each obstacle could be any of the four types of corner.
+
+    Potential algorithm to get loops:
+    - For each obstacle in the grid:
+        - For each type of corner:
+            - Find where the other two adjacent corners would be
+              (i.e. if this corner is bottom right, we find the bottom left
+              and top right)
+            - If we can't find those, continue
+            - If we can, use the distances between the three corners to
+              figure out where the fourth corner should be
+            - In theory, there shouldn't be a corner there already. Record
+              that location as a place for a loop
+
+    Then we have to confirm if the potential loops are loops that the guard
+    could actually end up in. Algorithm:
+
+    - For loop in loops:
+        - For corner in loop:
+            - Check if the guard ever visited the correct side
+              (e.g. if we're talking about the bottom left corner, the guard
+              would have to have visited the square to the right of it,
+              because she would then turn 90˚ and go up and hit the top
+              left)
+            - If yes, this loop is valid. Else, it's not
+    """
+    answer = 0
     return answer
 
 
