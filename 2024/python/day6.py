@@ -1,5 +1,6 @@
 import os
 import sys
+import itertools as it
 from pprint import PrettyPrinter
 
 pp = PrettyPrinter(indent=4)
@@ -269,6 +270,8 @@ def part2(input: Input):
 
     # print(obstacles)
 
+    possible_loops = []
+
     for obstacle in obstacles:
         orow_i, ocol_i = obstacle  # 'o' prefix for 'obstacle'
 
@@ -298,6 +301,12 @@ def part2(input: Input):
         ]
         if len(bottom_left_candidates) > 0 and len(top_right_candidates) > 0:
             top_left = obstacle
+            combos = it.product(bottom_left_candidates, top_right_candidates)
+            for bl, tr in combos:
+                # Find the bottom right. it's 1 col less than tr and 1 row
+                # more than bl
+                bottom_right = (bl[0] + 1, tr[1] - 1)
+                possible_loops.append(top_left, tr, bl, bottom_right)
 
         ###################################################
         ### Check if this obstacle is a top-right corner ###
