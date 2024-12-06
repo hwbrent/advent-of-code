@@ -331,6 +331,60 @@ def part2(input: Input):
             # bottom-left is 1 above bottom-right and 1 to left of top-left
             # bottom_left = (bottom_right[0] - 1, top_left[1] - 1)
 
+        ######################################################
+        ### Check if this obstacle is a bottom-left corner ###
+        ######################################################
+        # Top-left coordinates:
+        # - col is one more than obstacle's
+        # - row is some amount smaller than obstacle's
+        top_left_candidates = [
+            (row_i, col_i)
+            for row_i, col_i in obstacles
+            if col_i == ocol_i + 1 and row_i < orow_i
+        ]
+        # Bottom-right coordinates:
+        # - col is some amount bigger than obstacle's
+        # - row is one more than obstacle's
+        bottom_right_candidates = [
+            (row_i, col_i)
+            for row_i, col_i in obstacles
+            if row_i == orow_i + 1 and col_i > ocol_i
+        ]
+        if len(top_left_candidates) > 0 and len(bottom_right_candidates) > 0:
+            bottom_left = obstacle
+            # top_left = something
+            # bottom_right = something
+
+            # top-right is 1 below top-left and 1 to the right of bottom-right
+            # top_right = (top_left[0] - 1, bottom_right[1] + 1)
+
+        #######################################################
+        ### Check if this obstacle is a bottom-right corner ###
+        #######################################################
+        # Bottom-left coordinates:
+        # - row is 1 less than obstacle's
+        # - col is some amount smaller than obstacle's
+        bottom_left_candidates = [
+            (row_i, col_i)
+            for row_i, col_i in obstacles
+            if row_i == orow_i - 1 and col_i < ocol_i
+        ]
+        # Top-right coordinates:
+        # - col is 1 bigger than obstacle's
+        # - row is some amount smaller than obstacle's
+        top_right_candidates = [
+            (row_i, col_i)
+            for row_i, col_i in obstacles
+            if col_i == ocol_i + 1 and row_i < orow_i
+        ]
+        if len(bottom_left_candidates) > 0 and len(top_right_candidates) > 0:
+            bottom_right = obstacle
+            # bottom_left = something
+            # top_right = something
+
+            # top-left is 1 above bottom-left and 1 to the left of top-right
+            # top_left = (bottom_left[0] - 1, top_right[1] - 1)
+
     return answer
 
 
