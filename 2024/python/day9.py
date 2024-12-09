@@ -56,7 +56,11 @@ Compact the amphipod's hard drive using the process he requested. What is the re
 
 
 def parse_raw_input(input: str):
-    return input
+    input = input.strip()
+    length = len(input)
+    files = [int(input[i]) for i in range(0, length)]
+    free_space = [int(input[i]) for i in range(1, length)]
+    return files, free_space
 
 
 def part1(input):
