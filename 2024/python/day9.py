@@ -56,11 +56,23 @@ Compact the amphipod's hard drive using the process he requested. What is the re
 
 
 def parse_raw_input(input: str):
-    input = input.strip()
-    length = len(input)
-    files = [int(input[i]) for i in range(0, length)]
-    free_space = [int(input[i]) for i in range(1, length)]
-    return files, free_space
+    disk_map = input.strip()
+
+    counts = []  # the number of times a file appears
+    ids = []  # the id of each file
+    free_space = []  # the number of free spaces between files
+
+    for i, char in enumerate(disk_map):
+        num = int(char)
+        if i % 2 == 0:
+            counts.append(num)
+            ids.append(int(i / 2))
+        else:
+            free_space.append(num)
+
+    free_space.append(0)  # to make it the same length as 'counts' and 'ids'
+
+    return disk_map, counts, ids, free_space
 
 
 def part1(input):
