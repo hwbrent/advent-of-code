@@ -76,7 +76,53 @@ def parse_raw_input(input: str):
 
 
 def part1(input):
-    answer = None
+    disk_map, counts, ids, free_space = input
+    # print(disk_map, "\n")
+
+    print(disk_map)
+    print(counts)
+    print(ids)
+    print(free_space, "\n")
+
+    # figure out the spaced-out representation that 'disk_map' delineates
+    spaced = []
+    for id, count, spaces in zip(ids, counts, free_space):
+        for _ in range(count):
+            spaced.append(id)
+        for _ in range(spaces):
+            spaced.append(".")
+
+    print("".join([str(num) for num in spaced]), "\n")
+
+    # compress 'spaced'
+    i = 0
+    while i < len(spaced):
+        # get the entry at this index in 'spaced'. if it's a number, skip it
+        entry = spaced[i]
+        if entry != ".":
+            i += 1
+            continue
+
+        # get the digit from the back of 'spaced' and add it to this
+        # index. we can't just 'pop' because the last element could be
+        # '.', so we keep popping until we get a number
+        to_insert = "."
+        while to_insert == ".":
+            to_insert = spaced.pop()
+
+        # replace '.' with the number popped off the back of 'spaced'
+        spaced[i] = to_insert
+
+        i += 1
+
+    print(repr("".join([str(num) for num in spaced])), "\n")
+
+    answer = 0
+
+    # figure out the checksum
+    for i, num in enumerate(spaced):
+        answer += i * num
+
     return answer
 
 
@@ -86,6 +132,7 @@ def part2(input):
 
 
 def main():
+    # utils.handle(part1, "2333133121414131402")
     utils.handle(part1)
     utils.handle(part2)
 
