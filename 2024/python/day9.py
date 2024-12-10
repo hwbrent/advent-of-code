@@ -111,7 +111,10 @@ def part1(input):
             to_insert = spaced.pop()
 
         # replace '.' with the number popped off the back of 'spaced'
-        spaced[i] = to_insert
+        try:
+            spaced[i] = to_insert
+        except:
+            spaced.append(to_insert)
 
         i += 1
 
@@ -132,8 +135,9 @@ def part2(input):
 
 
 def main():
+    utils.handle(part1)  # 6415184586041 (0.15229582786560059 seconds)
     # utils.handle(part1, "2333133121414131402")
-    utils.handle(part1)
+    # utils.handle(part1, "12345")
     utils.handle(part2)
 
 
