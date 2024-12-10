@@ -75,6 +75,16 @@ def parse_raw_input(input: str):
     return disk_map, counts, ids, free_space
 
 
+def get_spaced(ids, counts, free_space):
+    spaced = []
+    for id, count, spaces in zip(ids, counts, free_space):
+        for _ in range(count):
+            spaced.append(id)
+        for _ in range(spaces):
+            spaced.append(".")
+    return spaced
+
+
 def part1(input):
     disk_map, counts, ids, free_space = input
     # print(disk_map, "\n")
@@ -85,12 +95,7 @@ def part1(input):
     print(free_space, "\n")
 
     # figure out the spaced-out representation that 'disk_map' delineates
-    spaced = []
-    for id, count, spaces in zip(ids, counts, free_space):
-        for _ in range(count):
-            spaced.append(id)
-        for _ in range(spaces):
-            spaced.append(".")
+    spaced = get_spaced(ids, counts, free_space)
 
     print("".join([str(num) for num in spaced]), "\n")
 
