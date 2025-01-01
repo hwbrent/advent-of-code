@@ -129,6 +129,15 @@ def get_num(coord, input) -> int:
     return input[row][col]
 
 
+def in_range(coord, rows, cols) -> bool:
+    """
+    Returns a `bool` indicating whether the given `coord` is within the
+    bounds of the input
+    """
+    row, col = coord
+    return row in range(rows) and col in range(cols)
+
+
 def part1(input):
     answer = None
     trailheads = get_trailheads(input)
