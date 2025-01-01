@@ -139,9 +139,57 @@ def in_range(coord, rows, cols) -> bool:
 
 
 def part1(input):
-    answer = None
+    rows = len(input)
+    cols = len(input[0])
+
     trailheads = get_trailheads(input)
-    pp.pprint(trailheads)
+
+    print(trailheads)
+
+    scores = {trailhead: 0 for trailhead in trailheads}
+
+    def recurse(coord, head):
+        # figure out the number of the current pos
+        current_num = get_num(coord, input)
+
+        # if we've reached the end of a trail, increment the score for this
+        # specific trail head, and stop recursing
+        if current_num == 9:
+            scores[head] += 1
+            return
+
+        # otherwise, continue moving along the trail
+
+        # figure out the next number to move onto
+        next_num = current_num + 1
+
+        # get the surrounding coords
+        surrounding = (
+            get_above(coord),
+            get_below(coord),
+            get_left(coord),
+            get_right(coord),
+        )
+
+        # figure out which of the surrounding coords can be moved to
+        eligible = (
+            entry
+            for entry in surrounding
+            if in_range(entry, rows, cols) and get_num(entry, input) == next_num
+        )
+
+        # recurse on the eligible surrounding coords
+        for entry in eligible:
+            recurse(entry, entry)
+
+    # start recursing on the trailheads
+    for head in trailheads:
+        recurse(head, head)
+
+    print(scores)
+
+    # sum up the scores of all the trailheads
+    answer = sum(scores.values())
     return answer
 
 
@@ -151,7 +199,19 @@ def part2(input):
 
 
 def main():
-    utils.handle(part1)
+    utils.handle(
+        part1,
+        """
+89010123
+78121874
+87430965
+96549874
+45678903
+32019012
+01329801
+10456732
+""",
+    )
     utils.handle(part2)
 
 
