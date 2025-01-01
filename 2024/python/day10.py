@@ -180,7 +180,7 @@ def part1(input):
 
         # recurse on the eligible surrounding coords
         for entry in eligible:
-            recurse(entry, entry)
+            recurse(entry, head)
 
     # start recursing on the trailheads
     for head in trailheads:
