@@ -89,6 +89,38 @@ def get_trailheads(input) -> list[tuple]:
     return coords
 
 
+def get_above(coord):
+    """
+    Gets the coordinate above `coord`
+    """
+    row, col = coord
+    return (row - 1, col)
+
+
+def get_below(coord):
+    """
+    Gets the coordinate below `coord`
+    """
+    row, col = coord
+    return (row + 1, col)
+
+
+def get_left(coord):
+    """
+    Gets the coordinate left of `coord`
+    """
+    row, col = coord
+    return (row, col - 1)
+
+
+def get_right(coord):
+    """
+    Gets the coordinate right of `coord`
+    """
+    row, col = coord
+    return (row, col + 1)
+
+
 def part1(input):
     answer = None
     trailheads = get_trailheads(input)
