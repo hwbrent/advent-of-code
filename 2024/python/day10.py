@@ -72,7 +72,7 @@ The reindeer gleefully carries over a protractor and adds it to the pile. What i
 
 
 def parse_raw_input(input: str):
-    return input
+    return [[int(char) for char in row] for row in input.strip().split(os.linesep)]
 
 
 def part1(input):
