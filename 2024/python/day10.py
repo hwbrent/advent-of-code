@@ -121,6 +121,14 @@ def get_right(coord):
     return (row, col + 1)
 
 
+def get_num(coord, input) -> int:
+    """
+    Get the numeric value at the given `coord`
+    """
+    row, col = coord
+    return input[row][col]
+
+
 def part1(input):
     answer = None
     trailheads = get_trailheads(input)
