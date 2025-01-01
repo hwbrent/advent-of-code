@@ -75,8 +75,24 @@ def parse_raw_input(input: str):
     return [[int(char) for char in row] for row in input.strip().split(os.linesep)]
 
 
+def get_trailheads(input) -> list[tuple]:
+    """
+    Returns a list of the coordinates of trailheads (zeros)
+    """
+    coords = []
+    for row_i, row in enumerate(input):
+        for col_i, num in enumerate(row):
+            if num != 0:
+                continue
+            coord = (row_i, col_i)
+            coords.append(coord)
+    return coords
+
+
 def part1(input):
     answer = None
+    trailheads = get_trailheads(input)
+    pp.pprint(trailheads)
     return answer
 
 
