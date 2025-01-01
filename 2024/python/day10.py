@@ -89,7 +89,7 @@ def get_trailheads(input) -> list[tuple]:
     return coords
 
 
-def get_above(coord):
+def get_above(coord) -> tuple[int, int]:
     """
     Gets the coordinate above `coord`
     """
@@ -97,7 +97,7 @@ def get_above(coord):
     return (row - 1, col)
 
 
-def get_below(coord):
+def get_below(coord) -> tuple[int, int]:
     """
     Gets the coordinate below `coord`
     """
@@ -105,7 +105,7 @@ def get_below(coord):
     return (row + 1, col)
 
 
-def get_left(coord):
+def get_left(coord) -> tuple[int, int]:
     """
     Gets the coordinate left of `coord`
     """
@@ -113,7 +113,7 @@ def get_left(coord):
     return (row, col - 1)
 
 
-def get_right(coord):
+def get_right(coord) -> tuple[int, int]:
     """
     Gets the coordinate right of `coord`
     """
