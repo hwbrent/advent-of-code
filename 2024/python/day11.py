@@ -65,7 +65,7 @@ Consider the arrangement of stones in front of you. How many stones will you hav
 
 
 def parse_raw_input(input: str):
-    return input
+    return [int(entry) for entry in input.strip().split()]
 
 
 def part1(input):
