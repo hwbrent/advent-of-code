@@ -87,7 +87,7 @@ What is the total price of fencing all regions on your map?
 
 
 def parse_raw_input(input: str):
-    return input
+    return [[char for char in line.strip()] for line in input.strip().split(os.linesep)]
 
 
 def part1(input):
