@@ -1,5 +1,6 @@
 import os
 import sys
+import copy
 from pprint import PrettyPrinter
 
 pp = PrettyPrinter(indent=4)
@@ -90,6 +91,19 @@ def parse_raw_input(input: str):
     return [[char for char in line.strip()] for line in input.strip().split(os.linesep)]
 
 
+def in_range(coord, input) -> bool:
+    row_count = len(input)
+    col_count = len(input[0])
+
+    row, col = coord
+    return row in range(row_count) and col in range(col_count)
+
+
+def get_type(coord, input) -> str:
+    row, col = coord
+    return input[row][col]
+
+
 def part1(input):
     """
     Delineate the regions
@@ -117,6 +131,54 @@ def part1(input):
     """
 
     answer = None
+
+    regions = []
+    plot_regions = [[None for _ in row] for row in input]
+
+    has_no_region = lambda row, col: plot_regions[row][col] is None
+
+    def check_surrounding(coord, region_num):
+        row, col = coord
+
+        # add the current coord to the region
+        regions[region_num].append(coord)
+
+        # mark the current value as being in a region
+        plot_regions[row][col] = region_num
+
+        # figure out which of the surrounding
+        surrounding = [
+            (row + 1, col),  # above
+            (row - 1, col),  # below
+            (row, col - 1),  # left
+            (row, col + 1),  # right
+        ]
+        eligible = [
+            entry
+            for entry in surrounding
+            if in_range(entry, input)
+            and has_no_region(*entry)
+            and get_type(entry, input) == get_type(coord, input)
+        ]
+        for entry in eligible:
+            check_surrounding(entry, region_num)
+
+    # figure out the regions
+    for row_i, row in enumerate(input):
+        for col_i, _ in enumerate(row):
+            # if this plot is in a region, skip it
+            region = plot_regions[row_i][col_i]
+            if not (region is None):
+                continue
+
+            # register a new region
+            region_num = len(regions)
+            regions.append([])
+
+            # find the plots that form the new region
+            coord = (row_i, col_i)
+            check_surrounding(coord, region_num)
+
     return answer
 
 
