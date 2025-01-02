@@ -175,6 +175,7 @@ def part1(input):
 
     regions = []
     plot_regions = [[None for _ in row] for row in input]
+    region_neighbours = {}  # key is coord, value is int
 
     has_no_region = lambda row, col: plot_regions[row][col] is None
 
@@ -194,13 +195,14 @@ def part1(input):
             (row, col - 1),  # left
             (row, col + 1),  # right
         ]
-        eligible = [
+        neighbours = [
             entry
             for entry in surrounding
             if in_range(entry, input)
-            and has_no_region(*entry)
             and get_type(entry, input) == get_type(coord, input)
         ]
+        region_neighbours[coord] = len(neighbours)
+        eligible = (n for n in neighbours if has_no_region(*n))
         for entry in eligible:
             check_surrounding(entry, region_num)
 
@@ -220,10 +222,25 @@ def part1(input):
             coord = (row_i, col_i)
             check_surrounding(coord, region_num)
 
-    for region in regions:
-        visualise_region(region, input)
+    # for region in regions:
+    #     visualise_region(region, input)
 
-    return answer
+    # figure out the perimeters of each region
+    perimeters = []
+    for region in regions:
+        perimeter = 0
+        for coord in region:
+            neighbours = region_neighbours[coord]
+            if neighbours == 4:
+                continue
+            perimeter += neighbours
+        perimeters.append(perimeter)
+
+    total_price = 0
+    for region, perimeter in zip(regions, perimeters):
+        price = len(region) * perimeter
+        total_price += price
+    return total_price
 
 
 def part2(input):
