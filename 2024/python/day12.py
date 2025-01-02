@@ -252,7 +252,7 @@ def part2(input):
 
 
 def main():
-    utils.handle(part1)
+    utils.handle(part1)  # 1421958 (0.09386968612670898 seconds)
     utils.handle(part2)
 
 
