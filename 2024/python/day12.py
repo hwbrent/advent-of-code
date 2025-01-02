@@ -104,6 +104,47 @@ def get_type(coord, input) -> str:
     return input[row][col]
 
 
+def visualise_region(region, input) -> None:
+    """
+    Shows the
+    """
+
+    # create a copy of the input to amend
+    vis = copy.deepcopy(input)
+
+    # for each row/col coordinate in 'region', grab the value, and make it
+    # green
+    for coord in region:
+        row, col = coord
+        # see: https://stackoverflow.com/a/287944
+        vis[row][col] = "\033[92m" + vis[row][col] + "\033[0m"
+
+    # we don't want to show the entire input because it's massive, so we show
+    # the smallest possible rectangle containing the pattern
+    row_coords = [coord[0] for coord in region]
+    col_coords = [coord[1] for coord in region]
+    min_row = min(row_coords)
+    max_row = max(row_coords)
+    min_col = min(col_coords)
+    max_col = max(col_coords)
+    # show any surrounding rows/cols
+    if min_row != 0:
+        min_row -= 1
+    if min_col != 0:
+        min_col -= 1
+    if max_row != len(input):
+        max_row += 1
+    if max_col != len(input[0]):
+        max_col += 1
+
+    print()
+    rows = vis[min_row : max_row + 1]
+    for row in rows:
+        vals = row[min_col : max_col + 1]
+        print("".join(vals))
+    print()
+
+
 def part1(input):
     """
     Delineate the regions
@@ -178,6 +219,9 @@ def part1(input):
             # find the plots that form the new region
             coord = (row_i, col_i)
             check_surrounding(coord, region_num)
+
+    for region in regions:
+        visualise_region(region, input)
 
     return answer
 
