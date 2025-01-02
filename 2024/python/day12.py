@@ -233,7 +233,10 @@ def part1(input):
             neighbours = region_neighbours[coord]
             if neighbours == 4:
                 continue
-            perimeter += neighbours
+
+            # if a plot has one neighbour, that means it has three sides free
+            perimeter += 4 - neighbours
+
         perimeters.append(perimeter)
 
     total_price = 0
