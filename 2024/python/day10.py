@@ -1,5 +1,6 @@
 import os
 import sys
+import copy
 from pprint import PrettyPrinter
 
 pp = PrettyPrinter(indent=4)
@@ -138,6 +139,26 @@ def in_range(coord, rows, cols) -> bool:
     return row in range(rows) and col in range(cols)
 
 
+def visualise_trail(trail, input) -> None:
+    """
+    Prints `input` with the values corresponding to the coordinates in
+    `trail` highlighted
+    """
+    # create a copy of the input to amend
+    vis = copy.deepcopy(input)
+
+    # for each row/col coordinate in 'trail', grab the value, and make it
+    # green
+    for coord in trail:
+        row, col = coord
+        # see: https://stackoverflow.com/a/287944
+        vis[row][col] = "\033[92m" + str(vis[row][col]) + "\033[0m"
+
+    # turn the 2d-list input into a string, and print it
+    vis = os.linesep.join("".join(str(char) for char in row) for row in vis)
+    print(os.linesep + vis + os.linesep)
+
+
 def part1(input):
     rows = len(input)
     cols = len(input[0])
@@ -159,9 +180,7 @@ def part1(input):
         if current_num == 9:
             scores[head] += 1
 
-            # print the coords and the numbers corresponding to the trail
-            nums = "".join([str(get_num(coord, input)) for coord in trail])
-            print(trail, nums)
+            visualise_trail(trail, input)
             return
 
         # otherwise, continue moving along the trail
