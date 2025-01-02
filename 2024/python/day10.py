@@ -148,7 +148,9 @@ def part1(input):
 
     scores = {trailhead: 0 for trailhead in trailheads}
 
-    def recurse(coord, head):
+    def recurse(coord, head, trail=[]):
+        trail = trail + [coord]
+
         # figure out the number of the current pos
         current_num = get_num(coord, input)
 
@@ -156,6 +158,10 @@ def part1(input):
         # specific trail head, and stop recursing
         if current_num == 9:
             scores[head] += 1
+
+            # print the coords and the numbers corresponding to the trail
+            nums = "".join([str(get_num(coord, input)) for coord in trail])
+            print(trail, nums)
             return
 
         # otherwise, continue moving along the trail
@@ -180,7 +186,7 @@ def part1(input):
 
         # recurse on the eligible surrounding coords
         for entry in eligible:
-            recurse(entry, head)
+            recurse(entry, head, trail)
 
     # start recursing on the trailheads
     for head in trailheads:
