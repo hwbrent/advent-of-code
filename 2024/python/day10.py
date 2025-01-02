@@ -165,9 +165,8 @@ def part1(input):
 
     trailheads = get_trailheads(input)
 
-    print(trailheads)
-
-    scores = {trailhead: 0 for trailhead in trailheads}
+    # The unique 9-height positions reachable from each trailhead
+    trailends = {trailhead: set() for trailhead in trailheads}
 
     def recurse(coord, head, trail=[]):
         trail = trail + [coord]
@@ -175,11 +174,10 @@ def part1(input):
         # figure out the number of the current pos
         current_num = get_num(coord, input)
 
-        # if we've reached the end of a trail, increment the score for this
-        # specific trail head, and stop recursing
+        # if we've reached the end of a trail, record the fact that this
+        # 9 can be reached via this trailhead
         if current_num == 9:
-            scores[head] += 1
-
+            trailends[head].add(coord)
             visualise_trail(trail, input)
             return
 
@@ -211,10 +209,10 @@ def part1(input):
     for head in trailheads:
         recurse(head, head)
 
-    print(scores)
-
-    # sum up the scores of all the trailheads
-    answer = sum(scores.values())
+    # add up the number of 9-height positions reachable from each trailhead
+    answer = 0
+    for heads in trailends.values():
+        answer += len(heads)
     return answer
 
 
