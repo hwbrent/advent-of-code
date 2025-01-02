@@ -73,7 +73,9 @@ The reindeer gleefully carries over a protractor and adds it to the pile. What i
 
 
 def parse_raw_input(input: str):
-    return [[int(char) for char in row] for row in input.strip().split(os.linesep)]
+    return [
+        [int(char) for char in row.strip()] for row in input.strip().split(os.linesep)
+    ]
 
 
 def get_trailheads(input) -> list[tuple]:
@@ -178,7 +180,7 @@ def part1(input):
         # 9 can be reached via this trailhead
         if current_num == 9:
             trailends[head].add(coord)
-            visualise_trail(trail, input)
+            # visualise_trail(trail, input)
             return
 
         # otherwise, continue moving along the trail
@@ -224,17 +226,17 @@ def part2(input):
 def main():
     utils.handle(
         part1,
-        """
-89010123
-78121874
-87430965
-96549874
-45678903
-32019012
-01329801
-10456732
-""",
-    )
+        # """
+        # 89010123
+        # 78121874
+        # 87430965
+        # 96549874
+        # 45678903
+        # 32019012
+        # 01329801
+        # 10456732
+        # """,
+    )  # 459 (0.013190269470214844 seconds)
     utils.handle(part2)
 
 
