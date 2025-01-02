@@ -1,5 +1,6 @@
 import os
 import sys
+import time
 from pprint import PrettyPrinter
 
 pp = PrettyPrinter(indent=4)
@@ -68,8 +69,59 @@ def parse_raw_input(input: str):
     return [int(entry) for entry in input.strip().split()]
 
 
-def part1(input):
-    answer = None
+def blink(stones: list) -> None:
+    """
+    Does one pass over `stones`, amending it in-place
+    """
+    i = 0
+    while i < len(stones):
+        # print(i, len(stones))
+
+        stone = stones[i]
+
+        # if stone is 0, replace it with 1
+        if stone == 0:
+            stones[i] = 0
+            i += 1
+            continue
+
+        # if stone has even number of digits, it's replaced by two stones:
+        # 1. the left half of the digits
+        # 2. the right half of the digits
+        string = str(stone)
+        length = len(string)
+        if length % 2 == 0:
+            midpoint = length // 2  # '//' so the result is an int
+            left = string[:midpoint]
+            right = string[midpoint:]
+
+            stones[i] = left
+            stones.insert(i + 1, right)
+
+            i += 2  # skip 'right'
+            continue
+
+        # else, multiply by 2024
+        stones[i] *= 2024
+        i += 1
+
+
+def part1(stones: list):
+
+    # do 25 blinks
+    total = 25
+    for i in range(total):
+        i = str(i).ljust(2, " ")
+        print(f"{i} / {total}", end="")
+
+        start = time.time_ns()
+        blink(stones)
+        end = time.time_ns()
+        secs = (end - start) / 1_000_000_000
+
+        print(f" - {secs} seconds")
+
+    answer = len(stones)
     return answer
 
 
