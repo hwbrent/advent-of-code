@@ -219,7 +219,54 @@ def part1(input):
 
 
 def part2(input):
-    answer = None
+    rows = len(input)
+    cols = len(input[0])
+
+    trailheads = get_trailheads(input)
+
+    answer = [0]
+
+    def recurse(coord, head, trail=[]):
+
+        trail = trail + [coord]
+
+        # figure out the number of the current pos
+        current_num = get_num(coord, input)
+
+        # if we've reached the end of a trail, increment the answer
+        if current_num == 9:
+            answer[0] += 1
+            # visualise_trail(trail, input)
+            return
+
+        # otherwise, continue moving along the trail
+
+        # figure out the next number to move onto
+        next_num = current_num + 1
+
+        # get the surrounding coords
+        surrounding = (
+            get_above(coord),
+            get_below(coord),
+            get_left(coord),
+            get_right(coord),
+        )
+
+        # figure out which of the surrounding coords can be moved to
+        eligible = (
+            entry
+            for entry in surrounding
+            if in_range(entry, rows, cols) and get_num(entry, input) == next_num
+        )
+
+        # recurse on the eligible surrounding coords
+        for entry in eligible:
+            recurse(entry, head, trail)
+
+    # start recursing on the trailheads
+    for head in trailheads:
+        recurse(head, head)
+
     return answer
 
 
@@ -237,7 +284,7 @@ def main():
         # 10456732
         # """,
     )  # 459 (0.013190269470214844 seconds)
-    utils.handle(part2)
+    utils.handle(part2)  # 1034 (0.012137889862060547 seconds)
 
 
 if __name__ == "__main__":
