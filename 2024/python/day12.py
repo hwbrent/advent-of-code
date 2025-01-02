@@ -91,6 +91,21 @@ def parse_raw_input(input: str):
 
 
 def part1(input):
+    """
+    - Iterate over each plot in 'input' and figure out the region it belongs
+      in
+    - Init an 'overall_pricing' variable
+    - For each region:
+      - Init a 'group_perimeter' variable
+      - For each plot within the region:
+        - Figure out how many neighbours this plot has
+        - If the number is not four, the plot is on the perimeter, so add
+          the number of neighbours to 'group_perimeter'
+      - Multiply 'group_perimeter' by the number of plots in the region to
+        get the price of the fencing, and increment 'overall_pricing' by that
+        much
+    """
+
     answer = None
     return answer
 
