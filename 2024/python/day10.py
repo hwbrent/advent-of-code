@@ -224,6 +224,8 @@ def part2(input):
 
     trailheads = get_trailheads(input)
 
+    # for some reason i can't just use an integer here - 'recurse' can't access
+    # it. so i have to use a list ???
     answer = [0]
 
     def recurse(coord, head, trail=[]):
@@ -267,7 +269,7 @@ def part2(input):
     for head in trailheads:
         recurse(head, head)
 
-    return answer
+    return answer[0]
 
 
 def main():
