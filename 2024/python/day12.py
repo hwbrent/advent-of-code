@@ -189,18 +189,20 @@ def part1(input):
         plot_regions[row][col] = region_num
 
         # figure out which of the surrounding
-        surrounding = [
-            (row + 1, col),  # above
-            (row - 1, col),  # below
-            (row, col - 1),  # left
-            (row, col + 1),  # right
-        ]
-        neighbours = [
-            entry
-            for entry in surrounding
-            if in_range(entry, input)
-            and get_type(entry, input) == get_type(coord, input)
-        ]
+        above = (row + 1, col)
+        below = (row - 1, col)
+        left = (row, col - 1)
+        right = (row, col + 1)
+        surrounding = (above, below, left, right)
+
+        # function to check if 'x' is a valid neighbour of 'coord' (i.e.
+        # is within the bounds of the input and is of the same type as
+        # 'coord')
+        is_neighbour = lambda x: in_range(x, input) and get_type(x, input) == get_type(
+            coord, input
+        )
+
+        neighbours = [entry for entry in surrounding if is_neighbour(entry)]
         region_neighbours[coord] = len(neighbours)
         eligible = (n for n in neighbours if has_no_region(*n))
         for entry in eligible:
