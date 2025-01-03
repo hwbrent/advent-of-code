@@ -202,9 +202,18 @@ def part1(input):
             coord, input
         )
 
-        neighbours = [entry for entry in surrounding if is_neighbour(entry)]
-        region_neighbours[coord] = len(neighbours)
-        eligible = (n for n in neighbours if has_no_region(*n))
+        # record which neighbours 'coord' has
+        neighbours = {
+            "above": above if is_neighbour(above) else None,
+            "below": below if is_neighbour(below) else None,
+            "left": left if is_neighbour(left) else None,
+            "right": right if is_neighbour(right) else None,
+        }
+        region_neighbours[coord] = neighbours
+
+        # recurse on each neighbour which isn't already recorded as being in
+        # a region (and therefore is in this region),
+        eligible = (n for n in neighbours.values() if n and has_no_region(*n))
         for entry in eligible:
             check_surrounding(entry, region_num)
 
@@ -232,12 +241,15 @@ def part1(input):
     for region in regions:
         perimeter = 0
         for coord in region:
-            neighbours = region_neighbours[coord]
-            if neighbours == 4:
+            # get the number of valid neighbours. if there are 4, that means
+            # one on every side, so 'coord' isn't on the perimeter
+            neighbours = [v for v in region_neighbours[coord].values() if not v is None]
+            count = len(neighbours)
+            if count == 4:
                 continue
 
             # if a plot has one neighbour, that means it has three sides free
-            perimeter += 4 - neighbours
+            perimeter += 4 - count
 
         perimeters.append(perimeter)
 
