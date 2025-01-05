@@ -154,6 +154,22 @@ def parse_raw_input(input: str) -> Input:
 
 
 def part1(input: Input):
+    WIDTH = 101
+    HEIGHT = 103
+    SECONDS = 100
+
+    # make each pair move 100 times
+    for pair in input:
+        position, velocity = pair
+
+        # get the position after 100 seconds
+        position[0] += velocity[0] * SECONDS
+        position[1] += velocity[1] * SECONDS
+
+        # make the position wrap around
+        position[0] %= WIDTH
+        position[0] %= HEIGHT
+
     answer = None
     return answer
 
