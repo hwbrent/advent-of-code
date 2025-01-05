@@ -1,5 +1,9 @@
+from PIL import Image
+import numpy as np
+
 import os
 import sys
+import time
 from pprint import PrettyPrinter
 
 pp = PrettyPrinter(indent=4)
@@ -123,8 +127,8 @@ In this example, the quadrants contain 1, 3, 4, and 1 robot. Multiplying these t
 Predict the motion of the robots in your list within a space which is 101 tiles wide and 103 tiles tall. What will the safety factor be after exactly 100 seconds have elapsed?
 """
 
-Position = tuple[int, int]
-Velocity = tuple[int, int]
+Position = list[int, int]
+Velocity = list[int, int]
 Pair = tuple[Position, Velocity]
 
 Input = list[Pair]
@@ -145,18 +149,20 @@ def parse_raw_input(input: str) -> Input:
         position = position.split(",")
         velocity = velocity.split(",")
 
-        position = tuple(map(int, position))
-        velocity = tuple(map(int, velocity))
+        position = list(map(int, position))
+        velocity = list(map(int, velocity))
 
         tups.append((position, velocity))
 
     return tups
 
 
+WIDTH = 101
+HEIGHT = 103
+
+
 def part1(input: Input):
     # consts from problem description:
-    WIDTH = 101
-    HEIGHT = 103
     SECONDS = 100  # basically the number of times we move each robot
 
     # the number of robots in each quadrant
@@ -207,6 +213,39 @@ def part1(input: Input):
 
 def part2(input: Input):
     answer = None
+
+    DOWNLOADS_PATH = os.path.join("/", "Users", "henrybrent", "Downloads")
+
+    # arbitrary number; i have no idea when the christmas tree will appear
+    SECONDS = 500
+
+    # for each 'second', save an image of the robots in their current
+    # positions, and then move the robots
+    for sec in range(SECONDS):
+
+        # initialise an empty grid
+        grid = np.zeros((HEIGHT, WIDTH), dtype=np.uint8)
+
+        # draw the robots' positions onto the grid
+        for robot in input:
+            (px, py), _ = robot
+            grid[py, px] = 255
+
+        # save the grid as an image
+        img = Image.fromarray(grid)
+        name = f"{sec}.png"
+        print("Saving", name, time.time_ns() / 1_000_000)
+        path = os.path.join(DOWNLOADS_PATH, name)
+        img.save(path)
+
+        # move each robot
+        for robot in input:
+            position, velocity = robot
+            position[0] += velocity[0]
+            position[0] %= WIDTH
+            position[1] += velocity[1]
+            position[1] %= HEIGHT
+
     return answer
 
 
