@@ -249,22 +249,22 @@ def part2(input: Input):
     # arbitrary number; i have no idea when the christmas tree will appear
     SECONDS = 50_000
 
-    start_time = time.time()
-
+    # track the smallest image file generated, as that will probably end up
+    # being the one with the christmas tree (since robots will be overlapping)
     min_size_value = math.inf
     min_size_time = None
 
-    # for each 'second', save an image of the robots in their current
-    # positions, and then move the robots
+    # (main loop)
     for sec in range(SECONDS):
         # save image of grid and robots
         image_path = visualise_grid(input, sec)
 
+        # get the size of this image, and if it's the smallest encuntered
+        # so far, record the 'sec' value
         size = os.path.getsize(image_path)
         if size < min_size_value:
             min_size_value = size
             min_size_time = sec
-            # print(f"Time: {sec}, Size: {min_size_value}")
 
         # move each robot
         move_robots(input)
@@ -273,8 +273,8 @@ def part2(input: Input):
 
 
 def main():
-    utils.handle(part1)  # 209409792 (0.0018150806427001953 seconds)
-    utils.handle(part2)
+    utils.handle(part1)  # 209409792 ( 0.0018150806427001953 seconds)
+    utils.handle(part2)  # 8006      (53.00049304962158 seconds)
 
 
 if __name__ == "__main__":
