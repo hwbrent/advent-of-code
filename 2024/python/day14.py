@@ -250,6 +250,7 @@ def part2(input: Input):
 
         # save image of grid and robots
         # visualise_grid(input, sec)
+        # print(f"Saving image {sec}.png -", time.time() - start_time)
 
         # move each robot
         for robot in input:
