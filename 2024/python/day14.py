@@ -160,43 +160,30 @@ def parse_raw_input(input: str) -> Input:
 WIDTH = 101
 HEIGHT = 103
 
+# functions to help determine which quadrant a given coord is in. Facilitates
+# 'get_safety_score'
+WIDTH_MIDPOINT = WIDTH // 2
+HEIGHT_MIDPOINT = HEIGHT // 2
+left_of_centre = lambda x: x in range(0, WIDTH_MIDPOINT)
+right_of_centre = lambda x: x in range(WIDTH_MIDPOINT + 1, WIDTH)
+above_centre = lambda y: y in range(0, HEIGHT_MIDPOINT)
+below_centre = lambda y: y in range(HEIGHT_MIDPOINT + 1, HEIGHT)
 
-def part1(input: Input):
-    # consts from problem description:
-    SECONDS = 100  # basically the number of times we move each robot
+in_top_left = lambda x, y: left_of_centre(x) and above_centre(y)
+in_top_right = lambda x, y: right_of_centre(x) and above_centre(y)
+in_bottom_left = lambda x, y: left_of_centre(x) and below_centre(y)
+in_bottom_right = lambda x, y: right_of_centre(x) and below_centre(y)
 
-    # the number of robots in each quadrant
+
+def get_safety_score(robots: Input) -> int:
     top_left = 0
     top_right = 0
     bottom_left = 0
     bottom_right = 0
 
-    # functions to help determine which quadrant a given coord is in
-    WIDTH_MIDPOINT = WIDTH // 2
-    HEIGHT_MIDPOINT = HEIGHT // 2
-    left_of_centre = lambda x: x in range(0, WIDTH_MIDPOINT)
-    right_of_centre = lambda x: x in range(WIDTH_MIDPOINT + 1, WIDTH)
-    above_centre = lambda y: y in range(0, HEIGHT_MIDPOINT)
-    below_centre = lambda y: y in range(HEIGHT_MIDPOINT + 1, HEIGHT)
-
-    in_top_left = lambda x, y: left_of_centre(x) and above_centre(y)
-    in_top_right = lambda x, y: right_of_centre(x) and above_centre(y)
-    in_bottom_left = lambda x, y: left_of_centre(x) and below_centre(y)
-    in_bottom_right = lambda x, y: right_of_centre(x) and below_centre(y)
-
-    # make each pair move 100 times
-    for pair in input:
-        position, velocity = pair
+    for robot in robots:
+        position, _ = robot
         px, py = position
-        vx, vy = velocity
-
-        # get the position after 100 seconds
-        px += vx * SECONDS
-        py += vy * SECONDS
-
-        # make the position wrap around
-        px %= WIDTH
-        py %= HEIGHT
 
         if in_top_left(px, py):
             top_left += 1
@@ -207,7 +194,26 @@ def part1(input: Input):
         if in_bottom_right(px, py):
             bottom_right += 1
 
-    answer = top_left * top_right * bottom_left * bottom_right
+    return top_left * top_right * bottom_left * bottom_right
+
+
+def part1(input: Input):
+    # consts from problem description:
+    SECONDS = 100  # basically the number of times we move each robot
+
+    # make each pair move 100 times
+    for pair in input:
+        position, velocity = pair
+
+        # get the position after 100 seconds
+        position[0] += velocity[0] * SECONDS
+        position[1] += velocity[1] * SECONDS
+
+        # make the position wrap around
+        position[0] %= WIDTH
+        position[1] %= HEIGHT
+
+    answer = get_safety_score(input)
     return answer
 
 
