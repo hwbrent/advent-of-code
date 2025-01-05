@@ -240,6 +240,8 @@ def visualise_grid(robots: Input, sec: int):
     path = os.path.join(DOWNLOADS_PATH, "AoC Day 14", name)
     img.save(path)
 
+    return path
+
 
 def part2(input: Input):
     answer = None
@@ -249,29 +251,25 @@ def part2(input: Input):
 
     start_time = time.time()
 
-    min_safety_score = math.inf
-    min_safety_time = None
+    min_size_value = math.inf
+    min_size_time = None
 
     # for each 'second', save an image of the robots in their current
     # positions, and then move the robots
     for sec in range(SECONDS):
-        print(sec, end="\r")
-
         # save image of grid and robots
-        # visualise_grid(input, sec)
-        # print(f"Saving image {sec}.png -", time.time() - start_time)
+        image_path = visualise_grid(input, sec)
 
-        # get the safety score at this point in time, and if it's the
-        # lowest encountered so far, record which timestamp it is
-        score = get_safety_score(input)
-        if score < min_safety_score:
-            min_safety_score = score
-            min_safety_time = sec
+        size = os.path.getsize(image_path)
+        if size < min_size_value:
+            min_size_value = size
+            min_size_time = sec
+            # print(f"Time: {sec}, Size: {min_size_value}")
 
         # move each robot
         move_robots(input)
 
-    return min_safety_time
+    return min_size_time
 
 
 def main():
