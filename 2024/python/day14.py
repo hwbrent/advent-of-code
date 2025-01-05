@@ -4,6 +4,7 @@ import numpy as np
 import os
 import sys
 import time
+import math
 from pprint import PrettyPrinter
 
 pp = PrettyPrinter(indent=4)
@@ -248,6 +249,9 @@ def part2(input: Input):
 
     start_time = time.time()
 
+    min_safety_score = math.inf
+    min_safety_time = None
+
     # for each 'second', save an image of the robots in their current
     # positions, and then move the robots
     for sec in range(SECONDS):
@@ -259,7 +263,14 @@ def part2(input: Input):
         # move each robot
         move_robots(input)
 
-    return answer
+        # get the safety score at this point in time, and if it's the
+        # lowest encountered so far, record which timestamp it is
+        score = get_safety_score(input)
+        if score < min_safety_score:
+            min_safety_score = score
+            min_safety_time = sec
+
+    return min_safety_time
 
 
 def main():
