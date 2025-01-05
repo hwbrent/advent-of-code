@@ -197,21 +197,25 @@ def get_safety_score(robots: Input) -> int:
     return top_left * top_right * bottom_left * bottom_right
 
 
-def part1(input: Input):
-    # consts from problem description:
-    SECONDS = 100  # basically the number of times we move each robot
-
-    # make each pair move 100 times
-    for pair in input:
-        position, velocity = pair
+def move_robots(robots: Input, steps=1) -> None:
+    for robot in robots:
+        position, velocity = robot
 
         # get the position after 100 seconds
-        position[0] += velocity[0] * SECONDS
-        position[1] += velocity[1] * SECONDS
+        position[0] += velocity[0] * steps
+        position[1] += velocity[1] * steps
 
         # make the position wrap around
         position[0] %= WIDTH
         position[1] %= HEIGHT
+
+
+def part1(input: Input):
+    # consts from problem description:
+    SECONDS = 100  # basically the number of times we move each robot
+
+    # make each robot move 100 times
+    move_robots(input, SECONDS)
 
     answer = get_safety_score(input)
     return answer
@@ -253,12 +257,7 @@ def part2(input: Input):
         # print(f"Saving image {sec}.png -", time.time() - start_time)
 
         # move each robot
-        for robot in input:
-            position, velocity = robot
-            position[0] += velocity[0]
-            position[0] %= WIDTH
-            position[1] += velocity[1]
-            position[1] %= HEIGHT
+        move_robots(input)
 
     return answer
 
