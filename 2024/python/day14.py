@@ -217,10 +217,27 @@ def part1(input: Input):
     return answer
 
 
+DOWNLOADS_PATH = os.path.join("/", "Users", "henrybrent", "Downloads")
+
+
+def visualise_grid(robots: Input, sec: int):
+    # initialise an empty grid
+    grid = np.zeros((HEIGHT, WIDTH), dtype=np.uint8)
+
+    # draw the robots' positions onto the grid
+    for robot in robots:
+        (px, py), _ = robot
+        grid[py, px] = 255
+
+    # save the grid as an image
+    img = Image.fromarray(grid)
+    name = f"{sec}.png"
+    path = os.path.join(DOWNLOADS_PATH, "AoC Day 14", name)
+    img.save(path)
+
+
 def part2(input: Input):
     answer = None
-
-    DOWNLOADS_PATH = os.path.join("/", "Users", "henrybrent", "Downloads")
 
     # arbitrary number; i have no idea when the christmas tree will appear
     SECONDS = 10_000
@@ -231,20 +248,8 @@ def part2(input: Input):
     # positions, and then move the robots
     for sec in range(SECONDS):
 
-        # initialise an empty grid
-        grid = np.zeros((HEIGHT, WIDTH), dtype=np.uint8)
-
-        # draw the robots' positions onto the grid
-        for robot in input:
-            (px, py), _ = robot
-            grid[py, px] = 255
-
-        # save the grid as an image
-        img = Image.fromarray(grid)
-        name = f"{sec}.png"
-        print("Saving", name, time.time() - start_time)
-        path = os.path.join(DOWNLOADS_PATH, "AoC Day 14", name)
-        img.save(path)
+        # save image of grid and robots
+        # visualise_grid(input, sec)
 
         # move each robot
         for robot in input:
