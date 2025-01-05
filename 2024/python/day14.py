@@ -255,6 +255,7 @@ def part2(input: Input):
     # for each 'second', save an image of the robots in their current
     # positions, and then move the robots
     for sec in range(SECONDS):
+        print(sec, end="\r")
 
         # save image of grid and robots
         # visualise_grid(input, sec)
