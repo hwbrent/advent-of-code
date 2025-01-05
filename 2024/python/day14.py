@@ -219,6 +219,8 @@ def part2(input: Input):
     # arbitrary number; i have no idea when the christmas tree will appear
     SECONDS = 10_000
 
+    start_time = time.time()
+
     # for each 'second', save an image of the robots in their current
     # positions, and then move the robots
     for sec in range(SECONDS):
@@ -234,7 +236,7 @@ def part2(input: Input):
         # save the grid as an image
         img = Image.fromarray(grid)
         name = f"{sec}.png"
-        print("Saving", name, time.time_ns() / 1_000_000)
+        print("Saving", name, time.time() - start_time)
         path = os.path.join(DOWNLOADS_PATH, "AoC Day 14", name)
         img.save(path)
 
