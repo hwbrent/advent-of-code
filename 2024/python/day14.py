@@ -168,7 +168,7 @@ def part1(input: Input):
 
         # make the position wrap around
         position[0] %= WIDTH
-        position[0] %= HEIGHT
+        position[1] %= HEIGHT
 
     answer = None
     return answer
