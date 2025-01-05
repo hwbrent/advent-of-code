@@ -235,7 +235,7 @@ def part2(input: Input):
         img = Image.fromarray(grid)
         name = f"{sec}.png"
         print("Saving", name, time.time_ns() / 1_000_000)
-        path = os.path.join(DOWNLOADS_PATH, name)
+        path = os.path.join(DOWNLOADS_PATH, "AoC Day 14", name)
         img.save(path)
 
         # move each robot
