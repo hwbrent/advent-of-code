@@ -260,15 +260,15 @@ def part2(input: Input):
         # visualise_grid(input, sec)
         # print(f"Saving image {sec}.png -", time.time() - start_time)
 
-        # move each robot
-        move_robots(input)
-
         # get the safety score at this point in time, and if it's the
         # lowest encountered so far, record which timestamp it is
         score = get_safety_score(input)
         if score < min_safety_score:
             min_safety_score = score
             min_safety_time = sec
+
+        # move each robot
+        move_robots(input)
 
     return min_safety_time
 
