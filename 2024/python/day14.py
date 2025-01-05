@@ -158,19 +158,44 @@ def part1(input: Input):
     HEIGHT = 103
     SECONDS = 100
 
+    # the number of robots in each quadrant
+    top_left = 0
+    top_right = 0
+    bottom_left = 0
+    bottom_right = 0
+
+    WIDTH_MIDPOINT = WIDTH // 2
+    width1 = range(0, WIDTH_MIDPOINT)  # left of centre
+    width2 = range(WIDTH_MIDPOINT + 1, WIDTH)  # right of centre
+
+    HEIGHT_MIDPOINT = HEIGHT // 2
+    height1 = range(0, HEIGHT_MIDPOINT)  # above centre
+    height2 = range(HEIGHT_MIDPOINT + 1, HEIGHT)  # below centre
+
     # make each pair move 100 times
     for pair in input:
         position, velocity = pair
+        px, py = position
+        vx, vy = velocity
 
         # get the position after 100 seconds
-        position[0] += velocity[0] * SECONDS
-        position[1] += velocity[1] * SECONDS
+        px += vx * SECONDS
+        py += vy * SECONDS
 
         # make the position wrap around
-        position[0] %= WIDTH
-        position[1] %= HEIGHT
+        px %= WIDTH
+        py %= HEIGHT
 
-    answer = None
+        if px in width1 and py in height1:
+            top_left += 1
+        if px in width2 and py in height1:
+            top_right += 1
+        if px in width1 and py in height2:
+            bottom_left += 1
+        if px in width2 and py in height2:
+            bottom_right += 1
+
+    answer = top_left * top_right * bottom_left * bottom_right
     return answer
 
 
@@ -180,7 +205,7 @@ def part2(input: Input):
 
 
 def main():
-    utils.handle(part1)
+    utils.handle(part1)  # 209409792 (0.0018150806427001953 seconds)
     utils.handle(part2)
 
 
