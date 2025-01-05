@@ -123,12 +123,33 @@ In this example, the quadrants contain 1, 3, 4, and 1 robot. Multiplying these t
 Predict the motion of the robots in your list within a space which is 101 tiles wide and 103 tiles tall. What will the safety factor be after exactly 100 seconds have elapsed?
 """
 
-
-def parse_raw_input(input: str):
-    return input
+Input = list[tuple[tuple[int], tuple[int]]]
 
 
-def part1(input):
+def parse_raw_input(input: str) -> Input:
+    input = input.strip()
+
+    tups = []
+    for line in input.split(os.linesep):
+        line = line.strip()
+
+        position, velocity = line.split(" ")
+
+        position = position.replace("p=", "")
+        velocity = velocity.replace("v=", "")
+
+        position = position.split(",")
+        velocity = velocity.split(",")
+
+        position = tuple(map(int, position))
+        velocity = tuple(map(int, velocity))
+
+        tups.append((position, velocity))
+
+    return tups
+
+
+def part1(input: Input):
     answer = None
     return answer
 
