@@ -217,7 +217,7 @@ def part2(input: Input):
     DOWNLOADS_PATH = os.path.join("/", "Users", "henrybrent", "Downloads")
 
     # arbitrary number; i have no idea when the christmas tree will appear
-    SECONDS = 500
+    SECONDS = 10_000
 
     # for each 'second', save an image of the robots in their current
     # positions, and then move the robots
