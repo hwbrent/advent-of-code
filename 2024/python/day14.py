@@ -245,7 +245,7 @@ def part2(input: Input):
     answer = None
 
     # arbitrary number; i have no idea when the christmas tree will appear
-    SECONDS = 10_000
+    SECONDS = 50_000
 
     start_time = time.time()
 
