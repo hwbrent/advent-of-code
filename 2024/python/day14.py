@@ -165,11 +165,18 @@ def part1(input: Input):
     bottom_left = 0
     bottom_right = 0
 
-    # ranges to help determine which side/quadrant the positions are in
-    left = range(0, WIDTH // 2)
-    right = range(WIDTH // 2 + 1, WIDTH)
-    top = range(0, HEIGHT // 2)
-    bottom = range(HEIGHT // 2 + 1, HEIGHT)
+    # functions to help determine which quadrant a given coord is in
+    WIDTH_MIDPOINT = WIDTH // 2
+    HEIGHT_MIDPOINT = HEIGHT // 2
+    left_of_centre = lambda x: x in range(0, WIDTH_MIDPOINT)
+    right_of_centre = lambda x: x in range(WIDTH_MIDPOINT + 1, WIDTH)
+    above_centre = lambda y: y in range(0, HEIGHT_MIDPOINT)
+    below_centre = lambda y: y in range(HEIGHT_MIDPOINT + 1, HEIGHT)
+
+    in_top_left = lambda x, y: left_of_centre(x) and above_centre(y)
+    in_top_right = lambda x, y: right_of_centre(x) and above_centre(y)
+    in_bottom_left = lambda x, y: left_of_centre(x) and below_centre(y)
+    in_bottom_right = lambda x, y: right_of_centre(x) and below_centre(y)
 
     # make each pair move 100 times
     for pair in input:
@@ -185,13 +192,13 @@ def part1(input: Input):
         px %= WIDTH
         py %= HEIGHT
 
-        if (px in top) and (py in left):
+        if in_top_left(px, py):
             top_left += 1
-        if (px in top) and (py in right):
+        if in_top_right(px, py):
             top_right += 1
-        if (px in bottom) and (py in left):
+        if in_bottom_left(px, py):
             bottom_left += 1
-        if (px in bottom) and (py in right):
+        if in_bottom_right(px, py):
             bottom_right += 1
 
     answer = top_left * top_right * bottom_left * bottom_right
