@@ -164,14 +164,18 @@ def part2(input):
     times_hit_zero = 0
 
     for direction in input:
-        dial_value += direction
 
-        times_hit_zero += dial_value % TOTAL_DIAL_VALUES
+        before = dial_value
+        dial_value += direction
+        after = dial_value
 
         dial_value %= TOTAL_DIAL_VALUES  # wrap around
 
         if dial_value == 0:
             times_hit_zero += 1
+
+        combined = abs(before) + abs(after)
+        times_hit_zero += combined // TOTAL_DIAL_VALUES
 
     answer = times_hit_zero
     return answer
