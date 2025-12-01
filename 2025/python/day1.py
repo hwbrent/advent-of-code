@@ -78,11 +78,27 @@ Analyze the rotations in your attached document. What's the actual password to o
 
 
 def parse_raw_input(input: str):
-    return input
+    out = []
+
+    for line in input.split(os.linesep):
+        line = line.strip()
+        if not line:
+            continue
+
+        direction = line[0]
+        distance = int(line[1:])
+
+        if direction == "L":
+            distance *= -1
+
+        out.append(distance)
+
+    return out
 
 
 def part1(input):
     answer = None
+    print(input)
     return answer
 
 
