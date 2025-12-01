@@ -1,4 +1,7 @@
 {
     "editor.wordWrap": "on",
-    "editor.wordWrapColumn": 75
+    "editor.wordWrapColumn": 75,
+    "github.copilot.enable": {
+        "*": false,
+    }
 }
