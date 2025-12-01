@@ -77,7 +77,23 @@ Analyze the rotations in your attached document. What's the actual password to o
 """
 
 
+INITIAL_DIAL_VALUE = 50
+TOTAL_DIAL_VALUES = 100
+
+
 def parse_raw_input(input: str):
+    #     input = """
+    # L68
+    # L30
+    # R48
+    # L5
+    # R60
+    # L55
+    # L1
+    # L99
+    # R14
+    # L82
+    # """
     out = []
 
     for line in input.split(os.linesep):
@@ -97,8 +113,18 @@ def parse_raw_input(input: str):
 
 
 def part1(input):
-    answer = None
-    print(input)
+    dial_value = INITIAL_DIAL_VALUE
+
+    times_hit_zero = 0
+
+    for direction in input:
+        dial_value += direction
+        dial_value %= TOTAL_DIAL_VALUES  # wrap around
+
+        if dial_value == 0:
+            times_hit_zero += 1
+
+    answer = times_hit_zero
     return answer
 
 
@@ -108,7 +134,7 @@ def part2(input):
 
 
 def main():
-    utils.handle(part1)
+    utils.handle(part1)  # 989 (0.0020248889923095703 seconds)
     utils.handle(part2)
 
 
