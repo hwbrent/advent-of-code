@@ -174,7 +174,7 @@ def part2(input):
         if dial_value == 0:
             times_hit_zero += 1
 
-        combined = abs(before) + abs(after)
+        combined = abs(before) + abs(direction)
         times_hit_zero += combined // TOTAL_DIAL_VALUES
 
     answer = times_hit_zero
