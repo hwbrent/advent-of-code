@@ -58,27 +58,15 @@ Input = list[str, str]
 
 def parse_raw_input(input: str) -> Input:
     # input = "11-22,95-115,998-1012,1188511880-1188511890,222220-222224,1698522-1698528,446443-446449,38593856-38593862,565653-565659,824824821-824824827,2121212118-2121212124"
-    return [pair.split("-") for pair in input.strip().split(",")]
+    return [[int(num) for num in pair.split("-")] for pair in input.strip().split(",")]
 
 
 def part1(input: Input):
     answer = 0
     for first_id, last_id in input:
+        # print([first_id, last_id])
 
-        # pad to ensure the numbers are the same length
-        length1 = len(first_id)
-        length2 = len(last_id)
-        max_length = max(length1, length2)
-        first_id = first_id.rjust(max_length, "0")
-        last_id = last_id.rjust(max_length, "0")
-
-        # brute force
-        first_num = int(first_id)
-        last_num = int(last_id)
-
-        # print([first_num, last_num])
-
-        full_range = range(first_num, last_num + 1)
+        full_range = range(first_id, last_id + 1)
         for id in full_range:
             id = str(id)
             length = len(id)
@@ -96,20 +84,9 @@ def part1(input: Input):
 def part2(input):
     answer = 0
     for first_id, last_id in input:
-
-        # pad to ensure the numbers are the same length
-        length1 = len(first_id)
-        length2 = len(last_id)
-        max_length = max(length1, length2)
-        first_id = first_id.rjust(max_length, "0")
-        last_id = last_id.rjust(max_length, "0")
-
-        # brute force
-        first_num = int(first_id)
-        last_num = int(last_id)
         # print([first_num, last_num])
 
-        full_range = range(first_num, last_num + 1)
+        full_range = range(first_id, last_id + 1)
         for id in full_range:
             id = str(id)
 
