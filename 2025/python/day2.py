@@ -164,7 +164,7 @@ def part2(input):
 
 def main():
     utils.handle(part1)  # 54234399924 (0.9478640556335449 seconds)
-    utils.handle(part2)
+    utils.handle(part2)  # 70187097315 (7.794951915740967 seconds)
 
 
 if __name__ == "__main__":
