@@ -76,6 +76,8 @@ def part1(input: Input):
         first_num = int(first_id)
         last_num = int(last_id)
 
+        # print([first_num, last_num])
+
         full_range = range(first_num, last_num + 1)
         for id in full_range:
             id = str(id)
@@ -83,10 +85,9 @@ def part1(input: Input):
             first_half = id[: length // 2]
             second_half = id[length // 2 :]
             if first_half == second_half:
-                # print("    ", [first_num, last_num], "*", id)
+                # print("    ", id)
                 answer += int(id)
             else:
-                # print("    ", [first_num, last_num], id)
                 pass
 
     return answer
@@ -106,12 +107,11 @@ def part2(input):
         # brute force
         first_num = int(first_id)
         last_num = int(last_id)
-        print([first_num, last_num])
+        # print([first_num, last_num])
 
         full_range = range(first_num, last_num + 1)
         for id in full_range:
             id = str(id)
-            # print("\t", id)
 
             # cant repeat if it's bigger than half the length of the entire
             # id
@@ -134,18 +134,9 @@ def part2(input):
                     first_idx += substring_length
                     last_idx += substring_length
 
-                # print(
-                #     "\t" * 2,
-                #     "length",
-                #     substring_length,
-                #     "->",
-                #     substrings,
-                #     "*" * 8 if len(substrings) == 1 else "",
-                # )
-
                 if len(substrings) == 1:
                     answer += int(id)
-                    # print("\t", id)
+                    # print("    ", id)
 
                     # we already found one way in which a repeating can fit
                     # into 'id', so it's invalid and we shouldn't check for
@@ -154,10 +145,6 @@ def part2(input):
                     # substrings of '2', '22', '222', but we only want to
                     # account for 222222 once
                     break
-                    # print("    *", substrings)
-                else:
-                    # print("    ", substrings)
-                    pass
 
     return answer
 
