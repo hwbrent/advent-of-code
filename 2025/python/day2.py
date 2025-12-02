@@ -72,15 +72,9 @@ def part1(input: Input):
         first_id = first_id.rjust(max_length, "0")
         last_id = last_id.rjust(max_length, "0")
 
-        # diff = last_id - first_id
-        # id_range = range(first_id, last_id + 1)
-        # print(first_id, last_id, diff)
-        # print(first_id, last_id)
-
         # brute force
         first_num = int(first_id)
         last_num = int(last_id)
-        # print([first_num, last_num])
 
         full_range = range(first_num, last_num + 1)
         for id in full_range:
@@ -94,9 +88,6 @@ def part1(input: Input):
             else:
                 # print("    ", [first_num, last_num], id)
                 pass
-
-        # for digit1, digit2 in zip(first_id, last_id):
-        #     print(digit1, digit2)
 
     return answer
 
@@ -112,15 +103,9 @@ def part2(input):
         first_id = first_id.rjust(max_length, "0")
         last_id = last_id.rjust(max_length, "0")
 
-        # diff = last_id - first_id
-        # id_range = range(first_id, last_id + 1)
-        # print(first_id, last_id, diff)
-        # print(first_id, last_id)
-
         # brute force
         first_num = int(first_id)
         last_num = int(last_id)
-        # print([first_num, last_num])
 
         full_range = range(first_num, last_num + 1)
         for id in full_range:
