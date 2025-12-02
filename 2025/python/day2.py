@@ -57,7 +57,7 @@ Input = list[str, str]
 
 
 def parse_raw_input(input: str) -> Input:
-    # input = "11-22,95-115,998-1012,1188511880-1188511890,222220-222224,1698522-1698528,446443-446449,38593856-38593862,565653-565659,824824821-824824827,2121212118-2121212124"
+    input = "11-22,95-115,998-1012,1188511880-1188511890,222220-222224,1698522-1698528,446443-446449,38593856-38593862,565653-565659,824824821-824824827,2121212118-2121212124"
     return [pair.split("-") for pair in input.strip().split(",")]
 
 
@@ -106,10 +106,12 @@ def part2(input):
         # brute force
         first_num = int(first_id)
         last_num = int(last_id)
+        print([first_num, last_num])
 
         full_range = range(first_num, last_num + 1)
         for id in full_range:
             id = str(id)
+            # print("\t", id)
 
             # cant repeat if it's bigger than half the length of the entire
             # id
@@ -132,8 +134,30 @@ def part2(input):
                     first_idx += substring_length
                     last_idx += substring_length
 
+                # print(
+                #     "\t" * 2,
+                #     "length",
+                #     substring_length,
+                #     "->",
+                #     substrings,
+                #     "*" * 8 if len(substrings) == 1 else "",
+                # )
+
                 if len(substrings) == 1:
-                    answer += int(substring)
+                    answer += int(id)
+                    # print("\t", id)
+
+                    # we already found one way in which a repeating can fit
+                    # into 'id', so it's invalid and we shouldn't check for
+                    # more ways
+                    # e.g. if we have 222222, you can have repeating
+                    # substrings of '2', '22', '222', but we only want to
+                    # account for 222222 once
+                    break
+                    # print("    *", substrings)
+                else:
+                    # print("    ", substrings)
+                    pass
 
     return answer
 
