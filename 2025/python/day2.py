@@ -53,14 +53,29 @@ Adding up all the invalid IDs in this example produces 1227775554.
 What do you get if you add up all of the invalid IDs?
 """
 
-
-def parse_raw_input(input: str):
-    return [[int(num) for num in pair.split("-")] for pair in input.strip().split(",")]
+Input = list[str, str]
 
 
-def part1(input):
+def parse_raw_input(input: str) -> Input:
+    return [pair.split("-") for pair in input.strip().split(",")]
+
+
+def part1(input: Input):
     answer = None
-    print(input)
+    for first_id, last_id in input:
+
+        # pad to ensure the numbers are the same length
+        length1 = len(first_id)
+        length2 = len(last_id)
+        max_length = max(length1, length2)
+        first_id = first_id.ljust(max_length, "0")
+        last_id = last_id.ljust(max_length, "0")
+
+        # diff = last_id - first_id
+        # id_range = range(first_id, last_id + 1)
+        # print(first_id, last_id, diff)
+        print(first_id, last_id)
+
     return answer
 
 
