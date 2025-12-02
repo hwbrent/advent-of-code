@@ -68,8 +68,8 @@ def part1(input: Input):
         length1 = len(first_id)
         length2 = len(last_id)
         max_length = max(length1, length2)
-        first_id = first_id.ljust(max_length, "0")
-        last_id = last_id.ljust(max_length, "0")
+        first_id = first_id.rjust(max_length, "0")
+        last_id = last_id.rjust(max_length, "0")
 
         # diff = last_id - first_id
         # id_range = range(first_id, last_id + 1)
