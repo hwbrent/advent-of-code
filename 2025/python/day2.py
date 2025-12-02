@@ -120,7 +120,7 @@ def part2(input):
                 first_idx = 0
                 last_idx = substring_length
                 while last_idx < len(id):
-                    substring = id[first_idx : last_idx + 1]
+                    substring = id[first_idx:last_idx]
                     substrings.add(substring)
                     first_idx += substring_length
                     last_idx += substring_length
