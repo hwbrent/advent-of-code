@@ -55,11 +55,12 @@ What do you get if you add up all of the invalid IDs?
 
 
 def parse_raw_input(input: str):
-    return input
+    return [[int(num) for num in pair.split("-")] for pair in input.strip().split(",")]
 
 
 def part1(input):
     answer = None
+    print(input)
     return answer
 
 
