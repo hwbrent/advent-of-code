@@ -112,7 +112,7 @@ TOTAL_DIAL_VALUES = 100
 
 
 def parse_raw_input(input: str):
-    #     input = """
+    # input = """
     # L68
     # L30
     # R48
@@ -162,20 +162,45 @@ def part2(input):
     dial_value = INITIAL_DIAL_VALUE
 
     times_hit_zero = 0
+    times_crossed_zero = 0
+
+    was_on_zero = False
 
     for direction in input:
+
+        dial_before_readable = dial_value % TOTAL_DIAL_VALUES
+        divs_before = dial_value // TOTAL_DIAL_VALUES
+
         dial_value += direction
 
-        if dial_value % TOTAL_DIAL_VALUES == 0:
+        dial_after_readable = dial_value % TOTAL_DIAL_VALUES
+        divs_after = dial_value // TOTAL_DIAL_VALUES
+
+        did_hit_zero = dial_value % TOTAL_DIAL_VALUES == 0
+        did_cross_zero = divs_before != divs_after
+
+        if did_hit_zero:
             times_hit_zero += 1
 
-    answer = times_hit_zero
+        if did_cross_zero:
+            to_add = abs(divs_after - divs_before)
+            if did_hit_zero:
+                # landing on zero shouldnt count as crossing zero
+                to_add -= 1
+            if was_on_zero:
+                to_add -= 1
+            times_crossed_zero += to_add
+
+        was_on_zero = did_hit_zero
+        continue
+
+    answer = times_hit_zero + times_crossed_zero
     return answer
 
 
 def main():
     utils.handle(part1)  # 989 (0.0020248889923095703 seconds)
-    utils.handle(part2)  # 157551 (too high)
+    utils.handle(part2)
 
 
 if __name__ == "__main__":
