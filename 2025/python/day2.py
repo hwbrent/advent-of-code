@@ -102,7 +102,47 @@ def part1(input: Input):
 
 
 def part2(input):
-    answer = None
+    answer = 0
+    for first_id, last_id in input:
+
+        # pad to ensure the numbers are the same length
+        length1 = len(first_id)
+        length2 = len(last_id)
+        max_length = max(length1, length2)
+        first_id = first_id.rjust(max_length, "0")
+        last_id = last_id.rjust(max_length, "0")
+
+        # diff = last_id - first_id
+        # id_range = range(first_id, last_id + 1)
+        # print(first_id, last_id, diff)
+        # print(first_id, last_id)
+
+        # brute force
+        first_num = int(first_id)
+        last_num = int(last_id)
+        # print([first_num, last_num])
+
+        full_range = range(first_num, last_num + 1)
+        for id in full_range:
+            id = str(id)
+
+            # cant repeat if it's bigger than half the length of the entire
+            # id
+            max_substring_length = len(id) // 2
+            for substring_length in range(1, max_substring_length + 1):
+                # split the number up into substrings of length 'substring_length'
+                substrings = set()
+                first_idx = 0
+                last_idx = substring_length
+                while last_idx < len(id):
+                    substring = id[first_idx : last_idx + 1]
+                    substrings.add(substring)
+                    first_idx += substring_length
+                    last_idx += substring_length
+
+                if len(substrings) == 1:
+                    answer += int(substring)
+
     return answer
 
 
