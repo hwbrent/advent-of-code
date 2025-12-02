@@ -62,7 +62,7 @@ def parse_raw_input(input: str) -> Input:
 
 
 def part1(input: Input):
-    answer = None
+    answer = 0
     for first_id, last_id in input:
 
         # pad to ensure the numbers are the same length
@@ -75,7 +75,28 @@ def part1(input: Input):
         # diff = last_id - first_id
         # id_range = range(first_id, last_id + 1)
         # print(first_id, last_id, diff)
-        print(first_id, last_id)
+        # print(first_id, last_id)
+
+        # brute force
+        first_num = int(first_id)
+        last_num = int(last_id)
+        # print([first_num, last_num])
+
+        full_range = range(first_num, last_num + 1)
+        for id in full_range:
+            id = str(id)
+            length = len(id)
+            first_half = id[: length // 2]
+            second_half = id[length // 2 :]
+            if first_half == second_half:
+                # print("    ", [first_num, last_num], "*", id)
+                answer += int(id)
+            else:
+                # print("    ", [first_num, last_num], id)
+                pass
+
+        # for digit1, digit2 in zip(first_id, last_id):
+        #     print(digit1, digit2)
 
     return answer
 
@@ -86,7 +107,7 @@ def part2(input):
 
 
 def main():
-    utils.handle(part1)
+    utils.handle(part1)  # 54234399924 (0.9478640556335449 seconds)
     utils.handle(part2)
 
 
