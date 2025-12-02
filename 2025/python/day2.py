@@ -116,6 +116,13 @@ def part2(input):
             max_substring_length = len(id) // 2
             for substring_length in range(1, max_substring_length + 1):
                 # split the number up into substrings of length 'substring_length'
+
+                # if we can't get evenly-sized substrings, skip.
+                # e.g. substrings of length 4 within an id of length 6
+                # wouldn't work
+                if len(id) % substring_length != 0:
+                    continue
+
                 substrings = set()
                 first_idx = 0
                 last_idx = substring_length
