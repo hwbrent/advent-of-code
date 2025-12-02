@@ -126,7 +126,7 @@ def part2(input):
                 substrings = set()
                 first_idx = 0
                 last_idx = substring_length
-                while last_idx < len(id):
+                while last_idx <= len(id):
                     substring = id[first_idx:last_idx]
                     substrings.add(substring)
                     first_idx += substring_length
