@@ -171,8 +171,6 @@ def part2(batteries: Input) -> int:
 
         answer += joltage
 
-        # break
-
     return answer
 
 
