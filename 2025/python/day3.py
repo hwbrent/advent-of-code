@@ -123,6 +123,10 @@ def part2(batteries: Input) -> int:
 
         search_start_index = 0
         for joltage_digit_index in range(JOLTAGE_DIGIT_COUNT):
+            # basically at every iteration, we just want to find the biggest
+            # digit possible to add to 'joltage_digits' - this will result in
+            # the joltage being the largest possible
+
             # we can only search for the max digit up to a certain point in
             # 'bank' because we need to reserve digits for subsequent joltage
             # digits to search+use.
