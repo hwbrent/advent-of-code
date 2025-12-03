@@ -11,7 +11,7 @@ sys.path.append(root)
 import utils
 
 # Problem URL: https://adventofcode.com/2025/day/3
-# Input URL:   {input_url}
+# Input URL:   https://adventofcode.com/2025/day/3/input
 
 """
 --- Day 3: Lobby ---
