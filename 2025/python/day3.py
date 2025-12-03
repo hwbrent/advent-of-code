@@ -75,12 +75,12 @@ Input = list[list[int]]
 
 
 def parse_raw_input(input: str) -> Input:
-    input = """
-    987654321111111
-    811111111111119
-    234234234234278
-    818181911112111
-    """
+    # input = """
+    # 987654321111111
+    # 811111111111119
+    # 234234234234278
+    # 818181911112111
+    # """
     return [
         [int(battery) for battery in bank.strip()]
         for bank in input.strip().split(os.linesep)
@@ -112,7 +112,7 @@ def part2(batteries: Input) -> int:
     JOLTAGE_DIGIT_COUNT = 12
 
     for bank in batteries:
-        print(bank)
+        # print(bank)
 
         len_bank = len(bank)
 
@@ -150,17 +150,17 @@ def part2(batteries: Input) -> int:
 
             joltage_digits.append(str(biggest_digit))
 
-            print(
-                "    ",
-                digit_number,
-                search_area,
-                [reserved, len_reserved],
-                biggest_digit,
-            )
+            # print(
+            #     "    ",
+            #     digit_number,
+            #     search_area,
+            #     [reserved, len_reserved],
+            #     biggest_digit,
+            # )
 
         joltage = int("".join(joltage_digits))
 
-        print("    ", joltage)
+        # print("    ", joltage)
 
         answer += joltage
 
