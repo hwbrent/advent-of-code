@@ -71,7 +71,8 @@ The total output joltage is now much larger: 987654321111 + 811111111119 + 43423
 What is the new total output joltage?
 """
 
-Input = list[list[int]]
+Bank = list[int]
+Input = list[Bank]
 
 
 def parse_raw_input(input: str) -> Input:
@@ -87,91 +88,76 @@ def parse_raw_input(input: str) -> Input:
     ]
 
 
+def get_joltage(bank: Bank, batteries_to_turn_on: int) -> int:
+    """
+    Gets the joltage value for the given bank of batteries according to
+    the number of batteries that should be turned on per bank
+    """
+
+    # print(bank)
+
+    len_bank = len(bank)
+
+    # this is the joltage value of the bank. we build it up by
+    # concatenating digits and then converting to an int
+    joltage_str = ""
+
+    search_start_index = 0
+    for joltage_digit_index in range(batteries_to_turn_on):
+        # basically at every iteration, we just want to find the biggest
+        # digit possible to add to 'joltage_digits' - this will result in
+        # the joltage being the largest possible
+
+        # we can only search for the max digit up to a certain point in
+        # 'bank' because we need to reserve digits for subsequent joltage
+        # digits to search+use.
+        # if this is the 12th digit, we don't need to reserve digits.
+        # if this is the 11th digit, we need to reserve 1 digit.
+        # if this is the 10th digit, we need to reserve 2 digits.
+        # etc
+
+        digit_number = joltage_digit_index + 1
+
+        num_digits_to_reserve = batteries_to_turn_on - digit_number
+        search_end_index_incl = len_bank - num_digits_to_reserve  # up to, but not at
+
+        search_area = bank[search_start_index:search_end_index_incl]
+
+        reserved = bank[search_end_index_incl:]
+        len_reserved = len(reserved)
+
+        # grab the largest digit numerically in the available search
+        # area and stick it on the end of the joltage number
+        biggest_digit = max(search_area)
+        joltage_str += str(biggest_digit)
+
+        # ensure that the search area in the next iteration begins from
+        # the digit after the one we just used in the joltage
+        search_start_index = search_start_index + search_area.index(biggest_digit) + 1
+
+        # print(
+        #     "    ",
+        #     digit_number,
+        #     search_area,
+        #     [reserved, len_reserved],
+        #     biggest_digit,
+        # )
+
+    joltage = int(joltage_str)
+
+    # print("    ", joltage)
+
+    return joltage
+
+
 def part1(batteries: Input) -> int:
-    answer = 0
-
-    for bank in batteries:
-        # the joltage is basically just the biggest 2-digit number possible
-        # from the batteries in the bank
-
-        digit1 = max(bank[:-1])
-        digit1_index = bank.index(digit1)
-
-        digit2 = max(bank[digit1_index + 1 :])
-
-        joltage = int(str(digit1) + str(digit2))
-
-        answer += joltage
-
-    return answer
+    batteries_to_turn_on = 2
+    return sum([get_joltage(bank, batteries_to_turn_on) for bank in batteries])
 
 
 def part2(batteries: Input) -> int:
-    answer = 0
-
-    JOLTAGE_DIGIT_COUNT = 12
-
-    for bank in batteries:
-        # print(bank)
-
-        len_bank = len(bank)
-
-        # this is the joltage value of the bank. we build it up by
-        # concatenating digits and then converting to an int
-        joltage_str = ""
-
-        search_start_index = 0
-        for joltage_digit_index in range(JOLTAGE_DIGIT_COUNT):
-            # basically at every iteration, we just want to find the biggest
-            # digit possible to add to 'joltage_digits' - this will result in
-            # the joltage being the largest possible
-
-            # we can only search for the max digit up to a certain point in
-            # 'bank' because we need to reserve digits for subsequent joltage
-            # digits to search+use.
-            # if this is the 12th digit, we don't need to reserve digits.
-            # if this is the 11th digit, we need to reserve 1 digit.
-            # if this is the 10th digit, we need to reserve 2 digits.
-            # etc
-
-            digit_number = joltage_digit_index + 1
-
-            num_digits_to_reserve = JOLTAGE_DIGIT_COUNT - digit_number
-            search_end_index_incl = (
-                len_bank - num_digits_to_reserve
-            )  # up to, but not at
-
-            search_area = bank[search_start_index:search_end_index_incl]
-
-            reserved = bank[search_end_index_incl:]
-            len_reserved = len(reserved)
-
-            # grab the largest digit numerically in the available search
-            # area and stick it on the end of the joltage number
-            biggest_digit = max(search_area)
-            joltage_str += str(biggest_digit)
-
-            # ensure that the search area in the next iteration begins from
-            # the digit after the one we just used in the joltage
-            search_start_index = (
-                search_start_index + search_area.index(biggest_digit) + 1
-            )
-
-            # print(
-            #     "    ",
-            #     digit_number,
-            #     search_area,
-            #     [reserved, len_reserved],
-            #     biggest_digit,
-            # )
-
-        joltage = int(joltage_str)
-
-        # print("    ", joltage)
-
-        answer += joltage
-
-    return answer
+    batteries_to_turn_on = 12
+    return sum([get_joltage(bank, batteries_to_turn_on) for bank in batteries])
 
 
 def main():
