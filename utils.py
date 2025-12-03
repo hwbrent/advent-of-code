@@ -30,6 +30,7 @@ CHROMEDRIVER_PATH = "./chromedriver"
 PYTHON_FILE_TEMPLATE = """
 import os
 import sys
+from typing import Any
 from pprint import PrettyPrinter
 
 pp = PrettyPrinter(indent=4)
@@ -49,17 +50,19 @@ import utils
 {part1_description}
 \"\"\"
 
+Input = Any
 
-def parse_raw_input(input: str):
+
+def parse_raw_input(input: str) -> Input:
     return input
 
 
-def part1(input):
+def part1(input: Input) -> int:
     answer = None
     return answer
 
 
-def part2(input):
+def part2(input: Input) -> int:
     answer = None
     return answer
 
