@@ -148,6 +148,9 @@ def part2(batteries: Input) -> int:
             len_reserved = len(reserved)
 
             biggest_digit = max(search_area)
+
+            # ensure that the search area in the next iteration begins from
+            # the digit after the one we just used in the joltage
             search_start_index = (
                 search_start_index + search_area.index(biggest_digit) + 1
             )
