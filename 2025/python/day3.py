@@ -45,16 +45,33 @@ The total output joltage is the sum of the maximum joltage from each bank, so in
 There are many batteries in front of you. Find the maximum joltage possible from each bank; what is the total output joltage?
 """
 
+Input = list[list[int]]
 
-def parse_raw_input(input: str):
+
+def parse_raw_input(input: str) -> Input:
     return [
         [int(battery) for battery in bank] for bank in input.strip().split(os.linesep)
     ]
 
 
-def part1(input):
-    answer = None
-    print(input)
+def part1(batteries: Input):
+    answer = 0
+
+    BATTERIES_PER_BANK = 2
+
+    for bank in batteries:
+        # the joltage is basically just the biggest 2-digit number possible
+        # from the batteries in the bank
+
+        digit1 = max(bank[:-1])
+        digit1_index = bank.index(digit1)
+
+        digit2 = max(bank[digit1_index + 1 :])
+
+        joltage = int(digit1 + digit2)
+
+        answer += joltage
+
     return answer
 
 
