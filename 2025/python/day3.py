@@ -119,7 +119,7 @@ def part2(batteries: Input) -> int:
         joltage_digits = []
 
         search_start_index = 0
-        for i in range(JOLTAGE_DIGIT_COUNT):
+        for joltage_digit_index in range(JOLTAGE_DIGIT_COUNT):
             # we can only search for the max digit up to a certain point in
             # 'bank' because we need to reserve digits for subsequent joltage
             # digits to search+use.
@@ -128,7 +128,7 @@ def part2(batteries: Input) -> int:
             # if this is the 10th digit, we need to reserve 2 digits.
             # etc
 
-            digit_number = i + 1
+            digit_number = joltage_digit_index + 1
 
             num_digits_to_reserve = JOLTAGE_DIGIT_COUNT - digit_number
             search_end_index_incl = (
