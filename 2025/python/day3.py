@@ -49,6 +49,12 @@ Input = list[list[int]]
 
 
 def parse_raw_input(input: str) -> Input:
+    # input = """
+    # 987654321111111
+    # 811111111111119
+    # 234234234234278
+    # 818181911112111
+    # """
     return [
         [int(battery) for battery in bank.strip()]
         for bank in input.strip().split(os.linesep)
