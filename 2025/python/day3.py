@@ -150,12 +150,12 @@ def get_joltage(bank: Bank, batteries_to_turn_on: int) -> int:
 
 def part1(batteries: Input) -> int:
     batteries_to_turn_on = 2
-    return sum([get_joltage(bank, batteries_to_turn_on) for bank in batteries])
+    return sum(get_joltage(bank, batteries_to_turn_on) for bank in batteries)
 
 
 def part2(batteries: Input) -> int:
     batteries_to_turn_on = 12
-    return sum([get_joltage(bank, batteries_to_turn_on) for bank in batteries])
+    return sum(get_joltage(bank, batteries_to_turn_on) for bank in batteries)
 
 
 def main():
