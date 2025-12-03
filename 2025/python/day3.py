@@ -170,8 +170,8 @@ def part2(batteries: Input) -> int:
 
 
 def main():
-    utils.handle(part1)
-    utils.handle(part2)
+    utils.handle(part1)  # 17316           (0.003820180892944336 seconds)
+    utils.handle(part2)  # 171741365473332 (0.005300045013427734 seconds)
 
 
 if __name__ == "__main__":
