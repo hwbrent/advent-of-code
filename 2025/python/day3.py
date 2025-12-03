@@ -112,6 +112,9 @@ def part2(batteries: Input) -> int:
     JOLTAGE_DIGIT_COUNT = 12
 
     for bank in batteries:
+        print(bank)
+
+        len_bank = len(bank)
 
         joltage_digits = []
 
@@ -129,23 +132,33 @@ def part2(batteries: Input) -> int:
             # etc
 
             digit_number = i + 1
-            search_end_index = -(JOLTAGE_DIGIT_COUNT - i)
 
-            subsection = bank[search_start_index:search_end_index]
+            num_digits_to_reserve = JOLTAGE_DIGIT_COUNT - digit_number
+            search_end_index_incl = (
+                len_bank - num_digits_to_reserve
+            )  # up to, but not at
 
-            rest = bank[search_end_index:]
-            len_rest = len(rest)
+            search_area = bank[search_start_index:search_end_index_incl]
 
-            biggest_digit = max(subsection)
+            reserved = bank[search_end_index_incl:]
+            len_reserved = len(reserved)
+
+            biggest_digit = max(search_area)
             search_start_index = bank.index(biggest_digit) + 1
 
             joltage_digits.append(str(biggest_digit))
 
-            # print(digit_number, subsection, rest, len_rest)
+            print(
+                "    ",
+                digit_number,
+                search_area,
+                [reserved, len_reserved],
+                biggest_digit,
+            )
 
         joltage = int("".join(joltage_digits))
 
-        print(bank, joltage)
+        print("    ", joltage)
 
         answer += joltage
 
