@@ -116,6 +116,9 @@ def part2(batteries: Input) -> int:
 
         len_bank = len(bank)
 
+        # this will store the separate digits of the joltage for
+        # this bank. at the end we concatenate them together to form the
+        # numeric joltage value
         joltage_digits = []
 
         search_start_index = 0
