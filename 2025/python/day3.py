@@ -116,10 +116,9 @@ def part2(batteries: Input) -> int:
 
         len_bank = len(bank)
 
-        # this will store the separate digits of the joltage for
-        # this bank. at the end we concatenate them together to form the
-        # numeric joltage value
-        joltage_digits = []
+        # this is the joltage value of the bank. we build it up by
+        # concatenating digits and then converting to an int
+        joltage_str = ""
 
         search_start_index = 0
         for joltage_digit_index in range(JOLTAGE_DIGIT_COUNT):
@@ -155,7 +154,7 @@ def part2(batteries: Input) -> int:
                 search_start_index + search_area.index(biggest_digit) + 1
             )
 
-            joltage_digits.append(str(biggest_digit))
+            joltage_str += str(biggest_digit)
 
             # print(
             #     "    ",
@@ -165,7 +164,7 @@ def part2(batteries: Input) -> int:
             #     biggest_digit,
             # )
 
-        joltage = int("".join(joltage_digits))
+        joltage = int(joltage_str)
 
         # print("    ", joltage)
 
