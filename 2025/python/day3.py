@@ -109,7 +109,7 @@ def part1(batteries: Input) -> int:
 def part2(batteries: Input) -> int:
     answer = 0
 
-    BATTERIES_PER_BANK = 12
+    JOLTAGE_DIGIT_COUNT = 12
 
     for bank in batteries:
 
@@ -117,10 +117,10 @@ def part2(batteries: Input) -> int:
 
         search_start_index = 0
         for i, battery in enumerate(bank):
-            if i >= BATTERIES_PER_BANK:
+            if i >= JOLTAGE_DIGIT_COUNT:
                 break
             digit_number = i + 1
-            search_end_index = -(BATTERIES_PER_BANK - i)
+            search_end_index = -(JOLTAGE_DIGIT_COUNT - i)
 
             subsection = bank[search_start_index:search_end_index]
 
