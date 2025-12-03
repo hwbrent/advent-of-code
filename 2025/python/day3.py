@@ -75,22 +75,20 @@ Input = list[list[int]]
 
 
 def parse_raw_input(input: str) -> Input:
-    # input = """
-    # 987654321111111
-    # 811111111111119
-    # 234234234234278
-    # 818181911112111
-    # """
+    input = """
+    987654321111111
+    811111111111119
+    234234234234278
+    818181911112111
+    """
     return [
         [int(battery) for battery in bank.strip()]
         for bank in input.strip().split(os.linesep)
     ]
 
 
-def part1(batteries: Input):
+def part1(batteries: Input) -> int:
     answer = 0
-
-    BATTERIES_PER_BANK = 2
 
     for bank in batteries:
         # the joltage is basically just the biggest 2-digit number possible
@@ -108,8 +106,42 @@ def part1(batteries: Input):
     return answer
 
 
-def part2(input):
-    answer = None
+def part2(batteries: Input) -> int:
+    answer = 0
+
+    BATTERIES_PER_BANK = 12
+
+    for bank in batteries:
+
+        joltage_digits = []
+
+        search_start_index = 0
+        for i, battery in enumerate(bank):
+            if i >= BATTERIES_PER_BANK:
+                break
+            digit_number = i + 1
+            search_end_index = -(BATTERIES_PER_BANK - i)
+
+            subsection = bank[search_start_index:search_end_index]
+
+            rest = bank[search_end_index:]
+            len_rest = len(rest)
+
+            biggest_digit = max(subsection)
+            search_start_index = bank.index(biggest_digit) + 1
+
+            joltage_digits.append(str(biggest_digit))
+
+            # print(digit_number, subsection, rest, len_rest)
+
+        joltage = int("".join(joltage_digits))
+
+        print(bank, joltage)
+
+        answer += joltage
+
+        # break
+
     return answer
 
 
