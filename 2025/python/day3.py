@@ -50,7 +50,8 @@ Input = list[list[int]]
 
 def parse_raw_input(input: str) -> Input:
     return [
-        [int(battery) for battery in bank] for bank in input.strip().split(os.linesep)
+        [int(battery) for battery in bank.strip()]
+        for bank in input.strip().split(os.linesep)
     ]
 
 
