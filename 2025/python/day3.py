@@ -122,9 +122,7 @@ def get_joltage(bank: Bank, batteries_to_turn_on: int) -> int:
         search_end_index_incl = len_bank - num_digits_to_reserve  # up to, but not at
 
         search_area = bank[search_start_index:search_end_index_incl]
-
         reserved = bank[search_end_index_incl:]
-        len_reserved = len(reserved)
 
         # grab the largest digit numerically in the available search
         # area and stick it on the end of the joltage number
@@ -139,7 +137,7 @@ def get_joltage(bank: Bank, batteries_to_turn_on: int) -> int:
         #     "    ",
         #     digit_number,
         #     search_area,
-        #     [reserved, len_reserved],
+        #     [reserved, len(reserved)],
         #     biggest_digit,
         # )
 
