@@ -69,7 +69,7 @@ def part1(batteries: Input):
 
         digit2 = max(bank[digit1_index + 1 :])
 
-        joltage = int(digit1 + digit2)
+        joltage = int(str(digit1) + str(digit2))
 
         answer += joltage
 
