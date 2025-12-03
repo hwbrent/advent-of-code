@@ -119,6 +119,15 @@ def part2(batteries: Input) -> int:
         for i, battery in enumerate(bank):
             if i >= JOLTAGE_DIGIT_COUNT:
                 break
+
+            # we can only search for the max digit up to a certain point in
+            # 'bank' because we need to reserve digits for subsequent joltage
+            # digits to search+use.
+            # if this is the 12th digit, we don't need to reserve digits.
+            # if this is the 11th digit, we need to reserve 1 digit.
+            # if this is the 10th digit, we need to reserve 2 digits.
+            # etc
+
             digit_number = i + 1
             search_end_index = -(JOLTAGE_DIGIT_COUNT - i)
 
