@@ -47,11 +47,14 @@ There are many batteries in front of you. Find the maximum joltage possible from
 
 
 def parse_raw_input(input: str):
-    return input
+    return [
+        [int(battery) for battery in bank] for bank in input.strip().split(os.linesep)
+    ]
 
 
 def part1(input):
     answer = None
+    print(input)
     return answer
 
 
