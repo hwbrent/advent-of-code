@@ -144,7 +144,9 @@ def part2(batteries: Input) -> int:
             len_reserved = len(reserved)
 
             biggest_digit = max(search_area)
-            search_start_index = bank.index(biggest_digit) + 1
+            search_start_index = (
+                search_start_index + search_area.index(biggest_digit) + 1
+            )
 
             joltage_digits.append(str(biggest_digit))
 
