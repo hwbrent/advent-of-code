@@ -1,5 +1,6 @@
 import os
 import sys
+import time
 from typing import Literal
 from pprint import PrettyPrinter
 
@@ -82,13 +83,45 @@ def part1(grid: Grid) -> int:
 
 
 def part2(grid: Grid) -> int:
-    answer = None
+    answer = 0
+
+    len_grid = len(grid)
+    len_line = len(grid[0])
+
+    # debug
+    roll_count = len([char for line in grid for char in line if char == ROLL_OF_PAPER])
+    roll_count_initial = roll_count
+    time_start = time.time()
+    # print(roll_count_initial)
+
+    i_line = 0
+    while i_line < len_grid:
+        for i_space in range(len_line):
+            # print([i_line, i_space], roll_count)
+            if can_access_roll(grid, i_line, i_space):
+                grid[i_line][i_space] = EMPTY_SPACE
+                roll_count -= 1
+                answer += 1
+                i_line = 0
+                # print(f"{roll_count} ({time.time() - time_start} seconds)")
+                break
+        else:
+            i_line += 1
+
+    # debug
+    roll_count_final = roll_count
+    time_end = time.time()
+    time_diff = time_end - time_start
+    # print(
+    #     f"{roll_count_initial} --> {roll_count_final} = {answer} ({time_diff} seconds)"
+    # )
+
     return answer
 
 
 def main():
-    utils.handle(part1)  # 1505 (0.014733076095581055 seconds)
-    utils.handle(part2)
+    utils.handle(part1)  # 1505 ( 0.014733076095581055 seconds)
+    utils.handle(part2)  # 9182 (29.689964056015015 seconds)
 
 
 if __name__ == "__main__":
