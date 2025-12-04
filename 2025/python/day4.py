@@ -1,6 +1,6 @@
 import os
 import sys
-from typing import Any
+from typing import Literal
 from pprint import PrettyPrinter
 
 pp = PrettyPrinter(indent=4)
@@ -14,8 +14,12 @@ import utils
 # Problem URL: https://adventofcode.com/2025/day/4
 # Input URL:   https://adventofcode.com/2025/day/4/input
 
+ROLL_OF_PAPER = "@"
+EMPTY_SPACE = "."
 
-Input = Any
+Space = Literal[ROLL_OF_PAPER, EMPTY_SPACE]
+Line = list[Space]
+Input = list[Line]
 
 
 def parse_raw_input(input: str) -> Input:
@@ -31,7 +35,7 @@ def parse_raw_input(input: str) -> Input:
     .@@@@@@@@.
     @.@.@@@.@.
     """
-    return input
+    return [[char for char in line.strip()] for line in input.strip().split(os.linesep)]
 
 
 def part1(input: Input) -> int:
