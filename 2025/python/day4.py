@@ -23,23 +23,67 @@ Grid = list[Line]
 
 
 def parse_raw_input(input: str) -> Grid:
-    input = """
-    ..@@.@@@@.
-    @@@.@.@.@@
-    @@@@@.@.@@
-    @.@@@@..@.
-    @@.@@@@.@@
-    .@@@@@@@.@
-    .@.@.@.@@@
-    @.@@@.@@@@
-    .@@@@@@@@.
-    @.@.@@@.@.
-    """
+    # input = """
+    # ..@@.@@@@.
+    # @@@.@.@.@@
+    # @@@@@.@.@@
+    # @.@@@@..@.
+    # @@.@@@@.@@
+    # .@@@@@@@.@
+    # .@.@.@.@@@
+    # @.@@@.@@@@
+    # .@@@@@@@@.
+    # @.@.@@@.@.
+    # """
     return [[char for char in line.strip()] for line in input.strip().split(os.linesep)]
 
 
 def part1(grid: Grid) -> int:
-    answer = None
+    answer = 0
+
+    length_grid = len(grid)
+    length_line = len(grid[0])
+
+    # check every space in every line
+    for i_line, line in enumerate(grid):
+
+        line_prev = grid[i_line - 1] if i_line - 1 >= 0 else []
+        line_next = grid[i_line + 1] if i_line + 1 < length_grid else []
+
+        for i_space, space in enumerate(line):
+
+            if space == EMPTY_SPACE:
+                continue
+
+            i_space_prev = max(i_space - 1, 0)
+            i_space_next = min(i_space + 2, length_line)
+
+            line_prev_seg = line_prev[i_space_prev:i_space_next]
+            line_here_seg = line[i_space_prev:i_space_next]
+            line_next_seg = line_next[i_space_prev:i_space_next]
+
+            # remove one @ from line_here_seg as it's the current space and
+            # we dont want to account for that
+            for i_char, char in enumerate(line_here_seg):
+                if char == ROLL_OF_PAPER:
+                    del line_here_seg[i_char]
+                    break
+
+            surrounding = line_prev_seg + line_here_seg + line_next_seg
+
+            roll_count = surrounding.count(ROLL_OF_PAPER)
+            # roll_count -= 1  # so that we dont count the current space
+
+            can_access = roll_count < 4
+            if can_access:
+                answer += 1
+
+            # print([i_line, i_space], roll_count)
+            # print("    ", line_prev_seg)
+            # print("    ", line_here_seg)
+            # print("    ", line_next_seg)
+            # print()
+
     return answer
 
 
