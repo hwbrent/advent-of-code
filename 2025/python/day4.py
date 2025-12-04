@@ -19,10 +19,10 @@ EMPTY_SPACE = "."
 
 Space = Literal[ROLL_OF_PAPER, EMPTY_SPACE]
 Line = list[Space]
-Input = list[Line]
+Grid = list[Line]
 
 
-def parse_raw_input(input: str) -> Input:
+def parse_raw_input(input: str) -> Grid:
     input = """
     ..@@.@@@@.
     @@@.@.@.@@
@@ -38,12 +38,12 @@ def parse_raw_input(input: str) -> Input:
     return [[char for char in line.strip()] for line in input.strip().split(os.linesep)]
 
 
-def part1(input: Input) -> int:
+def part1(grid: Grid) -> int:
     answer = None
     return answer
 
 
-def part2(input: Input) -> int:
+def part2(grid: Grid) -> int:
     answer = None
     return answer
 
