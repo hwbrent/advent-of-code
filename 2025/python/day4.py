@@ -72,7 +72,6 @@ def part1(grid: Grid) -> int:
             surrounding = line_prev_seg + line_here_seg + line_next_seg
 
             roll_count = surrounding.count(ROLL_OF_PAPER)
-            # roll_count -= 1  # so that we dont count the current space
 
             can_access = roll_count < 4
             if can_access:
