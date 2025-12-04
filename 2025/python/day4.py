@@ -1,5 +1,6 @@
 import os
 import sys
+import time
 from typing import Literal
 from pprint import PrettyPrinter
 
@@ -38,62 +39,89 @@ def parse_raw_input(input: str) -> Grid:
     return [[char for char in line.strip()] for line in input.strip().split(os.linesep)]
 
 
+def can_access_roll(grid: Grid, i_line: int, i_space: int) -> bool:
+    if grid[i_line][i_space] != ROLL_OF_PAPER:
+        return False
+
+    len_grid = len(grid)
+    len_line = len(grid[0])
+
+    line_prev = grid[i_line - 1] if i_line - 1 >= 0 else []
+    line_here = grid[i_line]
+    line_next = grid[i_line + 1] if i_line + 1 < len_grid else []
+
+    i_space_prev = max(i_space - 1, 0)
+    i_space_next = min(i_space + 2, len_line)
+
+    line_prev_seg = line_prev[i_space_prev:i_space_next]
+    line_here_seg = line_here[i_space_prev:i_space_next]
+    line_next_seg = line_next[i_space_prev:i_space_next]
+
+    # remove one @ from line_here_seg as it's the current space and
+    # we dont want to account for that
+    for i_char, char in enumerate(line_here_seg):
+        if char == ROLL_OF_PAPER:
+            del line_here_seg[i_char]
+            break
+
+    surrounding = line_prev_seg + line_here_seg + line_next_seg
+
+    roll_count = surrounding.count(ROLL_OF_PAPER)
+
+    can_access = roll_count < 4
+    return can_access
+
+
 def part1(grid: Grid) -> int:
-    answer = 0
-
-    length_grid = len(grid)
-    length_line = len(grid[0])
-
-    # check every space in every line
-    for i_line, line in enumerate(grid):
-
-        line_prev = grid[i_line - 1] if i_line - 1 >= 0 else []
-        line_next = grid[i_line + 1] if i_line + 1 < length_grid else []
-
-        for i_space, space in enumerate(line):
-
-            if space == EMPTY_SPACE:
-                continue
-
-            i_space_prev = max(i_space - 1, 0)
-            i_space_next = min(i_space + 2, length_line)
-
-            line_prev_seg = line_prev[i_space_prev:i_space_next]
-            line_here_seg = line[i_space_prev:i_space_next]
-            line_next_seg = line_next[i_space_prev:i_space_next]
-
-            # remove one @ from line_here_seg as it's the current space and
-            # we dont want to account for that
-            for i_char, char in enumerate(line_here_seg):
-                if char == ROLL_OF_PAPER:
-                    del line_here_seg[i_char]
-                    break
-
-            surrounding = line_prev_seg + line_here_seg + line_next_seg
-
-            roll_count = surrounding.count(ROLL_OF_PAPER)
-
-            can_access = roll_count < 4
-            if can_access:
-                answer += 1
-
-            # print([i_line, i_space], roll_count)
-            # print("    ", line_prev_seg)
-            # print("    ", line_here_seg)
-            # print("    ", line_next_seg)
-            # print()
-
-    return answer
+    len_grid = len(grid)
+    len_line = len(grid[0])
+    return sum(
+        int(can_access_roll(grid, i_line, i_space))
+        for i_space in range(len_line)
+        for i_line in range(len_grid)
+    )
 
 
 def part2(grid: Grid) -> int:
-    answer = None
+    answer = 0
+
+    len_grid = len(grid)
+    len_line = len(grid[0])
+
+    # debug
+    roll_count = len([char for line in grid for char in line if char == ROLL_OF_PAPER])
+    roll_count_initial = roll_count
+    time_start = time.time()
+    # print(roll_count_initial)
+
+    i_line = 0
+    while i_line < len_grid:
+        for i_space in range(len_line):
+            # print([i_line, i_space], roll_count)
+            if can_access_roll(grid, i_line, i_space):
+                grid[i_line][i_space] = EMPTY_SPACE
+                roll_count -= 1
+                answer += 1
+                i_line = 0
+                # print(f"{roll_count} ({time.time() - time_start} seconds)")
+                break
+        else:
+            i_line += 1
+
+    # debug
+    roll_count_final = roll_count
+    time_end = time.time()
+    time_diff = time_end - time_start
+    # print(
+    #     f"{roll_count_initial} --> {roll_count_final} = {answer} ({time_diff} seconds)"
+    # )
+
     return answer
 
 
 def main():
-    utils.handle(part1)  # 1505 (0.014733076095581055 seconds)
-    utils.handle(part2)
+    utils.handle(part1)  # 1505 ( 0.014733076095581055 seconds)
+    utils.handle(part2)  # 9182 (29.689964056015015    seconds)
 
 
 if __name__ == "__main__":
