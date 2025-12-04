@@ -92,7 +92,7 @@ def part2(grid: Grid) -> int:
 
 
 def main():
-    utils.handle(part1)
+    utils.handle(part1)  # 1505 (0.014733076095581055 seconds)
     utils.handle(part2)
 
 
