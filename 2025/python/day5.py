@@ -1,5 +1,6 @@
 import os
 import sys
+import numpy as np
 from typing import Any
 from pprint import PrettyPrinter
 
@@ -71,7 +72,7 @@ def part2(input: Input) -> int:
     fresh_ids = set()
 
     for lower_incl, upper_incl in fresh_id_ranges:
-        entire_range = range(lower_incl, upper_incl + 1)
+        entire_range = np.arange(lower_incl, upper_incl + 1)
 
         fresh_ids.update(entire_range)
 
