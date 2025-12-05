@@ -60,6 +60,7 @@ def part1(input: Input) -> int:
             lower_incl, upper_incl = fresh_id_range
             if available_id in range(lower_incl, upper_incl + 1):
                 answer += 1
+                break
 
     return answer
 
