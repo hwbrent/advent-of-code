@@ -14,15 +14,31 @@ import utils
 # Problem URL: https://adventofcode.com/2025/day/5
 # Input URL:   https://adventofcode.com/2025/day/5/input
 
-Input = Any
+FreshIdRange = list[int, int]
+FreshIdRanges = list[FreshIdRange]
+
+AvailableId = int
+AvailableIds = list[AvailableId]
+
+Input = tuple[FreshIdRanges, AvailableIds]
 
 
 def parse_raw_input(input: str) -> Input:
-    return input
+    fresh_id_ranges, available_ids = input.strip().split(2 * os.linesep)
+
+    fresh_id_ranges = [
+        [int(num) for num in line.strip().split("-")]
+        for line in fresh_id_ranges.strip().split(os.linesep)
+    ]
+
+    available_ids = [int(num.strip()) for num in available_ids.split(os.linesep)]
+
+    return fresh_id_ranges, available_ids
 
 
 def part1(input: Input) -> int:
     answer = None
+    print(input)
     return answer
 
 
