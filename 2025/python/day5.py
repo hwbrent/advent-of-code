@@ -97,10 +97,7 @@ def part2(input: Input) -> int:
 
     # for each range, get the number of ids in the range by subtracting the
     # upper bound from the lower bound
-    for fresh_id_range in merged_ranges:
-        lower, upper = fresh_id_range
-        ids_in_range = upper + 1 - lower
-        answer += ids_in_range
+    answer = sum(upper + 1 - lower for lower, upper in merged_ranges)
 
     return answer
 
