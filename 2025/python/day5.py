@@ -66,8 +66,16 @@ def part1(input: Input) -> int:
 
 
 def part2(input: Input) -> int:
-    answer = None
-    return answer
+    fresh_id_ranges, _ = input
+
+    fresh_ids = set()
+
+    for lower_incl, upper_incl in fresh_id_ranges:
+        entire_range = range(lower_incl, upper_incl + 1)
+
+        fresh_ids.update(entire_range)
+
+    return len(fresh_ids)
 
 
 def main():
