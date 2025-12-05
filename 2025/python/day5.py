@@ -78,11 +78,8 @@ def part2(input: Input) -> int:
     merged_ranges = deepcopy(sorted_ranges)
     i = 0
     while i < len(merged_ranges) - 1:
-        r1 = merged_ranges[i]
-        r2 = merged_ranges[i + 1]
-
-        r1_lower, r1_upper = r1
-        r2_lower, r2_upper = r2
+        r1_lower, r1_upper = merged_ranges[i]
+        r2_lower, r2_upper = merged_ranges[i + 1]
 
         if r1_upper >= r2_lower:
             # we're combining two ranges into one, so get rid of one of the
