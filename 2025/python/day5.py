@@ -1,6 +1,6 @@
 import os
 import sys
-from typing import Any
+from copy import deepcopy
 from pprint import PrettyPrinter
 
 pp = PrettyPrinter(indent=4)
@@ -66,13 +66,38 @@ def part1(input: Input) -> int:
 
 
 def part2(input: Input) -> int:
-    answer = None
-    return answer
+    fresh_id_ranges, _ = input
+
+    # merge ranges that overlap.
+    # doing this means we dont have to worry about the same id being
+    # accounted for in multiple different ranges
+
+    sorted_ranges = sorted(fresh_id_ranges)
+    merged_ranges = deepcopy(sorted_ranges)
+    i = 0
+    while i < len(merged_ranges) - 1:
+        lower1, upper1 = merged_ranges[i]
+        lower2, upper2 = merged_ranges[i + 1]
+
+        if upper1 >= lower2:
+            # we're combining two ranges into one, so get rid of one of the
+            # preexisting ranges
+            del merged_ranges[i + 1]
+
+            new_lower = lower1  # at most the same as lower2. no need to compare
+            new_upper = max(upper1, upper2)
+            merged_ranges[i] = [new_lower, new_upper]
+        else:
+            i += 1
+
+    # for each range, get the number of ids in the range by subtracting the
+    # upper bound from the lower bound
+    return sum((upper + 1) - lower for lower, upper in merged_ranges)
 
 
 def main():
-    utils.handle(part1)
-    utils.handle(part2)
+    utils.handle(part1)  # 720             (0.034510135650634766 seconds)
+    utils.handle(part2)  # 357608232770687 (0.001055002212524414 seconds)
 
 
 if __name__ == "__main__":
