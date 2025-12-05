@@ -24,6 +24,20 @@ Input = tuple[FreshIdRanges, AvailableIds]
 
 
 def parse_raw_input(input: str) -> Input:
+    input = """
+    3-5
+    10-14
+    16-20
+    12-18
+
+    1
+    5
+    8
+    11
+    17
+    32
+    """
+
     fresh_id_ranges, available_ids = input.strip().split(2 * os.linesep)
 
     fresh_id_ranges = [
