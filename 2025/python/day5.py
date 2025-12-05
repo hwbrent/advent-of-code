@@ -74,7 +74,7 @@ def part2(input: Input) -> int:
     # doing this means we dont have to worry about the same id being
     # accounted for in multiple different ranges
 
-    sorted_ranges = sorted(fresh_id_ranges, key=lambda x: x[0])
+    sorted_ranges = sorted(fresh_id_ranges)
     merged_ranges = deepcopy(sorted_ranges)
     i = 0
     while i < len(merged_ranges) - 1:
