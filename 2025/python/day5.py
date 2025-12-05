@@ -66,8 +66,6 @@ def part1(input: Input) -> int:
 
 
 def part2(input: Input) -> int:
-    answer = 0
-
     fresh_id_ranges, _ = input
 
     # merge ranges that overlap.
@@ -94,9 +92,7 @@ def part2(input: Input) -> int:
 
     # for each range, get the number of ids in the range by subtracting the
     # upper bound from the lower bound
-    answer = sum((upper + 1) - lower for lower, upper in merged_ranges)
-
-    return answer
+    return sum((upper + 1) - lower for lower, upper in merged_ranges)
 
 
 def main():
