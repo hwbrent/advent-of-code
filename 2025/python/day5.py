@@ -1,5 +1,6 @@
 import os
 import sys
+from copy import deepcopy
 from pprint import PrettyPrinter
 
 pp = PrettyPrinter(indent=4)
@@ -73,11 +74,12 @@ def part2(input: Input) -> int:
     # doing this means we dont have to worry about the same id being
     # accounted for in multiple different ranges
 
-    fresh_id_ranges.sort(key=lambda x: x[0])
+    sorted_ranges = sorted(fresh_id_ranges, key=lambda x: x[0])
+    merged_ranges = deepcopy(sorted_ranges)
     i = 0
-    while i < len(fresh_id_ranges) - 1:
-        r1 = fresh_id_ranges[i]
-        r2 = fresh_id_ranges[i + 1]
+    while i < len(merged_ranges) - 1:
+        r1 = merged_ranges[i]
+        r2 = merged_ranges[i + 1]
 
         r1_lower, r1_upper = r1
         r2_lower, r2_upper = r2
@@ -85,17 +87,17 @@ def part2(input: Input) -> int:
         if r1_upper >= r2_lower:
             # we're combining two ranges into one, so get rid of one of the
             # preexisting ranges
-            del fresh_id_ranges[i + 1]
+            del merged_ranges[i + 1]
 
             new_lower = r1_lower  # at most the same as r2_lower. no need to compare
             new_upper = max(r1_upper, r2_upper)
-            fresh_id_ranges[i] = [new_lower, new_upper]
+            merged_ranges[i] = [new_lower, new_upper]
         else:
             i += 1
 
     # for each range, get the number of ids in the range by subtracting the
     # upper bound from the lower bound
-    for fresh_id_range in fresh_id_ranges:
+    for fresh_id_range in merged_ranges:
         lower, upper = fresh_id_range
         ids_in_range = upper + 1 - lower
         answer += ids_in_range
