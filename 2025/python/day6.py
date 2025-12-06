@@ -84,10 +84,11 @@ def part1(problems: Problems) -> int:
 
 
 def part2(problems: Problems) -> int:
-    answer = 0
+    # remap the operands to the new format, and then use them to basically
+    # repeat part 1
 
-    for problem in problems[::-1]:
-        old_operands, operator = problem
+    for i_problem, problem in enumerate(problems):
+        old_operands, _ = problem
 
         old_operands = [s.replace(" ", "0") for s in old_operands]
 
@@ -103,11 +104,10 @@ def part2(problems: Problems) -> int:
             if num_str != "":
                 new_operands.append(num_str)
 
-        result = do_operation(new_operands, operator)
+        # replace the old operands with the new operands
+        problems[i_problem][0] = new_operands
 
-        answer += result
-
-    return answer
+    return part1(problems)
 
 
 def main():
