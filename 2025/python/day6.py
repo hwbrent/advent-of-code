@@ -2,7 +2,6 @@ import numpy as np
 
 import os
 import sys
-from typing import Any
 from pprint import PrettyPrinter
 
 pp = PrettyPrinter(indent=4)
@@ -23,12 +22,12 @@ Problems = list[Problem]
 
 
 def parse_raw_input(input: str) -> Problems:
-    input = """
-    123 328  51 64 
-    45 64  387 23 
-    6 98  215 314
-    *   +   *   +  
-    """
+    # input = """
+    # 123 328  51 64
+    # 45 64  387 23
+    # 6 98  215 314
+    # *   +   *   +
+    # """
 
     rows = [row.split() for row in input.strip().split(os.linesep)]
     cols = [[row[col_number] for row in rows] for col_number in range(len(rows[0]))]
@@ -65,7 +64,7 @@ def part2(problems: Problems) -> int:
 
 
 def main():
-    utils.handle(part1)
+    utils.handle(part1)  # 5667835681547 (0.009466171264648438 seconds)
     utils.handle(part2)
 
 
