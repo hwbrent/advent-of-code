@@ -53,9 +53,7 @@ def parse_raw_input(input: str) -> Problems:
     col_bounds = list(it.pairwise(operator_indices))
 
     problems = []
-    for pair in col_bounds:
-        lower, upper = pair
-
+    for lower, upper in col_bounds:
         operands = [row[lower:upper] for row in rows]
 
         operator = operands.pop().strip()
