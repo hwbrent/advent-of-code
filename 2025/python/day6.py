@@ -69,22 +69,20 @@ to_int = lambda x: int(x.strip())
 map_to_int = np.vectorize(to_int)
 
 
+def do_operation(operands: Operands, operator: Operator) -> int:
+    operands = map_to_int(operands)
+    match operator:
+        case "*":
+            return np.prod(operands)
+        case "+":
+            return np.sum(operands)
+
+
 def part1(problems: Problems) -> int:
     answer = 0
 
     for problem in problems:
-        result = 0
-
-        operands, operator = problem
-
-        operands = map_to_int(operands)
-
-        match operator:
-            case "*":
-                result = np.prod(operands)
-            case "+":
-                result = np.sum(operands)
-
+        result = do_operation(*problem)
         answer += result
 
     return answer
