@@ -33,11 +33,14 @@ def parse_raw_input(input: str) -> Problems:
     cols = [[row[col_number] for row in rows] for col_number in range(len(rows[0]))]
 
     problems = [
-        (np.array([int(num) for num in cols[i][:-1]]), cols[i][-1])
-        for i in range(len(cols))
+        (np.array([num for num in cols[i][:-1]]), cols[i][-1]) for i in range(len(cols))
     ]
 
     return problems
+
+
+to_int = lambda x: int(x)
+map_to_int = np.vectorize(to_int)
 
 
 def part1(problems: Problems) -> int:
@@ -47,6 +50,9 @@ def part1(problems: Problems) -> int:
         result = 0
 
         operands, operator = problem
+
+        operands = map_to_int(operands)
+
         match operator:
             case "*":
                 result = np.prod(operands)
