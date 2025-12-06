@@ -50,7 +50,7 @@ def parse_raw_input(input: str) -> Problems:
 
     # configure each col's bounds to start at the index of the current
     # operator and end at the index before the next operator
-    col_bounds = [[num1, num2] for num1, num2 in it.pairwise(operator_indices)]
+    col_bounds = list(it.pairwise(operator_indices))
 
     problems = []
     for pair in col_bounds:
