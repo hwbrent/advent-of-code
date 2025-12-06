@@ -1,3 +1,5 @@
+import numpy as np
+
 import os
 import sys
 from typing import Any
@@ -14,7 +16,7 @@ import utils
 # Problem URL: https://adventofcode.com/2025/day/6
 # Input URL:   https://adventofcode.com/2025/day/6/input
 
-Operands = list[int]
+Operands = np.ndarray
 Operator = str
 Problem = tuple[Operands, Operator]
 Problems = list[Problem]
@@ -32,7 +34,8 @@ def parse_raw_input(input: str) -> Problems:
     cols = [[row[col_number] for row in rows] for col_number in range(len(rows[0]))]
 
     problems = [
-        ([int(num) for num in cols[i][:-1]], cols[i][-1]) for i in range(len(cols))
+        (np.array([int(num) for num in cols[i][:-1]]), cols[i][-1])
+        for i in range(len(cols))
     ]
 
     return problems
