@@ -23,18 +23,32 @@ Problems = list[Problem]
 
 def parse_raw_input(input: str) -> Problems:
     input = """
-    123 328  51 64 
-    45 64  387 23 
-    6 98  215 314
-    *   +   *   +  
+123 328  51 64 
+ 45 64  387 23 
+  6 98  215 314
+*   +   *   +  
     """
 
-    rows = [row.split() for row in input.strip().split(os.linesep)]
-    cols = [[row[col_number] for row in rows] for col_number in range(len(rows[0]))]
+    print(repr(input))
 
-    problems = [
-        (np.array([num for num in cols[i][:-1]]), cols[i][-1]) for i in range(len(cols))
-    ]
+    # remove any newlines from the left of the input, but not general
+    # whitespace as it could affect the alignment of the numbers
+    input = input.lstrip(os.linesep)
+
+    # remove any whitespace at all from the right of the input. this will
+    # only affect the operator line which doesnt make a difference
+    input = input.rstrip()
+
+    rows = input.split(os.linesep)
+    pp.pprint(rows)
+
+    # rows = input.split(os.linesep)
+    # for row in rows:
+    #     if row.strip() == "":
+    #         continue
+    #     print(row.split(" "))
+    # pp.pprint(rows)
+    quit()
 
     return problems
 
