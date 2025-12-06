@@ -76,6 +76,7 @@ def do_operation(operands: Operands, operator: Operator) -> int:
             return np.prod(operands)
         case "+":
             return np.sum(operands)
+    return 0
 
 
 def part1(problems: Problems) -> int:
