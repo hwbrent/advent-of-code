@@ -91,8 +91,9 @@ def part2(problems: Problems) -> int:
 
         old_operands = [s.replace(" ", "0") for s in old_operands]
 
+        # get new operands by reading each operand right to left and using
+        # each digit
         new_operands = []
-
         length = len(old_operands[0])
         for i in range(length - 1, -1, -1):  # right to left
             num_str = "".join([operand[i] for operand in old_operands])
