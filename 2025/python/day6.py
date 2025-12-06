@@ -23,12 +23,12 @@ Problems = list[Problem]
 
 
 def parse_raw_input(input: str) -> Problems:
-    input = """
-123 328  51 64 
- 45 64  387 23 
-  6 98  215 314
-*   +   *   +  
-    """
+    #     input = """
+    # 123 328  51 64
+    #  45 64  387 23
+    #   6 98  215 314
+    # *   +   *   +
+    #     """
 
     # remove any newlines from the left of the input, but not general
     # whitespace as it could affect the alignment of the numbers
@@ -85,12 +85,33 @@ def part1(problems: Problems) -> int:
 
 def part2(problems: Problems) -> int:
     answer = 0
+
+    for problem in problems[::-1]:
+        old_operands, operator = problem
+
+        old_operands = [s.replace(" ", "0") for s in old_operands]
+
+        new_operands = []
+
+        length = len(old_operands[0])
+        for i in range(length - 1, -1, -1):  # right to left
+            num_str = "".join([operand[i] for operand in old_operands])
+
+            num_str = num_str.rstrip("0")  # ?
+
+            if num_str != "":
+                new_operands.append(num_str)
+
+        result = do_operation(new_operands, operator)
+
+        answer += result
+
     return answer
 
 
 def main():
     utils.handle(part1)  # 5667835681547 (0.009466171264648438 seconds)
-    utils.handle(part2)
+    utils.handle(part2)  # 9434900032651 (0.026433944702148438 seconds)
 
 
 if __name__ == "__main__":
