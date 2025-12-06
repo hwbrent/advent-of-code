@@ -22,12 +22,12 @@ Problems = list[Problem]
 
 
 def parse_raw_input(input: str) -> Problems:
-    # input = """
-    # 123 328  51 64
-    # 45 64  387 23
-    # 6 98  215 314
-    # *   +   *   +
-    # """
+    input = """
+    123 328  51 64 
+    45 64  387 23 
+    6 98  215 314
+    *   +   *   +  
+    """
 
     rows = [row.split() for row in input.strip().split(os.linesep)]
     cols = [[row[col_number] for row in rows] for col_number in range(len(rows[0]))]
