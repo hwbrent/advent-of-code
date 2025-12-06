@@ -14,26 +14,36 @@ import utils
 # Problem URL: https://adventofcode.com/2025/day/6
 # Input URL:   https://adventofcode.com/2025/day/6/input
 
+Operands = list[int]
+Operator = str
+Problem = tuple[Operands, Operator]
+Problems = list[Problem]
 
-Input = Any
 
-
-def parse_raw_input(input: str) -> Input:
+def parse_raw_input(input: str) -> Problems:
     input = """
     123 328  51 64 
     45 64  387 23 
     6 98  215 314
     *   +   *   +  
     """
-    return input
+
+    rows = [row.split() for row in input.strip().split(os.linesep)]
+    cols = [[row[col_number] for row in rows] for col_number in range(len(rows[0]))]
+
+    problems = [
+        ([int(num) for num in cols[i][:-1]], cols[i][-1]) for i in range(len(cols))
+    ]
+
+    return problems
 
 
-def part1(input: Input) -> int:
+def part1(problems: Problems) -> int:
     answer = 0
     return answer
 
 
-def part2(input: Input) -> int:
+def part2(problems: Problems) -> int:
     answer = 0
     return answer
 
