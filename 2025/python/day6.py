@@ -2,6 +2,7 @@ import numpy as np
 
 import os
 import sys
+import itertools as it
 from pprint import PrettyPrinter
 
 pp = PrettyPrinter(indent=4)
@@ -29,8 +30,6 @@ def parse_raw_input(input: str) -> Problems:
 *   +   *   +  
     """
 
-    print(repr(input))
-
     # remove any newlines from the left of the input, but not general
     # whitespace as it could affect the alignment of the numbers
     input = input.lstrip(os.linesep)
@@ -40,15 +39,30 @@ def parse_raw_input(input: str) -> Problems:
     input = input.rstrip()
 
     rows = input.split(os.linesep)
-    pp.pprint(rows)
 
-    # rows = input.split(os.linesep)
-    # for row in rows:
-    #     if row.strip() == "":
-    #         continue
-    #     print(row.split(" "))
-    # pp.pprint(rows)
-    quit()
+    # get the indices of the operators. this is where each column starts
+    operator_row = rows[-1]
+    operator_indices = [i for i, char in enumerate(operator_row) if char.strip()]
+
+    # obviously the last column ends at the end of the line. so add the index of the
+    # end of the line so that we can calculate the final range
+    operator_indices.append(len(rows[0]))
+
+    # configure each col's bounds to start at the index of the current
+    # operator and end at the index before the next operator
+    col_bounds = [[num1, num2] for num1, num2 in it.pairwise(operator_indices)]
+
+    problems = []
+    for pair in col_bounds:
+        lower, upper = pair
+
+        operands = [row[lower:upper] for row in rows]
+
+        operator = operands.pop().strip()
+
+        problem = [operands, operator]
+
+        problems.append(problem)
 
     return problems
 
