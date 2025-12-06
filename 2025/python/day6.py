@@ -46,20 +46,20 @@ map_to_int = np.vectorize(to_int)
 def part1(problems: Problems) -> int:
     answer = 0
 
-    for problem in problems:
-        result = 0
+    # for problem in problems:
+    #     result = 0
 
-        operands, operator = problem
+    #     operands, operator = problem
 
-        operands = map_to_int(operands)
+    #     operands = map_to_int(operands)
 
-        match operator:
-            case "*":
-                result = np.prod(operands)
-            case "+":
-                result = np.sum(operands)
+    #     match operator:
+    #         case "*":
+    #             result = np.prod(operands)
+    #         case "+":
+    #             result = np.sum(operands)
 
-        answer += result
+    #     answer += result
 
     return answer
 
