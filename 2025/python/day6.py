@@ -43,6 +43,19 @@ def parse_raw_input(input: str) -> Problems:
 
 def part1(problems: Problems) -> int:
     answer = 0
+
+    for problem in problems:
+        result = 0
+
+        operands, operator = problem
+        match operator:
+            case "*":
+                result = np.prod(operands)
+            case "+":
+                result = np.sum(operands)
+
+        answer += result
+
     return answer
 
 
