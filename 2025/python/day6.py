@@ -80,13 +80,7 @@ def do_operation(operands: Operands, operator: Operator) -> int:
 
 
 def part1(problems: Problems) -> int:
-    answer = 0
-
-    for problem in problems:
-        result = do_operation(*problem)
-        answer += result
-
-    return answer
+    return sum(do_operation(*problem) for problem in problems)
 
 
 def part2(problems: Problems) -> int:
