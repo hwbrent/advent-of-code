@@ -102,16 +102,10 @@ def part1(manifold: Manifold) -> int:
 
             i_beam += 1
 
-        # print(os.linesep)
-        # pp.pprint(manifold)
-        # print(os.linesep)
-        # input()
-
-    print(os.linesep)
-    # pp.pprint(manifold)
-    for row in manifold:
-        print(*row)
-    print(os.linesep)
+        print(os.linesep)
+        for row in manifold:
+            print(*row)
+        print(os.linesep)
 
     return answer
 
