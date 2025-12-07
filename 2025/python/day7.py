@@ -1,6 +1,6 @@
 import os
 import sys
-from typing import Any
+from typing import Literal
 from pprint import PrettyPrinter
 
 pp = PrettyPrinter(indent=4)
@@ -15,10 +15,18 @@ import utils
 # Input URL:   https://adventofcode.com/2025/day/7/input
 
 
-Input = Any
+START = "S"
+SPLITTER = "^"
+EMPTY_SPACE = "."
+BEAM = "|"
 
 
-def parse_raw_input(input: str) -> Input:
+Space = Literal[START, SPLITTER, EMPTY_SPACE]
+Row = list[Space]
+Manifold = list[Row]
+
+
+def parse_raw_input(input: str) -> Manifold:
     input = """
     .......S.......
     ...............
@@ -37,15 +45,16 @@ def parse_raw_input(input: str) -> Input:
     .^.^.^.^.^...^.
     ...............
     """
-    return input
+    return [[value for value in row.strip()] for row in input.strip().split(os.linesep)]
 
 
-def part1(input: Input) -> int:
+def part1(manifold: Manifold) -> int:
     answer = 0
+    print(manifold)
     return answer
 
 
-def part2(input: Input) -> int:
+def part2(manifold: Manifold) -> int:
     answer = 0
     return answer
 
