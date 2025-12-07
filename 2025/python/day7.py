@@ -50,7 +50,28 @@ def parse_raw_input(input: str) -> Manifold:
 
 def part1(manifold: Manifold) -> int:
     answer = 0
-    print(manifold)
+    # print(manifold)
+
+    # splitters that the beam gets split on
+    split_on = []
+
+    splitters = [
+        (i_row, i_col)
+        for i_row, row in enumerate(manifold)
+        for i_col, value in enumerate(row)
+        if value == SPLITTER
+    ]
+
+    for splitter in splitters:
+        # the beam will be split on this splitter if:
+        # 1. the splitter is directly under S (with no other splitter in
+        #    between)
+        # 2. the splitter is directly down and one space to the left/right
+        #    of another splitter which the beam is split on
+        pass
+
+    # print(splitters)
+
     return answer
 
 
