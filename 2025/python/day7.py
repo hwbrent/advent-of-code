@@ -50,27 +50,64 @@ def parse_raw_input(input: str) -> Manifold:
 
 def part1(manifold: Manifold) -> int:
     answer = 0
-    # print(manifold)
 
-    # splitters that the beam gets split on
-    split_on = []
-
-    splitters = [
-        (i_row, i_col)
+    pos_start = next(
+        [i_row, i_col]  # needs to be mutable
         for i_row, row in enumerate(manifold)
         for i_col, value in enumerate(row)
-        if value == SPLITTER
-    ]
+        if value == START
+    )
 
-    for splitter in splitters:
-        # the beam will be split on this splitter if:
-        # 1. the splitter is directly under S (with no other splitter in
-        #    between)
-        # 2. the splitter is directly down and one space to the left/right
-        #    of another splitter which the beam is split on
-        pass
+    beams = [pos_start]
 
-    # print(splitters)
+    while len(beams) > 0:
+
+        # iterate over the beams
+        i_beam = 0
+        while i_beam < len(beams):
+            beam = beams[i_beam]
+            row, col = beam
+
+            space = manifold[row][col]
+
+            # if the beam is currently on a splitter
+            if space == SPLITTER:
+                # use the current beam to create a new beam one space to the
+                # right of the splitter
+                new_beam = [row, col + 1]
+                beams.insert(i_beam + 1, new_beam)
+                manifold[row][col + 1] = BEAM
+
+                # move the current beam to the left
+                beam[1] -= 1
+
+                answer += 1
+
+            if space != START:
+                row, col = beam
+                manifold[row][col] = BEAM
+
+            # if the beam is currently on the bottom row
+            if row == len(manifold) - 1:
+                # it's done moving, so remove it
+                del beams[i_beam]
+                continue
+
+            # move the current beam down
+            beam[0] += 1
+
+            i_beam += 1
+
+        # print(os.linesep)
+        # pp.pprint(manifold)
+        # print(os.linesep)
+        # input()
+
+    print(os.linesep)
+    # pp.pprint(manifold)
+    for row in manifold:
+        print(*row)
+    print(os.linesep)
 
     return answer
 
