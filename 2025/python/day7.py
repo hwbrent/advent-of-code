@@ -110,10 +110,10 @@ def part1(manifold: Manifold) -> int:
 
             i_beam += 1
 
-        print(os.linesep)
-        for row in manifold:
-            print(*row)
-        print(os.linesep)
+        # print(os.linesep)
+        # for row in manifold:
+        #     print(*row)
+        # print(os.linesep)
 
     return len(split_on)
 
@@ -124,7 +124,7 @@ def part2(manifold: Manifold) -> int:
 
 
 def main():
-    utils.handle(part1)  # 1622 (1.9849331378936768 seconds)
+    utils.handle(part1)  # 1622 (0.5911369323730469 seconds)
     utils.handle(part2)
 
 
