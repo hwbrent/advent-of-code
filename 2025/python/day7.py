@@ -79,7 +79,7 @@ def part1(manifold: Manifold) -> int:
                 # use the current beam to create a new beam one space to the
                 # right of the splitter
                 new_beam = [row, col + 1]
-                beams.insert(i_beam + 1, new_beam)
+                beams.append(new_beam)
                 mark_position(manifold, row, col + 1)
 
                 # move the current beam to the left
