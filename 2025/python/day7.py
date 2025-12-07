@@ -48,6 +48,10 @@ def parse_raw_input(input: str) -> Manifold:
     return [[value for value in row.strip()] for row in input.strip().split(os.linesep)]
 
 
+def mark_position(manifold, row, col):
+    manifold[row][col] = BEAM
+
+
 def part1(manifold: Manifold) -> int:
     answer = 0
 
@@ -76,7 +80,7 @@ def part1(manifold: Manifold) -> int:
                 # right of the splitter
                 new_beam = [row, col + 1]
                 beams.insert(i_beam + 1, new_beam)
-                manifold[row][col + 1] = BEAM
+                mark_position(manifold, row, col + 1)
 
                 # move the current beam to the left
                 beam[1] -= 1
@@ -85,7 +89,7 @@ def part1(manifold: Manifold) -> int:
 
             if space != START:
                 row, col = beam
-                manifold[row][col] = BEAM
+                mark_position(manifold, row, col)
 
             # if the beam is currently on the bottom row
             if row == len(manifold) - 1:
