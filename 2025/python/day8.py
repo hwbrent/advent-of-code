@@ -15,10 +15,14 @@ import utils
 # Input URL:   https://adventofcode.com/2025/day/8/input
 
 
-Input = Any
+X = int
+Y = int
+Z = int
+JunctionBox = tuple[X, Y, Z]
+JunctionBoxes = list[JunctionBox]
 
 
-def parse_raw_input(input: str) -> Input:
+def parse_raw_input(input: str) -> JunctionBoxes:
     input = """
     162,817,812
     57,618,57
@@ -41,15 +45,19 @@ def parse_raw_input(input: str) -> Input:
     984,92,344
     425,690,689
     """
-    return input
+    return [
+        [int(num) for num in line.strip().split(",")]
+        for line in input.strip().split(os.linesep)
+    ]
 
 
-def part1(input: Input) -> int:
+def part1(junction_boxes: JunctionBoxes) -> int:
     answer = 0
+    print(junction_boxes)
     return answer
 
 
-def part2(input: Input) -> int:
+def part2(junction_boxes: JunctionBoxes) -> int:
     answer = 0
     return answer
 
