@@ -1,5 +1,6 @@
 import os
 import sys
+import math
 from typing import Any
 from pprint import PrettyPrinter
 
@@ -46,14 +47,36 @@ def parse_raw_input(input: str) -> JunctionBoxes:
     425,690,689
     """
     return [
-        [int(num) for num in line.strip().split(",")]
+        tuple([int(num) for num in line.strip().split(",")])
         for line in input.strip().split(os.linesep)
     ]
 
 
+def get_distance(box1: JunctionBox, box2: JunctionBox) -> float:
+    x1, y1, z1 = box1
+    x2, y2, z2 = box2
+    return math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2 + (z2 - z1) ** 2)
+
+
 def part1(junction_boxes: JunctionBoxes) -> int:
     answer = 0
-    print(junction_boxes)
+
+    distances = {}
+
+    # calculate distance between every pair of
+    for box1 in junction_boxes:
+        for box2 in junction_boxes:
+            if box1 == box2:
+                continue
+            key = (box1, box2)
+            rev_key = (box2, box1)
+            distance = (
+                distances[rev_key] if rev_key in distances else get_distance(*key)
+            )
+            distances[key] = distance
+
+    print(distances)
+
     return answer
 
 
