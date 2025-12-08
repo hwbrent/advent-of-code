@@ -53,6 +53,7 @@ def parse_raw_input(input: str) -> JunctionBoxes:
 
 
 def get_distance(box1: JunctionBox, box2: JunctionBox) -> float:
+    # see: https://www.geeksforgeeks.org/maths/3d-distance-formula/
     x1, y1, z1 = box1
     x2, y2, z2 = box2
     return math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2 + (z2 - z1) ** 2)
