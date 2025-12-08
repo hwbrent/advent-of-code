@@ -1,7 +1,7 @@
 import os
 import sys
 import math
-from numbers import Number
+from typing import Any
 from pprint import PrettyPrinter
 
 pp = PrettyPrinter(indent=4)
@@ -62,32 +62,21 @@ def get_distance(box1: JunctionBox, box2: JunctionBox) -> float:
 def part1(junction_boxes: JunctionBoxes) -> int:
     answer = 0
 
-    distances: dict[JunctionBox, dict[JunctionBox, float]] = {}
+    distances = {}
 
     # calculate distance between every pair of
     for box1 in junction_boxes:
         for box2 in junction_boxes:
             if box1 == box2:
                 continue
-
-            if not box1 in distances:
-                distances[box1] = {}
-
-            if not box2 in distances:
-                distances[box2] = {}
-
-            rev_distance = distances[box2].get(box1)
-
+            key = (box1, box2)
+            rev_key = (box2, box1)
             distance = (
-                rev_distance
-                if isinstance(rev_distance, Number)
-                else get_distance(box1, box2)
+                distances[rev_key] if rev_key in distances else get_distance(*key)
             )
+            distances[key] = distance
 
-            distances[box1][box2] = distance
-            distances[box2][box1] = distance
-
-    pp.pprint(distances)
+    print(distances)
 
     return answer
 
