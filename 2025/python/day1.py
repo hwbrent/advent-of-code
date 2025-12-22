@@ -10,8 +10,8 @@ sys.path.append(root)
 
 import utils
 
-# Problem URL: {problem_url}
-# Input URL:   {input_url}
+# Problem URL: https://adventofcode.com/2025/day/1
+# Input URL:   https://adventofcode.com/2025/day/1/input
 
 """
 --- Day 1: Secret Entrance ---
