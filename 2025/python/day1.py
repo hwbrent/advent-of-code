@@ -160,6 +160,23 @@ def part1(input):
 
 def part2(input):
     answer = 0
+
+    dial_value = INITIAL_DIAL_VALUE
+
+    # for each rotation, apply it one step at a time, and after each step,
+    # if the dial is on zero, increment the answer
+
+    for distance in input:
+
+        step = 1 if distance > 0 else -1
+
+        for _ in range(abs(distance)):
+            dial_value += step
+            dial_value %= TOTAL_DIAL_VALUES  # wrap around
+
+            if dial_value == 0:
+                answer += 1
+
     return answer
 
 
