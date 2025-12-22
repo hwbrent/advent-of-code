@@ -15,10 +15,14 @@ import utils
 # Input URL:   https://adventofcode.com/2025/day/9/input
 
 
-Input = Any
+NumRow = int
+NumCol = int
+
+Tile = list[NumRow, NumCol]
+Tiles = list[Tile]
 
 
-def parse_raw_input(input: str) -> Input:
+def parse_raw_input(input: str) -> Tiles:
     input = """
     7,1
     11,1
@@ -29,15 +33,19 @@ def parse_raw_input(input: str) -> Input:
     2,3
     7,3
     """
-    return input
+    return [
+        [int(num) for num in line.strip().split(",")]
+        for line in input.strip().split(os.linesep)
+    ]
 
 
-def part1(input: Input) -> int:
+def part1(tiles: Tiles) -> int:
     answer = 0
+    print(tiles)
     return answer
 
 
-def part2(input: Input) -> int:
+def part2(tiles: Tiles) -> int:
     answer = 0
     return answer
 
